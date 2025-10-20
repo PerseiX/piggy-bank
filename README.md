@@ -1,94 +1,80 @@
-# 10x Astro Starter
+# Piggy Bank
 
-A modern, opinionated starter template for building fast, accessible, and AI-friendly web applications.
+A modern web application for personal finance management.
+
+## Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Getting Started Locally](#getting-started-locally)
+- [Available Scripts](#available-scripts)
+- [Project Scope](#project-scope)
+- [Project Status](#project-status)
+- [License](#license)
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
-- [React](https://react.dev/) v19.0.0 - UI library for building interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4.0.17 - Utility-first CSS framework
+- **[Astro](https://astro.build/) v5**: Modern web framework for building fast, content-focused websites.
+- **[React](https://react.dev/) v19**: A JavaScript library for building user interfaces.
+- **[TypeScript](https://www.typescriptlang.org/) v5**: A typed superset of JavaScript that compiles to plain JavaScript.
+- **[Tailwind CSS](https://tailwindcss.com/) v4**: A utility-first CSS framework for rapid UI development.
+- **[Shadcn/ui](https://ui.shadcn.com/)**: Re-usable components built using Radix UI and Tailwind CSS.
 
-## Prerequisites
+## Getting Started Locally
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
+### Prerequisites
 
-## Getting Started
+- [Node.js](https://nodejs.org/) v22.14.0 or higher. It is recommended to use a version manager like [nvm](https://github.com/nvm-sh/nvm).
+- [npm](https://www.npmjs.com/) (comes with Node.js)
 
-1. Clone the repository:
+### Installation
 
-```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
+1.  Clone the repository:
 
-2. Install dependencies:
+    ```bash
+    git clone https://github.com/your-username/piggy-bank.git
+    cd piggy-bank
+    ```
 
-```bash
-npm install
-```
+2.  Install dependencies:
 
-3. Run the development server:
+    ```bash
+    npm install
+    ```
 
-```bash
-npm run dev
-```
+3.  Run the development server:
 
-4. Build for production:
+    ```bash
+    npm run dev
+    ```
 
-```bash
-npm run build
-```
+The application will be available at `http://localhost:4321`.
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
+In the project directory, you can run:
 
-## Project Structure
+-   `npm run dev`: Runs the app in the development mode.
+-   `npm run build`: Builds the app for production to the `dist/` folder.
+-   `npm run preview`: Serves the production build locally for preview.
+-   `npm run lint`: Lints the project files using ESLint.
+-   `npm run lint:fix`: Lints and automatically fixes problems in project files.
+-   `npm run format`: Formats code with Prettier.
 
-```md
-.
-├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
-```
+## Project Scope
 
-## AI Development Support
+The goal of this project is to provide a simple and intuitive interface for managing personal finances.
 
-This project is configured with AI development tools to enhance the development experience, providing guidelines for:
+**Key Features (Planned):**
 
-- Project structure
-- Coding practices
-- Frontend development
-- Styling with Tailwind
-- Accessibility best practices
-- Astro and React guidelines
+-   Track income and expenses.
+-   Create and manage budgets.
+-   Categorize transactions.
+-   View financial reports and visualizations.
 
-### Cursor IDE
+## Project Status
 
-The project includes AI rules in `.cursor/rules/` directory that help Cursor IDE understand the project structure and provide better code suggestions.
-
-### GitHub Copilot
-
-AI instructions for GitHub Copilot are available in `.github/copilot-instructions.md`
-
-### Windsurf
-
-The `.windsurfrules` file contains AI configuration for Windsurf.
-
-## Contributing
-
-Please follow the AI guidelines and coding practices defined in the AI configuration files when contributing to this project.
+This project is currently in the initial development phase. The current version is `0.0.1`.
 
 ## License
 
-MIT
+This project is licensed under the MIT License.
