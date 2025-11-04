@@ -13,12 +13,19 @@ export type WalletInsert = TablesInsert<"wallets">;
 export type WalletUpdate = TablesUpdate<"wallets">;
 
 /**
- * Represents the `financial_instruments` table in the database.
+ * Represents the `instruments` table in the database.
  * Directly maps to the auto-generated Supabase type.
  */
-export type FinancialInstrument = Tables<"financial_instruments">;
-export type FinancialInstrumentInsert = TablesInsert<"financial_instruments">;
-export type FinancialInstrumentUpdate = TablesUpdate<"financial_instruments">;
+export type Instrument = Tables<"instruments">;
+export type InstrumentInsert = TablesInsert<"instruments">;
+export type InstrumentUpdate = TablesUpdate<"instruments">;
+
+/**
+ * Represents the `instrument_value_changes` table in the database.
+ * Directly maps to the auto-generated Supabase type.
+ */
+export type InstrumentValueChange = Tables<"instrument_value_changes">;
+export type InstrumentValueChangeInsert = TablesInsert<"instrument_value_changes">;
 
 /**
  * Represents the `instrument_type` enum from the database.
@@ -26,116 +33,199 @@ export type FinancialInstrumentUpdate = TablesUpdate<"financial_instruments">;
 export type InstrumentType = Enums<"instrument_type">;
 
 // ===========================================================================
+// Utility Types
+// ===========================================================================
+
+/**
+ * Helper type for monetary values in dual format (grosze integer + PLN decimal string).
+ * Used to return both formats for client convenience.
+ */
+export type CurrencyDualFormat = {
+  grosze: number;
+  pln: string;
+};
+
+/**
+ * Direction of value change in instrument value history.
+ */
+export type ValueChangeDirection = "increase" | "decrease" | "unchanged";
+
+// ===========================================================================
 // Data Transfer Objects (DTOs)
 // ===========================================================================
 
 /**
- * DTO for a financial instrument, including calculated fields.
- * This extends the base `FinancialInstrument` type with `current_value`
- * and `growth_percentage`, which are computed in the backend.
+ * DTO for computed wallet aggregates.
+ * All fields are calculated server-side from instrument data.
+ */
+export type WalletAggregatesDto = {
+  target_grosze: number;
+  target_pln: string;
+  current_value_grosze: number;
+  current_value_pln: string;
+  invested_sum_grosze: number;
+  invested_sum_pln: string;
+  progress_percent: number;
+  performance_percent: number;
+};
+
+/**
+ * DTO for instrument data in API responses.
+ * Returns monetary values in dual format (grosze + PLN).
+ * Derived from the `instruments` table.
  */
 export type InstrumentDto = Pick<
-	FinancialInstrument,
-	"id" | "wallet_id" | "type" | "name" | "goal_amount"
+  Instrument,
+  "id" | "type" | "name" | "short_description" | "created_at" | "updated_at"
 > & {
-	current_value: number;
-	growth_percentage: number;
+  wallet_id: string;
+  invested_money_grosze: number;
+  invested_money_pln: string;
+  current_value_grosze: number;
+  current_value_pln: string;
+  goal_grosze: number | null;
+  goal_pln: string | null;
 };
 
 /**
- * DTO for the calculated summary of a wallet's financial status.
- * All fields are computed on the fly by the API.
+ * DTO for wallet in list response (GET /api/wallets).
+ * Includes computed aggregates but not nested instruments.
  */
-export type WalletSummaryDto = {
-	current_total: number;
-	remaining_amount: number;
-	days_left: number;
-};
-
-/**
- * DTO for a wallet, including its summary and associated financial instruments.
- * This is the primary DTO used for listing wallets.
- */
-export type WalletDto = Pick<
-	Wallet,
-	"id" | "name" | "goal_amount" | "target_date" | "description"
+export type WalletListItemDto = Pick<
+  Wallet,
+  "id" | "name" | "description" | "created_at" | "updated_at"
 > & {
-	summary: WalletSummaryDto;
-	instruments: InstrumentDto[];
+  aggregates: WalletAggregatesDto;
 };
 
 /**
- * DTO for detailed view of a single wallet.
- * It has the same structure as `WalletDto`.
+ * DTO for detailed wallet view (GET /api/wallets/:id).
+ * Includes computed aggregates and nested instruments array.
  */
-export type WalletDetailsDto = WalletDto;
+export type WalletDetailDto = Pick<
+  Wallet,
+  "id" | "name" | "description" | "created_at" | "updated_at"
+> & {
+  aggregates: WalletAggregatesDto;
+  instruments: InstrumentDto[];
+};
 
 /**
- * DTO for a wallet returned after a successful update operation.
- * Contains the updated properties of the wallet.
+ * DTO for wallet creation response (POST /api/wallets).
+ * Returns the created wallet with initial (empty) aggregates.
  */
-export type UpdatedWalletDto = Pick<
-	Wallet,
-	"id" | "name" | "goal_amount" | "target_date" | "description"
+export type WalletCreatedDto = Pick<
+  Wallet,
+  "id" | "name" | "description" | "created_at" | "updated_at"
+> & {
+  aggregates: WalletAggregatesDto;
+};
+
+/**
+ * DTO for wallet update response (PATCH /api/wallets/:id).
+ * Returns basic wallet fields without aggregates or instruments.
+ */
+export type WalletUpdatedDto = Pick<
+  Wallet,
+  "id" | "name" | "description" | "created_at" | "updated_at"
 >;
 
 /**
- * DTO for a newly created wallet, including its initial instruments.
+ * DTO for wallet soft-delete response (DELETE /api/wallets/:id).
+ * Returns confirmation with deletion timestamp.
  */
-export type WalletWithInstrumentsDto = Pick<
-	Wallet,
-	"id" | "name" | "goal_amount" | "target_date" | "description"
+export type WalletDeletedDto = {
+  id: string;
+  deleted_at: string;
+};
+
+/**
+ * DTO for instrument creation response (POST /api/wallets/:walletId/instruments).
+ * Same structure as InstrumentDto.
+ */
+export type InstrumentCreatedDto = InstrumentDto;
+
+/**
+ * DTO for instrument update response (PATCH /api/instruments/:id).
+ * Same structure as InstrumentDto.
+ */
+export type InstrumentUpdatedDto = InstrumentDto;
+
+/**
+ * DTO for instrument soft-delete response (DELETE /api/instruments/:id).
+ * Returns confirmation with deletion timestamp.
+ */
+export type InstrumentDeletedDto = {
+  id: string;
+  deleted_at: string;
+};
+
+/**
+ * DTO for instrument value change history item (GET /api/instruments/:id/value-changes).
+ * Includes computed delta and direction fields.
+ * Derived from the `instrument_value_changes` table.
+ */
+export type ValueChangeDto = Pick<
+  InstrumentValueChange,
+  "id" | "instrument_id" | "created_at"
 > & {
-	instruments: InstrumentDto[];
+  before_value_grosze: number;
+  before_value_pln: string;
+  after_value_grosze: number;
+  after_value_pln: string;
+  delta_grosze: number;
+  delta_pln: string;
+  direction: ValueChangeDirection;
 };
 
 // ===========================================================================
-// Command Models
+// Command Models (Input DTOs)
 // ===========================================================================
 
 /**
- * Command model for creating a new financial instrument.
- * Includes fields that may not directly map to the database table
- * but are used by business logic (e.g., to create an initial operation).
+ * Command model for creating a new wallet (POST /api/wallets).
+ * Accepts only name and optional description.
+ * Derived from WalletInsert type.
  */
-export type CreateInstrumentCommand = Pick<
-	FinancialInstrumentInsert,
-	"type" | "name" | "goal_amount"
-> & {
-	current_value: number;
-	growth_percentage: number;
+export type CreateWalletCommand = {
+  name: string;
+  description?: string;
 };
 
 /**
- * Command model for adding an instrument to an existing wallet.
- * Reuses `CreateInstrumentCommand` as the structure is identical.
+ * Command model for updating a wallet (PATCH /api/wallets/:id).
+ * All fields are optional for partial updates.
+ * Derived from WalletUpdate type.
  */
-export type AddInstrumentCommand = CreateInstrumentCommand;
-
-/**
- * Command model for creating a new wallet, along with its initial instruments.
- */
-export type CreateWalletCommand = Pick<
-	WalletInsert,
-	"name" | "goal_amount" | "target_date" | "description"
-> & {
-	instruments: CreateInstrumentCommand[];
+export type UpdateWalletCommand = {
+  name?: string;
+  description?: string;
 };
 
 /**
- * Command model for updating an existing wallet.
- * All properties are optional as per `WalletUpdate` type from Supabase.
+ * Command model for creating an instrument (POST /api/wallets/:walletId/instruments).
+ * Accepts PLN decimal strings for monetary values.
+ * Derived from InstrumentInsert type with custom monetary fields.
  */
-export type UpdateWalletCommand = Pick<
-	WalletUpdate,
-	"name" | "goal_amount" | "target_date" | "description"
->;
+export type CreateInstrumentCommand = {
+  type: InstrumentType;
+  name: string;
+  short_description?: string;
+  invested_money_pln: string;
+  current_value_pln: string;
+  goal_pln?: string;
+};
 
 /**
- * Command model for updating a financial instrument.
- * All properties are required as per PUT method semantics.
+ * Command model for updating an instrument (PATCH /api/instruments/:id).
+ * All fields are optional for partial updates.
+ * Accepts PLN decimal strings for monetary values.
  */
-export type UpdateInstrumentCommand = Pick<FinancialInstrument, "type" | "name" | "goal_amount"> & {
-	current_value: number;
-	growth_percentage: number;
+export type UpdateInstrumentCommand = {
+  type?: InstrumentType;
+  name?: string;
+  short_description?: string;
+  invested_money_pln?: string;
+  current_value_pln?: string;
+  goal_pln?: string;
 };
