@@ -24,6 +24,12 @@ import {
   updateWallet,
 } from "../../../lib/services/wallets/updateWallet"
 import {
+  SoftDeleteWalletServiceError,
+  WalletSoftDeleteForbiddenError,
+  WalletSoftDeleteNotFoundError,
+  softDeleteWallet,
+} from "../../../lib/services/wallets/softDeleteWallet"
+import {
   updateWalletSchema,
   walletIdParamSchema,
 } from "../../../lib/validation/wallets"
@@ -272,6 +278,108 @@ export const PATCH: APIRoute = async ({ request, params, locals }) => {
     }
 
     logApiError("Unexpected error during wallet update", error, context)
+
+    return errorResponse(500, {
+      code: ERROR_CODES.server,
+      message: "Internal server error",
+    })
+  }
+}
+
+export const DELETE: APIRoute = async ({ request, params, locals }) => {
+  const supabase = locals.supabase
+
+  if (!supabase) {
+    logApiError("Supabase client missing from locals", null)
+    return errorResponse(500, {
+      code: ERROR_CODES.server,
+      message: "Internal server error",
+    })
+  }
+
+  const paramValidationResult = walletIdParamSchema.safeParse({
+    id: params?.id,
+  })
+
+  if (!paramValidationResult.success) {
+    return errorResponse(400, {
+      code: ERROR_CODES.validation,
+      message: "Validation failed",
+      details: paramValidationResult.error.flatten(),
+    })
+  }
+
+  const walletId = paramValidationResult.data.id
+  const token = extractBearerToken(request.headers.get("authorization"))
+
+  if (!token) {
+    return errorResponse(401, {
+      code: ERROR_CODES.unauthorized,
+      message: "Missing or invalid authorization token",
+    })
+  }
+
+  const {
+    data: userData,
+    error: authError,
+  } = await supabase.auth.getUser(token)
+
+  if (authError || !userData?.user) {
+    logApiError("Failed to authenticate request", authError, {
+      tokenFingerprint: fingerprint(token),
+      walletId,
+    })
+    return errorResponse(401, {
+      code: ERROR_CODES.unauthorized,
+      message: "Unauthorized",
+    })
+  }
+
+  const ownerId = userData.user.id
+  const now = new Date().toISOString()
+
+  try {
+    const result = await softDeleteWallet({
+      supabase,
+      walletId,
+      ownerId,
+      now,
+    })
+
+    return jsonResponse(200, result)
+  } catch (error) {
+    const context = {
+      userId: ownerId,
+      walletId,
+      tokenFingerprint: fingerprint(token),
+      now,
+    }
+
+    if (error instanceof WalletSoftDeleteForbiddenError) {
+      logApiError("Wallet soft delete forbidden", error, context)
+      return errorResponse(403, {
+        code: ERROR_CODES.forbidden,
+        message: "Access to wallet denied",
+      })
+    }
+
+    if (error instanceof WalletSoftDeleteNotFoundError) {
+      logApiError("Wallet not found during soft delete", error, context)
+      return errorResponse(404, {
+        code: ERROR_CODES.notFound,
+        message: "Wallet not found",
+      })
+    }
+
+    if (error instanceof SoftDeleteWalletServiceError) {
+      logApiError("Wallet soft delete service failure", error, context)
+      return errorResponse(500, {
+        code: ERROR_CODES.server,
+        message: "Could not delete wallet",
+      })
+    }
+
+    logApiError("Unexpected error during wallet soft delete", error, context)
 
     return errorResponse(500, {
       code: ERROR_CODES.server,
