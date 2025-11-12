@@ -224,8 +224,8 @@ export type CreateInstrumentCommand = {
 export type UpdateInstrumentCommand = {
   type?: InstrumentType;
   name?: string;
-  short_description?: string;
+  short_description?: string | null;
   invested_money_pln?: string;
   current_value_pln?: string;
-  goal_pln?: string;
+  goal_pln?: string | null;
 };

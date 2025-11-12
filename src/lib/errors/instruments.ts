@@ -4,6 +4,11 @@ export const INSTRUMENT_ERROR_CODES = {
   walletSoftDeleted: "WALLET_SOFT_DELETED",
   nameConflict: "INSTRUMENT_NAME_CONFLICT",
   service: "CREATE_INSTRUMENT_SERVICE_ERROR",
+  instrumentNotFound: "INSTRUMENT_NOT_FOUND",
+  instrumentForbidden: "INSTRUMENT_FORBIDDEN",
+  instrumentSoftDeleted: "INSTRUMENT_SOFT_DELETED",
+  parentWalletSoftDeleted: "PARENT_WALLET_SOFT_DELETED",
+  updateService: "UPDATE_INSTRUMENT_SERVICE_ERROR",
 } as const
 
 export type InstrumentErrorCode =
@@ -59,6 +64,54 @@ export class CreateInstrumentServiceError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
     super(message, options)
     this.name = "CreateInstrumentServiceError"
+  }
+}
+
+export class InstrumentNotFoundError extends Error {
+  public readonly code = INSTRUMENT_ERROR_CODES.instrumentNotFound
+
+  constructor(readonly instrumentId: string) {
+    super(`Instrument with id "${instrumentId}" was not found`)
+    this.name = "InstrumentNotFoundError"
+  }
+}
+
+export class InstrumentForbiddenError extends Error {
+  public readonly code = INSTRUMENT_ERROR_CODES.instrumentForbidden
+
+  constructor(
+    readonly instrumentId: string,
+    readonly ownerId: string,
+  ) {
+    super(`Instrument "${instrumentId}" is not accessible for owner "${ownerId}"`)
+    this.name = "InstrumentForbiddenError"
+  }
+}
+
+export class InstrumentSoftDeletedError extends Error {
+  public readonly code = INSTRUMENT_ERROR_CODES.instrumentSoftDeleted
+
+  constructor(readonly instrumentId: string) {
+    super(`Instrument with id "${instrumentId}" has been soft-deleted`)
+    this.name = "InstrumentSoftDeletedError"
+  }
+}
+
+export class ParentWalletSoftDeletedError extends Error {
+  public readonly code = INSTRUMENT_ERROR_CODES.parentWalletSoftDeleted
+
+  constructor(readonly walletId: string) {
+    super(`Parent wallet "${walletId}" has been soft-deleted`)
+    this.name = "ParentWalletSoftDeletedError"
+  }
+}
+
+export class UpdateInstrumentServiceError extends Error {
+  public readonly code = INSTRUMENT_ERROR_CODES.updateService
+
+  constructor(message: string, options?: { cause?: unknown }) {
+    super(message, options)
+    this.name = "UpdateInstrumentServiceError"
   }
 }
 
