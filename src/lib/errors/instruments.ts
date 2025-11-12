@@ -8,6 +8,7 @@ export const INSTRUMENT_ERROR_CODES = {
   instrumentForbidden: "INSTRUMENT_FORBIDDEN",
   instrumentSoftDeleted: "INSTRUMENT_SOFT_DELETED",
   parentWalletSoftDeleted: "PARENT_WALLET_SOFT_DELETED",
+  getService: "GET_INSTRUMENT_SERVICE_ERROR",
   updateService: "UPDATE_INSTRUMENT_SERVICE_ERROR",
 } as const
 
@@ -112,6 +113,15 @@ export class UpdateInstrumentServiceError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
     super(message, options)
     this.name = "UpdateInstrumentServiceError"
+  }
+}
+
+export class GetInstrumentServiceError extends Error {
+  public readonly code = INSTRUMENT_ERROR_CODES.getService
+
+  constructor(message: string, options?: { cause?: unknown }) {
+    super(message, options)
+    this.name = "GetInstrumentServiceError"
   }
 }
 

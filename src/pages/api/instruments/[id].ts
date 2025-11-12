@@ -11,6 +11,7 @@ import {
 } from "../../../lib/api/requestBody"
 import { extractBearerToken, fingerprint } from "../../../lib/api/auth"
 import {
+  GetInstrumentServiceError,
   InstrumentForbiddenError,
   InstrumentNameConflictError,
   InstrumentNotFoundError,
@@ -18,6 +19,7 @@ import {
   ParentWalletSoftDeletedError,
   UpdateInstrumentServiceError,
 } from "../../../lib/errors/instruments"
+import { getInstrumentById } from "../../../lib/services/instruments/getInstrumentById"
 import { updateInstrument } from "../../../lib/services/instruments/updateInstrument"
 import {
   instrumentIdParamSchema,
@@ -34,6 +36,117 @@ const ERROR_CODES = {
   conflict: "CONFLICT",
   server: "SERVER_ERROR",
 } as const
+
+export const GET: APIRoute = async ({ request, params, locals }) => {
+  const supabase = locals.supabase
+
+  if (!supabase) {
+    logApiError("Supabase client missing from locals", null)
+    return errorResponse(500, {
+      code: ERROR_CODES.server,
+      message: "Internal server error",
+    })
+  }
+
+  const paramValidationResult = instrumentIdParamSchema.safeParse({
+    id: params?.id,
+  })
+
+  if (!paramValidationResult.success) {
+    return errorResponse(400, {
+      code: ERROR_CODES.validation,
+      message: "Validation failed",
+      details: paramValidationResult.error.flatten(),
+    })
+  }
+
+  const instrumentId = paramValidationResult.data.id
+  const token = extractBearerToken(request.headers.get("authorization"))
+
+  if (!token) {
+    return errorResponse(401, {
+      code: ERROR_CODES.unauthorized,
+      message: "Missing or invalid authorization token",
+    })
+  }
+
+  const {
+    data: userData,
+    error: authError,
+  } = await supabase.auth.getUser(token)
+
+  if (authError || !userData?.user) {
+    logApiError("Failed to authenticate request", authError, {
+      tokenFingerprint: fingerprint(token),
+      instrumentId,
+    })
+    return errorResponse(401, {
+      code: ERROR_CODES.unauthorized,
+      message: "Unauthorized",
+    })
+  }
+
+  const ownerId = userData.user.id
+
+  try {
+    const result = await getInstrumentById({
+      supabase,
+      ownerId,
+      instrumentId,
+    })
+
+    if (result.ok) {
+      return jsonResponse(200, result.instrument)
+    }
+
+    if (result.reason === "forbidden") {
+      logApiError("Instrument access forbidden during fetch", null, {
+        userId: ownerId,
+        instrumentId,
+      })
+      return errorResponse(403, {
+        code: ERROR_CODES.forbidden,
+        message: "Access to instrument denied",
+      })
+    }
+
+    if (result.reason === "softDeleted") {
+      logApiError("Attempted access to soft-deleted instrument", null, {
+        userId: ownerId,
+        instrumentId,
+      })
+      return errorResponse(404, {
+        code: ERROR_CODES.notFound,
+        message: "Instrument not found",
+      })
+    }
+
+    return errorResponse(404, {
+      code: ERROR_CODES.notFound,
+      message: "Instrument not found",
+    })
+  } catch (error) {
+    const context = {
+      userId: ownerId,
+      instrumentId,
+    }
+
+    if (error instanceof GetInstrumentServiceError) {
+      logApiError("Instrument retrieval service failure", error, context)
+      return errorResponse(500, {
+        code: ERROR_CODES.server,
+        message: "Internal server error",
+      })
+    }
+
+    logApiError("Unexpected error during instrument fetch", error, context)
+
+    return errorResponse(500, {
+      code: ERROR_CODES.server,
+      message: "Internal server error",
+    })
+  }
+}
 
 export const PATCH: APIRoute = async ({ request, params, locals }) => {
   const supabase = locals.supabase
