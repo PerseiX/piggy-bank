@@ -223,13 +223,23 @@ export const updateInstrumentSchema = baseUpdateInstrumentSchema.transform(
 
 export type UpdateInstrumentSchemaOutput = z.infer<typeof updateInstrumentSchema>
 
-export const instrumentIdParamSchema = z.object({
-  id: z
-    .string({ required_error: "Instrument id is required" })
-    .uuid({ message: "Instrument id must be a valid UUID" }),
-})
+const baseInstrumentIdParamSchema = z
+  .object({
+    id: z
+      .string({ required_error: "Instrument id is required" })
+      .uuid({ message: "Instrument id must be a valid UUID" }),
+  })
+  .strict()
+
+export const instrumentIdParamSchema = baseInstrumentIdParamSchema
 
 export type InstrumentIdParamSchemaOutput = z.infer<
   typeof instrumentIdParamSchema
+>
+
+export const deleteInstrumentParamsSchema = baseInstrumentIdParamSchema
+
+export type DeleteInstrumentParamsSchemaOutput = z.infer<
+  typeof deleteInstrumentParamsSchema
 >
 

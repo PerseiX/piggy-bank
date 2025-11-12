@@ -1,5 +1,5 @@
 import type { Database } from "../../../db/database.types"
-import type { InstrumentCreatedDto } from "../../../types"
+import type { InstrumentCreatedDto, InstrumentDeletedDto } from "../../../types"
 import {
   formatGroszeToPln,
   formatOptionalGroszeToPln,
@@ -40,3 +40,16 @@ export function mapInstrumentRowToDto(
   }
 }
 
+export type InstrumentSoftDeleteRow = Pick<
+  Database["public"]["Tables"]["instruments"]["Row"],
+  "id" | "deleted_at"
+>
+
+export function mapInstrumentSoftDeleteRowToDto(
+  instrument: InstrumentSoftDeleteRow,
+): InstrumentDeletedDto {
+  return {
+    id: instrument.id,
+    deleted_at: instrument.deleted_at,
+  }
+}

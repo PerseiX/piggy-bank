@@ -7,9 +7,11 @@ export const INSTRUMENT_ERROR_CODES = {
   instrumentNotFound: "INSTRUMENT_NOT_FOUND",
   instrumentForbidden: "INSTRUMENT_FORBIDDEN",
   instrumentSoftDeleted: "INSTRUMENT_SOFT_DELETED",
+  instrumentAlreadyDeleted: "INSTRUMENT_ALREADY_DELETED",
   parentWalletSoftDeleted: "PARENT_WALLET_SOFT_DELETED",
   getService: "GET_INSTRUMENT_SERVICE_ERROR",
   updateService: "UPDATE_INSTRUMENT_SERVICE_ERROR",
+  softDeleteService: "SOFT_DELETE_INSTRUMENT_SERVICE_ERROR",
 } as const
 
 export type InstrumentErrorCode =
@@ -98,6 +100,15 @@ export class InstrumentSoftDeletedError extends Error {
   }
 }
 
+export class InstrumentAlreadyDeletedError extends Error {
+  public readonly code = INSTRUMENT_ERROR_CODES.instrumentAlreadyDeleted
+
+  constructor(readonly instrumentId: string) {
+    super(`Instrument with id "${instrumentId}" has already been soft-deleted`)
+    this.name = "InstrumentAlreadyDeletedError"
+  }
+}
+
 export class ParentWalletSoftDeletedError extends Error {
   public readonly code = INSTRUMENT_ERROR_CODES.parentWalletSoftDeleted
 
@@ -122,6 +133,15 @@ export class GetInstrumentServiceError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
     super(message, options)
     this.name = "GetInstrumentServiceError"
+  }
+}
+
+export class InstrumentSoftDeleteFailedError extends Error {
+  public readonly code = INSTRUMENT_ERROR_CODES.softDeleteService
+
+  constructor(message: string, options?: { cause?: unknown }) {
+    super(message, options)
+    this.name = "InstrumentSoftDeleteFailedError"
   }
 }
 

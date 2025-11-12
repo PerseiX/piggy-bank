@@ -13,17 +13,21 @@ import { extractBearerToken, fingerprint } from "../../../lib/api/auth"
 import {
   GetInstrumentServiceError,
   InstrumentForbiddenError,
+  InstrumentAlreadyDeletedError,
   InstrumentNameConflictError,
   InstrumentNotFoundError,
   InstrumentSoftDeletedError,
+  InstrumentSoftDeleteFailedError,
   ParentWalletSoftDeletedError,
   UpdateInstrumentServiceError,
 } from "../../../lib/errors/instruments"
 import { getInstrumentById } from "../../../lib/services/instruments/getInstrumentById"
 import { updateInstrument } from "../../../lib/services/instruments/updateInstrument"
+import { softDeleteInstrument } from "../../../lib/services/instruments/softDeleteInstrument"
 import {
   instrumentIdParamSchema,
   updateInstrumentSchema,
+  deleteInstrumentParamsSchema,
 } from "../../../lib/validation/instruments"
 
 export const prerender = false
@@ -303,6 +307,155 @@ export const PATCH: APIRoute = async ({ request, params, locals }) => {
     }
 
     logApiError("Unexpected error during instrument update", error, context)
+
+    return errorResponse(500, {
+      code: ERROR_CODES.server,
+      message: "Internal server error",
+    })
+  }
+}
+
+export const DELETE: APIRoute = async ({ request, params, locals }) => {
+  const supabase = locals.supabase
+
+  if (!supabase) {
+    logApiError("Supabase client missing from locals", null)
+    return errorResponse(500, {
+      code: ERROR_CODES.server,
+      message: "Internal server error",
+    })
+  }
+
+  const paramValidationResult = deleteInstrumentParamsSchema.safeParse({
+    id: params?.id,
+  })
+
+  if (!paramValidationResult.success) {
+    return errorResponse(400, {
+      code: ERROR_CODES.validation,
+      message: "Validation failed",
+      details: paramValidationResult.error.flatten(),
+    })
+  }
+
+  const instrumentId = paramValidationResult.data.id
+  const token = extractBearerToken(request.headers.get("authorization"))
+
+  if (!token) {
+    return errorResponse(401, {
+      code: ERROR_CODES.unauthorized,
+      message: "Missing or invalid authorization token",
+    })
+  }
+
+  const {
+    data: userData,
+    error: authError,
+  } = await supabase.auth.getUser(token)
+
+  if (authError || !userData?.user) {
+    logApiError("Failed to authenticate request", authError, {
+      tokenFingerprint: fingerprint(token),
+      instrumentId,
+    })
+    return errorResponse(401, {
+      code: ERROR_CODES.unauthorized,
+      message: "Unauthorized",
+    })
+  }
+
+  const ownerId = userData.user.id
+  let bodyFingerprint: string | undefined
+
+  try {
+    // DELETE requests should not include a body; parse defensively to surface malformed payloads.
+    const rawBody = await request.text()
+    const trimmedBody = rawBody.trim()
+
+    if (trimmedBody.length > 0) {
+      try {
+        const parsedBody = JSON.parse(trimmedBody)
+        bodyFingerprint = fingerprint(parsedBody)
+      } catch (error) {
+        logApiError("Failed to parse DELETE instrument JSON body", error, {
+          userId: ownerId,
+          instrumentId,
+        })
+
+        return errorResponse(400, {
+          code: ERROR_CODES.validation,
+          message: "Request body must be valid JSON",
+        })
+      }
+    }
+  } catch (error) {
+    logApiError("Failed to read DELETE instrument request body", error, {
+      userId: ownerId,
+      instrumentId,
+    })
+
+    return errorResponse(400, {
+      code: ERROR_CODES.validation,
+      message: "Request body must be valid JSON",
+    })
+  }
+
+  try {
+    const deletedInstrument = await softDeleteInstrument({
+      supabase,
+      ownerId,
+      instrumentId,
+    })
+
+    return jsonResponse(200, deletedInstrument)
+  } catch (error) {
+    const context = {
+      userId: ownerId,
+      instrumentId,
+      ...(bodyFingerprint ? { bodyFingerprint } : {}),
+    }
+
+    if (error instanceof InstrumentNotFoundError) {
+      logApiError("Instrument not found during delete", error, context)
+      return errorResponse(404, {
+        code: ERROR_CODES.notFound,
+        message: "Instrument not found",
+      })
+    }
+
+    if (error instanceof InstrumentSoftDeletedError) {
+      logApiError("Soft-deleted instrument delete attempted", error, context)
+      return errorResponse(404, {
+        code: ERROR_CODES.notFound,
+        message: "Instrument not found",
+      })
+    }
+
+    if (error instanceof InstrumentAlreadyDeletedError) {
+      logApiError("Instrument already soft-deleted", error, context)
+      return errorResponse(404, {
+        code: ERROR_CODES.notFound,
+        message: "Instrument not found",
+      })
+    }
+
+    if (error instanceof InstrumentForbiddenError) {
+      logApiError("Instrument delete forbidden", error, context)
+      return errorResponse(403, {
+        code: ERROR_CODES.forbidden,
+        message: "Access to instrument denied",
+      })
+    }
+
+    if (error instanceof InstrumentSoftDeleteFailedError) {
+      logApiError("Instrument soft delete service failure", error, context)
+      return errorResponse(500, {
+        code: ERROR_CODES.server,
+        message: "Could not delete instrument",
+      })
+    }
+
+    logApiError("Unexpected error during instrument delete", error, context)
 
     return errorResponse(500, {
       code: ERROR_CODES.server,
