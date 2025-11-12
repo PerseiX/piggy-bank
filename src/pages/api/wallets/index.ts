@@ -6,6 +6,10 @@ import {
   jsonResponse,
   logApiError,
 } from "../../../lib/api/responses"
+import {
+  JsonBodyParseError,
+  parseJsonBody,
+} from "../../../lib/api/requestBody"
 import { extractBearerToken, fingerprint } from "../../../lib/api/auth"
 import { createWalletSchema } from "../../../lib/validation/wallets"
 import {
@@ -86,12 +90,22 @@ export const POST: APIRoute = async ({ request, locals }) => {
   let parsedBody: unknown
 
   try {
-    parsedBody = await request.json()
+    parsedBody = await parseJsonBody(request)
   } catch (error) {
-    logApiError("Failed to parse JSON body", error, { userId: ownerId })
-    return errorResponse(400, {
-      code: ERROR_CODES.validation,
-      message: "Request body must be valid JSON",
+    if (error instanceof JsonBodyParseError) {
+      logApiError("Failed to parse JSON body", error, { userId: ownerId })
+      return errorResponse(400, {
+        code: ERROR_CODES.validation,
+        message: "Request body must be valid JSON",
+      })
+    }
+
+    logApiError("Unexpected error while parsing JSON body", error, {
+      userId: ownerId,
+    })
+    return errorResponse(500, {
+      code: ERROR_CODES.server,
+      message: "Internal server error",
     })
   }
 
