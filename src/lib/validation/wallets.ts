@@ -27,3 +27,11 @@ export const createWalletSchema = baseCreateWalletSchema.transform((data) => {
 
 export type CreateWalletSchemaOutput = z.infer<typeof createWalletSchema>
 
+export const walletIdParamSchema = z.object({
+  id: z
+    .string({ required_error: "Wallet id is required" })
+    .uuid({ message: "Wallet id must be a valid UUID" }),
+})
+
+export type WalletIdParamSchemaOutput = z.infer<typeof walletIdParamSchema>
+

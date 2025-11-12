@@ -1,5 +1,4 @@
 import type { APIRoute } from "astro"
-import { createHash } from "node:crypto"
 import { z } from "zod"
 
 import {
@@ -7,6 +6,7 @@ import {
   jsonResponse,
   logApiError,
 } from "../../../lib/api/responses"
+import { extractBearerToken, fingerprint } from "../../../lib/api/auth"
 import { createWalletSchema } from "../../../lib/validation/wallets"
 import {
   CreateWalletServiceError,
@@ -46,8 +46,6 @@ const ERROR_CODES = {
   duplicateName: "DUPLICATE_NAME",
   server: "SERVER_ERROR",
 } as const
-
-const AUTH_SCHEME = "bearer"
 
 export const POST: APIRoute = async ({ request, locals }) => {
   const supabase = locals.supabase
@@ -226,30 +224,6 @@ export const GET: APIRoute = async ({ request, locals }) => {
       code: ERROR_CODES.server,
       message: "Internal server error",
     })
-  }
-}
-
-function extractBearerToken(headerValue: string | null): string | null {
-  if (!headerValue) {
-    return null
-  }
-
-  const [scheme, token] = headerValue.split(" ")
-
-  if (!token || scheme.toLowerCase() !== AUTH_SCHEME) {
-    return null
-  }
-
-  return token.trim()
-}
-
-function fingerprint(value: unknown): string {
-  try {
-    return createHash("sha256")
-      .update(typeof value === "string" ? value : JSON.stringify(value))
-      .digest("hex")
-  } catch {
-    return "unavailable"
   }
 }
 
