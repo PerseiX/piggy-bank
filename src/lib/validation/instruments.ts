@@ -1,5 +1,8 @@
 import { z } from "zod"
 
+export { walletIdParamSchema } from "./wallets"
+export type { WalletIdParamSchemaOutput } from "./wallets"
+
 import type {
   CreateInstrumentCommand,
   InstrumentType,
@@ -10,6 +13,58 @@ const CONTROL_CHAR_REGEX = /[\u0000-\u001F\u007F]/
 const PLN_DECIMAL_PATTERN = /^[0-9]+(\.[0-9]{1,2})?$/
 
 const instrumentTypeValues = ["bonds", "etf", "stocks"] as const
+
+const listWalletInstrumentsSortEnum = z.enum([
+  "name",
+  "updated_at",
+  "type",
+  "current_value_grosze",
+])
+
+const listWalletInstrumentsOrderEnum = z.enum(["asc", "desc"])
+
+export type ListWalletInstrumentsSortField = z.infer<
+  typeof listWalletInstrumentsSortEnum
+>
+export type ListWalletInstrumentsSortOrder = z.infer<
+  typeof listWalletInstrumentsOrderEnum
+>
+
+export const LIST_WALLET_INSTRUMENTS_DEFAULT_SORT: ListWalletInstrumentsSortField =
+  "updated_at"
+export const LIST_WALLET_INSTRUMENTS_DEFAULT_ORDER: ListWalletInstrumentsSortOrder =
+  "desc"
+
+const normalizedSortSchema = z
+  .string({
+    invalid_type_error: "Sort must be a string",
+  })
+  .trim()
+  .transform((value) => value.toLowerCase())
+  .pipe(listWalletInstrumentsSortEnum)
+
+const normalizedOrderSchema = z
+  .string({
+    invalid_type_error: "Order must be a string",
+  })
+  .trim()
+  .transform((value) => value.toLowerCase())
+  .pipe(listWalletInstrumentsOrderEnum)
+
+export const listWalletInstrumentsQuerySchema = z
+  .object({
+    sort: normalizedSortSchema.optional(),
+    order: normalizedOrderSchema.optional(),
+  })
+  .strict()
+  .transform((value) => ({
+    sort: value.sort ?? LIST_WALLET_INSTRUMENTS_DEFAULT_SORT,
+    order: value.order ?? LIST_WALLET_INSTRUMENTS_DEFAULT_ORDER,
+  }))
+
+export type ListWalletInstrumentsQuery = z.infer<
+  typeof listWalletInstrumentsQuerySchema
+>
 
 function isValidInstrumentType(value: string): value is InstrumentType {
   return instrumentTypeValues.includes(value as InstrumentType)

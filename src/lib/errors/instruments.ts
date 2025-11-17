@@ -4,6 +4,7 @@ export const INSTRUMENT_ERROR_CODES = {
   walletSoftDeleted: "WALLET_SOFT_DELETED",
   nameConflict: "INSTRUMENT_NAME_CONFLICT",
   service: "CREATE_INSTRUMENT_SERVICE_ERROR",
+  listService: "LIST_WALLET_INSTRUMENTS_SERVICE_ERROR",
   instrumentNotFound: "INSTRUMENT_NOT_FOUND",
   instrumentForbidden: "INSTRUMENT_FORBIDDEN",
   instrumentSoftDeleted: "INSTRUMENT_SOFT_DELETED",
@@ -68,6 +69,15 @@ export class CreateInstrumentServiceError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
     super(message, options)
     this.name = "CreateInstrumentServiceError"
+  }
+}
+
+export class ListWalletInstrumentsServiceError extends Error {
+  public readonly code = INSTRUMENT_ERROR_CODES.listService
+
+  constructor(message: string, options?: { cause?: unknown }) {
+    super(message, options)
+    this.name = "ListWalletInstrumentsServiceError"
   }
 }
 

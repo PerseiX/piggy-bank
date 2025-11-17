@@ -1,9 +1,9 @@
 import type { Database } from "../../../db/database.types"
-import type { InstrumentCreatedDto, InstrumentDeletedDto } from "../../../types"
+import type { InstrumentDeletedDto, InstrumentDto } from "../../../types"
 import {
   formatGroszeToPln,
   formatOptionalGroszeToPln,
-} from "../../formatters/currency"
+} from "../../utils/currency"
 
 export type InstrumentRowForDto = Pick<
   Database["public"]["Tables"]["instruments"]["Row"],
@@ -20,9 +20,9 @@ export type InstrumentRowForDto = Pick<
   | "updated_at"
 >
 
-export function mapInstrumentRowToDto(
+export function mapInstrumentRecordToDto(
   instrument: InstrumentRowForDto,
-): InstrumentCreatedDto {
+): InstrumentDto {
   return {
     id: instrument.id,
     wallet_id: instrument.wallet_id,
@@ -38,6 +38,12 @@ export function mapInstrumentRowToDto(
     created_at: instrument.created_at,
     updated_at: instrument.updated_at,
   }
+}
+
+export function mapInstrumentRowToDto(
+  instrument: InstrumentRowForDto,
+): InstrumentDto {
+  return mapInstrumentRecordToDto(instrument)
 }
 
 export type InstrumentSoftDeleteRow = Pick<
