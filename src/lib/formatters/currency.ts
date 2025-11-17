@@ -1,3 +1,4 @@
+import type { CurrencyDualFormat } from "../../types"
 import { formatGroszeToPlnString } from "../currency"
 
 const PLN_DECIMAL_PATTERN = /^[0-9]+(\.[0-9]{1,2})?$/
@@ -56,4 +57,21 @@ export function formatOptionalGroszeToPln(
 }
 
 export const plnDecimalPattern = PLN_DECIMAL_PATTERN
+
+export function formatGroszeToDual(value: number): CurrencyDualFormat {
+  return {
+    grosze: value,
+    pln: formatGroszeToPln(value),
+  }
+}
+
+export function formatOptionalGroszeToDual(
+  value: number | null | undefined,
+): CurrencyDualFormat | null {
+  if (value === null || value === undefined) {
+    return null
+  }
+
+  return formatGroszeToDual(value)
+}
 

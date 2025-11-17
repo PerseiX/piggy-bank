@@ -12,6 +12,7 @@ export const INSTRUMENT_ERROR_CODES = {
   getService: "GET_INSTRUMENT_SERVICE_ERROR",
   updateService: "UPDATE_INSTRUMENT_SERVICE_ERROR",
   softDeleteService: "SOFT_DELETE_INSTRUMENT_SERVICE_ERROR",
+  valueChangesService: "GET_INSTRUMENT_VALUE_CHANGES_SERVICE_ERROR",
 } as const
 
 export type InstrumentErrorCode =
@@ -142,6 +143,15 @@ export class InstrumentSoftDeleteFailedError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
     super(message, options)
     this.name = "InstrumentSoftDeleteFailedError"
+  }
+}
+
+export class InstrumentValueChangesServiceError extends Error {
+  public readonly code = INSTRUMENT_ERROR_CODES.valueChangesService
+
+  constructor(message: string, options?: { cause?: unknown }) {
+    super(message, options)
+    this.name = "InstrumentValueChangesServiceError"
   }
 }
 

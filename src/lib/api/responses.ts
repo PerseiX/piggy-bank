@@ -9,6 +9,7 @@ type ApiErrorBody = {
     code: string
     message: string
     details?: unknown
+    correlationId?: string
   }
 }
 
