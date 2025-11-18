@@ -14,12 +14,14 @@ This document describes the user interface architecture for Piggy Bank (MVP) and
 - **Main API endpoints (summary)**:
   - `GET /api/wallets` — list active wallets (aggregates).
   - `POST /api/wallets` — create wallet.
+  - `PATCH /api/wallets/:id` — update wallet.
   - `GET /api/wallets/:id` — wallet detail with instruments and aggregates.
   - `DELETE /api/wallets/:id` — soft-delete wallet.
   - `GET /api/wallets/:walletId/instruments` — list instruments in wallet.
   - `POST /api/wallets/:walletId/instruments` — create instrument.
   - `PATCH /api/instruments/:id` — update instrument.
   - `DELETE /api/instruments/:id` — soft-delete instrument.
+  - `GET /api/instruments/:id` — instrument detail.
   - `GET /api/instruments/:id/value-changes` — instrument value change history.
 
 ## 2. View List
@@ -37,7 +39,7 @@ Below are the required views. Each entry lists path, purpose, key information, c
   - Path: `/`
   - Purpose: Primary landing showing all active wallets, aggregates and quick actions.
   - Key information: Wallet card for each wallet with name, currentValue, target, lastUpdated, Add Wallet CTA.
-  - Key components: `WalletCard`,, global `Toast`, `TopNav`/`UserMenu`.
+  - Key components: `WalletCard`, `RadialProgress`, `PerformanceIndicator`, global `Toast`, `TopNav`/`UserMenu`.
   - Considerations: Mobile-first layout; on small screens show single prominent graph and condensed numbers; include textual alternative for both graphs (e.g., "Progress: 65%"); handle 0-target and 0-invested cases gracefully (show 0% or "—"). Protect API calls with Authorization header and redirect to `/signin` on 401.
 
 - **Wallet Detail**
@@ -48,7 +50,7 @@ Below are the required views. Each entry lists path, purpose, key information, c
   - Considerations: After any instrument or wallet mutation re-fetch `GET /api/wallets/:id` to sync aggregates; show inline field errors mapped from `VALIDATION_ERROR`; use toasts for non-field global errors. Soft-deleted parent wallet should surface a not-found/404 page if attempted access.
 
 - **Instrument Create / Edit Page fallback**
-  - Path:  `/wallets/:id/instruments/:instrumentId/edit` OR nested path `/wallets/:id/instruments/new` (
+  - Path: `/wallets/:id/instruments/new` (create) and `/wallets/:id/instruments/:instrumentId/edit` (edit); opens as route-aware modal from Wallet Detail or as a full page fallback.
   - Purpose: Create or edit an instrument with field validation and PLN↔grosze conversion.
   - Key information: Type (enum), name, short_description, invested_money_pln, current_value_pln, optional goal_pln, Save/Cancel buttons.
   - Key components: `InstrumentForm` (Zod validation), `CurrencyInput` (PLN display + grosze conversion), inline field error renderer, `Toast` for server-level issues.
@@ -107,8 +109,8 @@ Secondary flows:
   - `/` → Dashboard (GET `/api/wallets`)
   - `/wallets/new` → Create Wallet
   - `/wallets/:id` → Wallet Detail (GET `/api/wallets/:id`)
-  - `/wallets/:id?modal=instrument-new` or `/wallets/:id/instruments/new` → Instrument Create (modal)
-  - `/wallets/:id/instruments/:instrumentId/edit` → Instrument Edit (modal)
+  - `/wallets/:id/instruments/new` → Instrument Create (modal/page)
+  - `/wallets/:id/instruments/:instrumentId/edit` → Instrument Edit (modal/page)
   - `/instruments/:id` → Instrument Detail (GET `/api/instruments/:id` + history)
   - `/signin`, `/signup`, `/404`, `/401`
 
@@ -156,6 +158,11 @@ Secondary flows:
   - All graphs include ARIA labels and textual summary lines.
   - Keyboard focus is managed for modals and dialogs; forms expose error messages via ARIA `aria-invalid` and `aria-describedby`.
   - Color is not the only indicator for performance; use icons/text as well.
+ 
+- **Security**:
+  - Sanitize and safely render all user-provided strings; prefer escaping in templates.
+  - Adopt a sensible Content Security Policy; avoid inline scripts/styles.
+  - JWT stored in `localStorage` for MVP (documented XSS risk); plan migration to httpOnly cookies in production.
 
 ## 7. Mapping user stories to UI (high-level)
 
