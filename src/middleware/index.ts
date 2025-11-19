@@ -1,9 +1,10 @@
-import { defineMiddleware } from "astro:middleware"
+import { defineMiddleware } from "astro:middleware";
 
-import { supabaseClient } from "../db/supabase.client"
+import { createSupabaseServerClient } from "../lib/supabase-server";
 
 export const onRequest = defineMiddleware((context, next) => {
-  context.locals.supabase = supabaseClient
-  return next()
-})
+  // Create a Supabase client that uses cookies for session management
+  context.locals.supabase = createSupabaseServerClient(context.cookies);
+  return next();
+});
 

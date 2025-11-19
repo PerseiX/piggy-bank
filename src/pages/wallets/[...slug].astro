@@ -1,0 +1,71 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import WalletForm from "@/components/WalletForm";
+import { getWalletDetail } from "@/lib/services/wallets/getWalletDetail";
+
+export const prerender = false;
+
+// Get Supabase client and check authentication
+const supabase = Astro.locals.supabase;
+const { data: { session } } = await supabase.auth.getSession();
+
+if (!session || !session.user) {
+  return Astro.redirect("/signin");
+}
+
+// Extract the slug from the URL
+const { slug } = Astro.params;
+const slugParts = slug ? slug.split("/") : [];
+
+// Determine the mode based on the URL structure
+let mode: "create" | "edit" = "create";
+let walletId: string | undefined;
+let initialData: { id: string; name: string; description: string | null } | undefined;
+
+// Handle /wallets/new route
+if (slugParts.length === 1 && slugParts[0] === "new") {
+  mode = "create";
+}
+// Handle /wallets/:id/edit route
+else if (slugParts.length === 2 && slugParts[1] === "edit") {
+  mode = "edit";
+  walletId = slugParts[0];
+
+  // Fetch wallet data for edit mode
+  try {
+    const walletDetail = await getWalletDetail({
+      supabase,
+      walletId,
+      ownerId: session.user.id,
+    });
+    initialData = {
+      id: walletDetail.id,
+      name: walletDetail.name,
+      description: walletDetail.description,
+    };
+  } catch (error) {
+    // If wallet not found or unauthorized, show 404
+    return new Response(null, {
+      status: 404,
+      statusText: "Not Found",
+    });
+  }
+}
+// Invalid route
+else {
+  return new Response(null, {
+    status: 404,
+    statusText: "Not Found",
+  });
+}
+
+const pageTitle = mode === "create" ? "Create Wallet" : "Edit Wallet";
+---
+
+<Layout title={pageTitle}>
+  <main class="container mx-auto max-w-2xl px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">{pageTitle}</h1>
+    <WalletForm client:visible mode={mode} initialData={initialData} />
+  </main>
+</Layout>
+
