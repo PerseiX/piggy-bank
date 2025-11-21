@@ -1,8 +1,19 @@
 ---
-import Welcome from "../components/Welcome.astro";
-import Layout from "../layouts/Layout.astro";
+import Layout from "@/layouts/Layout.astro";
+import { DashboardView } from "@/components/views/DashboardView";
+
+// Server-side authentication check
+const supabase = Astro.locals.supabase;
+const { data: { session } } = await supabase.auth.getSession();
+
+// If no session, redirect to sign-in page
+if (!session) {
+  return Astro.redirect("/signin");
+}
+
+const accessToken = session.access_token;
 ---
 
-<Layout>
-  <Welcome />
+<Layout title="Dashboard">
+  <DashboardView client:load accessToken={accessToken} />
 </Layout>
