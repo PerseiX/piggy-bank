@@ -6,7 +6,7 @@ import { PerformanceIndicator } from "./PerformanceIndicator";
  * WalletCard Component
  * 
  * Displays a summary card for a single wallet.
- * The entire card is clickable and navigates to the wallet detail view.
+ * Includes an edit button in the header and a "View Details" link in the footer.
  * Shows key metrics including current value, target, progress, and performance.
  */
 
@@ -25,18 +25,34 @@ export function WalletCard({ wallet }: WalletCardProps) {
   });
 
   return (
-    <a
-      href={`/wallets/${id}`}
-      className="group block rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-    >
+    <div className="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-gray-300">
       {/* Header */}
       <div className="mb-4">
-        <h2 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-          {name}
-        </h2>
-        {description && (
-          <p className="mt-1 text-sm text-gray-600 line-clamp-2">{description}</p>
-        )}
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-xl font-semibold text-gray-900">
+              {name}
+            </h2>
+            {description && (
+              <p className="mt-1 text-sm text-gray-600 line-clamp-2">{description}</p>
+            )}
+          </div>
+          <a
+            href={`/wallets/${id}/edit`}
+            className="flex-shrink-0 rounded-md p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"
+            aria-label={`Edit ${name}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <svg
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
+            </svg>
+          </a>
+        </div>
       </div>
 
       {/* Main Metrics */}
@@ -75,12 +91,15 @@ export function WalletCard({ wallet }: WalletCardProps) {
       <footer className="border-t border-gray-100 pt-4">
         <div className="flex items-center justify-between text-xs text-gray-500">
           <span>Updated {formattedDate}</span>
-          <span className="text-blue-600 group-hover:text-blue-700 font-medium">
+          <a
+            href={`/wallets/${id}`}
+            className="text-blue-600 hover:text-blue-700 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 rounded"
+          >
             View Details →
-          </span>
+          </a>
         </div>
       </footer>
-    </a>
+    </div>
   );
 }
 

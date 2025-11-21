@@ -84,14 +84,15 @@ November 21, 2025
 - **File**: `src/components/views/WalletCard.tsx`
 - **Status**: ✅ Complete
 - **Features**:
-  - Entire card is a clickable link to wallet detail page
   - Displays wallet name and description (with line clamp)
+  - Edit button in top-right corner navigates to `/wallets/:id/edit`
   - Shows current value, target, and invested amount
   - Includes ProgressCircle and PerformanceIndicator components
-  - Footer with formatted update timestamp
-  - Hover effects for better UX (shadow, border, text color)
-  - Focus-visible outline for keyboard navigation
-  - "View Details →" text that changes color on hover
+  - Footer with formatted update timestamp and "View Details" link
+  - "View Details →" link navigates to wallet detail page
+  - Hover effects for better UX (shadow, border)
+  - Focus-visible outline for keyboard navigation on buttons/links
+  - Edit button with pencil icon and proper ARIA label
 
 ### 6. Visual Indicator Components
 #### ProgressCircle
@@ -141,9 +142,15 @@ November 21, 2025
 - Transitions to appropriate state (success/empty/error)
 
 ### ✅ View Wallet Details
-- User clicks on any WalletCard
+- User clicks "View Details →" link in wallet card footer
 - Navigates to `/wallets/{wallet.id}`
 - Card provides visual feedback on hover
+
+### ✅ Edit Wallet
+- User clicks the edit button (pencil icon) in top-right of wallet card
+- Navigates to `/wallets/{wallet.id}/edit`
+- Button has hover effect and proper accessibility label
+- Click event doesn't interfere with other card interactions
 
 ### ✅ Create New Wallet
 - User clicks "Add Wallet" button in header
@@ -226,13 +233,15 @@ All files pass TypeScript and ESLint checks with zero errors.
 - ✅ Empty state shows for users with no wallets
 - ✅ Wallet list displays with multiple wallets
 - ✅ Error state shows on API failure
-- ✅ Clicking wallet card navigates to detail page
+- ✅ "View Details" link navigates to detail page
+- ✅ Edit button navigates to edit page
 - ✅ "Add Wallet" button navigates to creation page
 - ✅ Responsive layout works on all screen sizes
 - ✅ Progress circle displays correct percentages
 - ✅ Performance indicator shows correct colors
 - ✅ Keyboard navigation works properly
 - ✅ Screen reader announcements are correct
+- ✅ Edit button has proper ARIA label
 
 ### Edge Cases Handled
 - Empty wallet list
@@ -295,8 +304,9 @@ src/
 - Add E2E tests with Playwright
 
 ### Dependencies on Other Views
-- Wallet creation page (`/wallets/new`) - navigation target
-- Wallet detail page (`/wallets/:id`) - navigation target
+- Wallet creation page (`/wallets/new`) - navigation target from "Add Wallet" button
+- Wallet edit page (`/wallets/:id/edit`) - navigation target from edit button
+- Wallet detail page (`/wallets/:id`) - navigation target from "View Details" link
 - Sign-in page (`/signin`) - authentication fallback
 
 ## Notes
