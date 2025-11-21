@@ -53,7 +53,7 @@ export function DashboardView({ accessToken }: DashboardViewProps) {
         {/* Main Content - Conditional Rendering Based on Status */}
         <main>
           {viewModel.status === "loading" && <LoadingState />}
-          {viewModel.status === "error" && <ErrorState error={viewModel.error} />}
+          {viewModel.status === "error" && <ErrorState title="Failed to load wallets" message={viewModel.error || "An unexpected error occurred. Please check your connection and try again."} />}
           {viewModel.status === "empty" && <EmptyState />}
           {viewModel.status === "success" && <WalletList wallets={viewModel.wallets} />}
         </main>

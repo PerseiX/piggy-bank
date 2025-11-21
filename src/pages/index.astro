@@ -4,9 +4,15 @@ import { DashboardView } from "@/components/views/DashboardView";
 
 // Server-side authentication check
 const supabase = Astro.locals.supabase;
-const { data: { session } } = await supabase.auth.getSession();
+const { data: { user }, error } = await supabase.auth.getUser();
 
-// If no session, redirect to sign-in page
+// If no user, redirect to sign-in page
+if (error || !user) {
+  return Astro.redirect("/signin");
+}
+
+// Get session for access token
+const { data: { session } } = await supabase.auth.getSession();
 if (!session) {
   return Astro.redirect("/signin");
 }

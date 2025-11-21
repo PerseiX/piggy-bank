@@ -1,15 +1,29 @@
 /**
  * ErrorState Component
  * 
- * Displays an error message when wallet data fails to load.
+ * Displays an error message when data fails to load.
  * Provides a user-friendly error message and fallback text.
  */
 
 interface ErrorStateProps {
-  error: string | null;
+  title?: string;
+  message: string;
+  onRetry?: () => void;
 }
 
-export function ErrorState({ error }: ErrorStateProps) {
+export function ErrorState({ 
+  title = "Something went wrong",
+  message,
+  onRetry,
+}: ErrorStateProps) {
+  const handleRetry = () => {
+    if (onRetry) {
+      onRetry();
+    } else {
+      window.location.reload();
+    }
+  };
+
   return (
     <div 
       className="rounded-lg border border-red-200 bg-red-50 p-6"
@@ -33,15 +47,15 @@ export function ErrorState({ error }: ErrorStateProps) {
         </div>
         <div className="ml-3">
           <h3 className="text-sm font-semibold text-red-800">
-            Failed to load wallets
+            {title}
           </h3>
           <div className="mt-2 text-sm text-red-700">
-            {error || "An unexpected error occurred. Please check your connection and try again."}
+            {message}
           </div>
           <div className="mt-4">
             <button
               type="button"
-              onClick={() => window.location.reload()}
+              onClick={handleRetry}
               className="rounded-md bg-red-100 px-3 py-2 text-sm font-semibold text-red-800 hover:bg-red-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
             >
               Try again

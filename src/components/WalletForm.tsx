@@ -88,13 +88,21 @@ export default function WalletForm({ mode, initialData }: WalletFormProps) {
     setIsSubmitting(true);
 
     try {
-      // Get the current session to include auth token
+      // Get the current user to verify authentication
       const supabase = getSupabaseBrowserClient();
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
 
-      if (!session?.access_token) {
+      if (userError || !user) {
         toast.error("You must be signed in to perform this action.");
-       // window.location.href = "/signin";
+        window.location.href = "/signin";
+        return;
+      }
+
+      // Get session for access token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        toast.error("Session expired. Please sign in again.");
+        window.location.href = "/signin";
         return;
       }
 
