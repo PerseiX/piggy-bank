@@ -38,7 +38,7 @@ export function WalletCard({ wallet }: WalletCardProps) {
             )}
           </div>
           <a
-            href={`/wallets/${id}/edit`}
+            href={`/wallets/detail/${id}/edit`}
             className="flex-shrink-0 rounded-md p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"
             aria-label={`Edit ${name}`}
             onClick={(e) => e.stopPropagation()}
@@ -92,7 +92,7 @@ export function WalletCard({ wallet }: WalletCardProps) {
         <div className="flex items-center justify-between text-xs text-gray-500">
           <span>Updated {formattedDate}</span>
           <a
-            href={`/wallets/${id}`}
+            href={`/wallets/detail/${id}`}
             className="text-blue-600 hover:text-blue-700 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 rounded"
           >
             View Details →
