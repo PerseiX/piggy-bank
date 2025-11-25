@@ -8,7 +8,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useWalletDetail, type ModalState } from "@/components/hooks/useWalletDetail";
-import { AppHeader } from "@/components/AppHeader";
 import { WalletHeader } from "./wallet-detail/WalletHeader";
 import { AggregatesSummary } from "./wallet-detail/AggregatesSummary";
 import { InstrumentList } from "./wallet-detail/InstrumentList";
@@ -35,28 +34,22 @@ export default function WalletDetailView({ walletId, accessToken }: WalletDetail
   // Handle loading state
   if (viewModel.status === "loading") {
     return (
-      <>
-        <AppHeader />
-        <div className="container mx-auto max-w-6xl px-4 py-8">
-          <LoadingState message="Loading wallet details..." />
-        </div>
-      </>
+      <div className="container mx-auto max-w-6xl px-4 py-8">
+        <LoadingState message="Loading wallet details..." />
+      </div>
     );
   }
 
   // Handle error state
   if (viewModel.status === "error" || !viewModel.walletData) {
     return (
-      <>
-        <AppHeader />
-        <div className="container mx-auto max-w-6xl px-4 py-8">
-          <ErrorState
-            title="Failed to Load Wallet"
-            message={viewModel.error || "Could not load wallet details. Please try again."}
-            onRetry={actions.refresh}
-          />
-        </div>
-      </>
+      <div className="container mx-auto max-w-6xl px-4 py-8">
+        <ErrorState
+          title="Failed to Load Wallet"
+          message={viewModel.error || "Could not load wallet details. Please try again."}
+          onRetry={actions.refresh}
+        />
+      </div>
     );
   }
 
@@ -189,9 +182,7 @@ export default function WalletDetailView({ walletId, accessToken }: WalletDetail
   };
 
   return (
-    <>
-      <AppHeader />
-      <div className="container mx-auto max-w-6xl px-4 py-8">
+    <div className="container mx-auto max-w-6xl px-4 py-8">
         <WalletHeader
           wallet={wallet}
           onEdit={handleEditWallet}
@@ -272,8 +263,7 @@ export default function WalletDetailView({ walletId, accessToken }: WalletDetail
           isLoading={isDeletingInstrument}
         />
       )}
-      </div>
-    </>
+    </div>
   );
 }
 

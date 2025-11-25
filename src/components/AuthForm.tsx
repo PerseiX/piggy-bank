@@ -7,26 +7,25 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
 import { AuthFormSchema, type AuthFormViewModel } from "@/lib/schemas/auth.schema";
 
 type AuthFormProps = {
-  variant: "signin" | "signup";
+  mode: "login" | "signup";
 };
 
-export function AuthForm({ variant }: AuthFormProps) {
+export function AuthForm({ mode }: AuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const supabase = getSupabaseBrowserClient();
 
-  const isSignIn = variant === "signin";
-  const title = isSignIn ? "Sign In" : "Sign Up";
-  const description = isSignIn 
+  const isLogin = mode === "login";
+  const title = isLogin ? "Sign In" : "Sign Up";
+  const description = isLogin 
     ? "Enter your credentials to access your account" 
     : "Create a new account to get started";
-  const buttonText = isSignIn ? "Sign In" : "Sign Up";
-  const footerText = isSignIn ? "Don't have an account?" : "Already have an account?";
-  const footerLinkText = isSignIn ? "Sign Up" : "Sign In";
-  const footerLinkHref = isSignIn ? "/signup" : "/signin";
+  const buttonText = isLogin ? "Sign In" : "Sign Up";
+  const footerText = isLogin ? "Don't have an account?" : "Already have an account?";
+  const footerLinkText = isLogin ? "Sign Up" : "Sign In";
+  const footerLinkHref = isLogin ? "/auth/signup" : "/auth/login";
+  const apiEndpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
 
   const form = useForm<AuthFormViewModel>({
     resolver: zodResolver(AuthFormSchema),
@@ -37,53 +36,41 @@ export function AuthForm({ variant }: AuthFormProps) {
   });
 
   const onSubmit = async (data: AuthFormViewModel) => {
-
-    console.log("data", data);
-    console.log("isSignIn", isSignIn);
     setIsLoading(true);
 
     try {
-      console.log("isSignIn", isSignIn);
-      if (isSignIn) {
-        // Sign in with existing credentials
-        const { error } = await supabase.auth.signInWithPassword({
-          email: data.email,
-          password: data.password,
-        });
-        
-        console.log("error", error);
-        if (error) {
-          toast.error("Authentication Failed", {
-            description: error.message,
-          });
-          return;
-        }
+      // Call the appropriate API endpoint
+      const response = await fetch(apiEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-        // Success - redirect to dashboard
+      const result = await response.json();
+
+      if (!response.ok) {
+        // Handle error response
+        toast.error(isLogin ? "Authentication Failed" : "Sign Up Failed", {
+          description: result.error || "Please try again.",
+        });
+        return;
+      }
+
+      // Success - show success message and redirect
+      if (isLogin) {
         toast.success("Welcome back!", {
           description: "You have successfully signed in.",
         });
-        window.location.href = "/";
       } else {
-        // Sign up with new credentials
-        const { error } = await supabase.auth.signUp({
-          email: data.email,
-          password: data.password,
-        });
-
-        if (error) {
-          toast.error("Sign Up Failed", {
-            description: error.message,
-          });
-          return;
-        }
-
-        // Success - redirect to dashboard or show confirmation message
         toast.success("Account Created!", {
-          description: "You have successfully signed up. Please check your email for verification.",
+          description: "You have successfully signed up.",
         });
-        window.location.href = "/";
       }
+
+      // Redirect to home page
+      window.location.href = "/";
     } catch (error) {
       // Handle unexpected errors
       toast.error("An unexpected error occurred", {
@@ -127,7 +114,17 @@ export function AuthForm({ variant }: AuthFormProps) {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Password</FormLabel>
+                      {isLogin && (
+                        <a 
+                          href="/auth/forgot-password" 
+                          className="text-sm text-primary hover:underline"
+                        >
+                          Forgot password?
+                        </a>
+                      )}
+                    </div>
                     <FormControl>
                       <Input
                         type="password"

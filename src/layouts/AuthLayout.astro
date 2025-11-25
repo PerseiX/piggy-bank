@@ -1,17 +1,12 @@
 ---
 import "../styles/global.css";
 import { Toaster } from "@/components/ui/sonner";
-import { AppHeader } from "@/components/AppHeader";
 
 interface Props {
   title?: string;
-  showHeader?: boolean;
 }
 
-const { title = "10x Astro Starter", showHeader = true } = Astro.props;
-
-// Get user from middleware
-const user = Astro.locals.user;
+const { title = "Piggy Bank" } = Astro.props;
 ---
 
 <!doctype html>
@@ -23,9 +18,10 @@ const user = Astro.locals.user;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body>
-    {showHeader && <AppHeader client:load user={user} />}
-    <slot />
+  <body class="bg-background">
+    <main role="main" class="min-h-screen">
+      <slot />
+    </main>
     <Toaster client:load />
   </body>
 </html>
@@ -38,3 +34,4 @@ const user = Astro.locals.user;
     height: 100%;
   }
 </style>
+

@@ -1,5 +1,4 @@
 import { useWallets } from "@/components/hooks/useWallets";
-import { AppHeader } from "@/components/AppHeader";
 import { LoadingState } from "./LoadingState";
 import { ErrorState } from "./ErrorState";
 import { EmptyState } from "./EmptyState";
@@ -21,9 +20,7 @@ export function DashboardView({ accessToken }: DashboardViewProps) {
   const viewModel = useWallets(accessToken);
 
   return (
-    <>
-      <AppHeader />
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           {/* Page Header */}
           <header className="mb-8">
@@ -62,7 +59,6 @@ export function DashboardView({ accessToken }: DashboardViewProps) {
           </main>
         </div>
       </div>
-    </>
   );
 }
 

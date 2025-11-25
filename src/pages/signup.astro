@@ -1,9 +1,5 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import { AuthForm } from "@/components/AuthForm";
+// Redirect to new auth route
+return Astro.redirect("/auth/signup", 301);
 ---
-
-<Layout title="Sign Up">
-  <AuthForm client:load variant="signup" />
-</Layout>
 

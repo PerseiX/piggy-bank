@@ -2,24 +2,12 @@
 import Layout from "@/layouts/Layout.astro";
 import { DashboardView } from "@/components/views/DashboardView";
 
-// Server-side authentication check
-const supabase = Astro.locals.supabase;
-const { data: { user }, error } = await supabase.auth.getUser();
-
-// If no user, redirect to sign-in page
-if (error || !user) {
-  return Astro.redirect("/signin");
-}
-
+// User is guaranteed to be authenticated by middleware
 // Get session for access token
-const { data: { session } } = await supabase.auth.getSession();
-if (!session) {
-  return Astro.redirect("/signin");
-}
-
-const accessToken = session.access_token;
+const { data: { session } } = await Astro.locals.supabase.auth.getSession();
+const accessToken = session?.access_token || "";
 ---
 
-<Layout title="Dashboard">
+<Layout title="Dashboard - Piggy Bank">
   <DashboardView client:load accessToken={accessToken} />
 </Layout>

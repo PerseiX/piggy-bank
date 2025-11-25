@@ -1,0 +1,9 @@
+---
+import AuthLayout from "@/layouts/AuthLayout.astro";
+import { AuthForm } from "@/components/AuthForm";
+---
+
+<AuthLayout title="Sign Up - Piggy Bank">
+  <AuthForm client:load mode="signup" />
+</AuthLayout>
+

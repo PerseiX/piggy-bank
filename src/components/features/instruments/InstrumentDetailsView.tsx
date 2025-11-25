@@ -8,7 +8,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useInstrumentDetails } from "@/components/hooks/useInstrumentDetails";
-import { AppHeader } from "@/components/AppHeader";
 import { InstrumentHeader, type InstrumentHeaderViewModel } from "./InstrumentHeader";
 import { InstrumentMetrics, type InstrumentMetricsViewModel } from "./InstrumentMetrics";
 import { ValueChangeHistory } from "./ValueChangeHistory";
@@ -31,12 +30,9 @@ export default function InstrumentDetailsView({ instrumentId, accessToken }: Ins
   // Handle loading state
   if (viewModel.status === "loading") {
     return (
-      <>
-        <AppHeader />
-        <div className="container mx-auto max-w-6xl px-4 py-8">
-          <LoadingState message="Loading instrument details..." />
-        </div>
-      </>
+      <div className="container mx-auto max-w-6xl px-4 py-8">
+        <LoadingState message="Loading instrument details..." />
+      </div>
     );
   }
 
@@ -51,24 +47,21 @@ export default function InstrumentDetailsView({ instrumentId, accessToken }: Ins
     const errorMessage = viewModel.error?.message || "Could not load instrument details. Please try again.";
 
     return (
-      <>
-        <AppHeader />
-        <div className="container mx-auto max-w-6xl px-4 py-8">
-          <ErrorState
-            title={errorTitle}
-            message={errorMessage}
-            onRetry={actions.refresh}
-          />
-          <div className="mt-4">
-            <a
-              href="/"
-              className="text-sm font-medium text-blue-600 hover:text-blue-500"
-            >
-              ← Back to Dashboard
-            </a>
-          </div>
+      <div className="container mx-auto max-w-6xl px-4 py-8">
+        <ErrorState
+          title={errorTitle}
+          message={errorMessage}
+          onRetry={actions.refresh}
+        />
+        <div className="mt-4">
+          <a
+            href="/"
+            className="text-sm font-medium text-blue-600 hover:text-blue-500"
+          >
+            ← Back to Dashboard
+          </a>
         </div>
-      </>
+      </div>
     );
   }
 
@@ -111,9 +104,7 @@ export default function InstrumentDetailsView({ instrumentId, accessToken }: Ins
   };
 
   return (
-    <>
-      <AppHeader />
-      <div className="container mx-auto max-w-6xl px-4 py-8">
+    <div className="container mx-auto max-w-6xl px-4 py-8">
         {/* Back to Wallet Link */}
         <div className="mb-4">
           <a
@@ -152,7 +143,6 @@ export default function InstrumentDetailsView({ instrumentId, accessToken }: Ins
           />
         )}
       </div>
-    </>
   );
 }
 

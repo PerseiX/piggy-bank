@@ -1,6 +1,5 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { AppHeader } from "@/components/AppHeader";
 import WalletForm from "@/components/WalletForm";
 import { getWalletDetail } from "@/lib/services/wallets/getWalletDetail";
 
@@ -70,7 +69,6 @@ const pageTitle = mode === "create" ? "Create Wallet" : "Edit Wallet";
 ---
 
 <Layout title={pageTitle}>
-  <AppHeader client:load />
   <main class="container mx-auto max-w-2xl px-4 py-8">
     <h1 class="text-3xl font-bold mb-8">{pageTitle}</h1>
     <WalletForm client:load mode={mode} initialData={initialData} />
