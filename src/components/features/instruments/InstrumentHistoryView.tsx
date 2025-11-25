@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useInstrumentDetails } from "@/components/hooks/useInstrumentDetails";
+import { AppHeader } from "@/components/AppHeader";
 import { ValueChangeChart } from "./ValueChangeChart";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -82,9 +83,12 @@ export default function InstrumentHistoryView({ instrumentId, accessToken }: Ins
   // Handle loading state
   if (instrumentViewModel.status === "loading" || historyStatus === "loading") {
     return (
-      <div className="container mx-auto max-w-7xl px-4 py-8">
-        <LoadingState message="Loading instrument history..." />
-      </div>
+      <>
+        <AppHeader />
+        <div className="container mx-auto max-w-7xl px-4 py-8">
+          <LoadingState message="Loading instrument history..." />
+        </div>
+      </>
     );
   }
 
@@ -99,21 +103,24 @@ export default function InstrumentHistoryView({ instrumentId, accessToken }: Ins
     const errorMessage = instrumentViewModel.error?.message || "Could not load instrument details. Please try again.";
 
     return (
-      <div className="container mx-auto max-w-7xl px-4 py-8">
-        <ErrorState
-          title={errorTitle}
-          message={errorMessage}
-          onRetry={actions.refresh}
-        />
-        <div className="mt-4">
-          <a
-            href="/"
+      <>
+        <AppHeader />
+        <div className="container mx-auto max-w-7xl px-4 py-8">
+          <ErrorState
+            title={errorTitle}
+            message={errorMessage}
+            onRetry={actions.refresh}
+          />
+          <div className="mt-4">
+            <a
+              href="/"
             className="text-sm font-medium text-blue-600 hover:text-blue-500"
           >
             ← Back to Dashboard
           </a>
         </div>
-      </div>
+        </div>
+      </>
     );
   }
 
@@ -153,13 +160,15 @@ export default function InstrumentHistoryView({ instrumentId, accessToken }: Ins
   };
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-8">
-      {/* Navigation */}
-      <div className="mb-4 flex items-center gap-4">
-        <a
-          href={`/instruments/${instrumentId}`}
-          className="text-sm font-medium text-blue-600 hover:text-blue-500"
-        >
+    <>
+      <AppHeader />
+      <div className="container mx-auto max-w-7xl px-4 py-8">
+        {/* Navigation */}
+        <div className="mb-4 flex items-center gap-4">
+          <a
+            href={`/instruments/${instrumentId}`}
+            className="text-sm font-medium text-blue-600 hover:text-blue-500"
+          >
           ← Back to Instrument Details
         </a>
         <span className="text-gray-300">|</span>
@@ -275,7 +284,8 @@ export default function InstrumentHistoryView({ instrumentId, accessToken }: Ins
           </div>
         </>
       )}
-    </div>
+      </div>
+    </>
   );
 }
 

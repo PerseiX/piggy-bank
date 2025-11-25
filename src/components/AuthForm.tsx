@@ -63,7 +63,7 @@ export function AuthForm({ variant }: AuthFormProps) {
         toast.success("Welcome back!", {
           description: "You have successfully signed in.",
         });
-        // window.location.href = "/wallets";
+        window.location.href = "/";
       } else {
         // Sign up with new credentials
         const { error } = await supabase.auth.signUp({

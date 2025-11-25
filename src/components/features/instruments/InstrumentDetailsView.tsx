@@ -8,6 +8,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useInstrumentDetails } from "@/components/hooks/useInstrumentDetails";
+import { AppHeader } from "@/components/AppHeader";
 import { InstrumentHeader, type InstrumentHeaderViewModel } from "./InstrumentHeader";
 import { InstrumentMetrics, type InstrumentMetricsViewModel } from "./InstrumentMetrics";
 import { ValueChangeHistory } from "./ValueChangeHistory";
@@ -30,9 +31,12 @@ export default function InstrumentDetailsView({ instrumentId, accessToken }: Ins
   // Handle loading state
   if (viewModel.status === "loading") {
     return (
-      <div className="container mx-auto max-w-6xl px-4 py-8">
-        <LoadingState message="Loading instrument details..." />
-      </div>
+      <>
+        <AppHeader />
+        <div className="container mx-auto max-w-6xl px-4 py-8">
+          <LoadingState message="Loading instrument details..." />
+        </div>
+      </>
     );
   }
 
@@ -47,21 +51,24 @@ export default function InstrumentDetailsView({ instrumentId, accessToken }: Ins
     const errorMessage = viewModel.error?.message || "Could not load instrument details. Please try again.";
 
     return (
-      <div className="container mx-auto max-w-6xl px-4 py-8">
-        <ErrorState
-          title={errorTitle}
-          message={errorMessage}
-          onRetry={actions.refresh}
-        />
-        <div className="mt-4">
-          <a
-            href="/"
-            className="text-sm font-medium text-blue-600 hover:text-blue-500"
-          >
-            ← Back to Dashboard
-          </a>
+      <>
+        <AppHeader />
+        <div className="container mx-auto max-w-6xl px-4 py-8">
+          <ErrorState
+            title={errorTitle}
+            message={errorMessage}
+            onRetry={actions.refresh}
+          />
+          <div className="mt-4">
+            <a
+              href="/"
+              className="text-sm font-medium text-blue-600 hover:text-blue-500"
+            >
+              ← Back to Dashboard
+            </a>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -104,45 +111,48 @@ export default function InstrumentDetailsView({ instrumentId, accessToken }: Ins
   };
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-8">
-      {/* Back to Wallet Link */}
-      <div className="mb-4">
-        <a
-          href={`/wallets/detail/${instrument.wallet_id}`}
-          className="text-sm font-medium text-blue-600 hover:text-blue-500"
-        >
-          ← Back to Wallet
-        </a>
-      </div>
+    <>
+      <AppHeader />
+      <div className="container mx-auto max-w-6xl px-4 py-8">
+        {/* Back to Wallet Link */}
+        <div className="mb-4">
+          <a
+            href={`/wallets/detail/${instrument.wallet_id}`}
+            className="text-sm font-medium text-blue-600 hover:text-blue-500"
+          >
+            ← Back to Wallet
+          </a>
+        </div>
 
-      {/* Header with name, type, and action buttons */}
-      <InstrumentHeader
-        instrument={headerViewModel}
-        instrumentId={instrumentId}
-        onDelete={handleDelete}
-      />
-
-      {/* Financial metrics cards */}
-      <InstrumentMetrics metrics={metricsViewModel} />
-
-      {/* Value change history accordion */}
-      <ValueChangeHistory
-        instrumentId={instrumentId}
-        accessToken={accessToken}
-      />
-
-      {/* Delete confirmation dialog */}
-      {showDeleteDialog && (
-        <ConfirmDeleteDialog
-          isOpen={true}
-          onClose={handleDeleteCancel}
-          onConfirm={handleDeleteConfirm}
-          title="Delete Instrument"
-          description={`Are you sure you want to delete "${instrument.name}"? This action cannot be undone and will delete all value change history for this instrument.`}
-          isLoading={isDeleting}
+        {/* Header with name, type, and action buttons */}
+        <InstrumentHeader
+          instrument={headerViewModel}
+          instrumentId={instrumentId}
+          onDelete={handleDelete}
         />
-      )}
-    </div>
+
+        {/* Financial metrics cards */}
+        <InstrumentMetrics metrics={metricsViewModel} />
+
+        {/* Value change history accordion */}
+        <ValueChangeHistory
+          instrumentId={instrumentId}
+          accessToken={accessToken}
+        />
+
+        {/* Delete confirmation dialog */}
+        {showDeleteDialog && (
+          <ConfirmDeleteDialog
+            isOpen={true}
+            onClose={handleDeleteCancel}
+            onConfirm={handleDeleteConfirm}
+            title="Delete Instrument"
+            description={`Are you sure you want to delete "${instrument.name}"? This action cannot be undone and will delete all value change history for this instrument.`}
+            isLoading={isDeleting}
+          />
+        )}
+      </div>
+    </>
   );
 }
 
