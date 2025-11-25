@@ -13,6 +13,7 @@ import { AggregatesSummary } from "./wallet-detail/AggregatesSummary";
 import { InstrumentList } from "./wallet-detail/InstrumentList";
 import { WalletFormModal } from "./wallet-detail/WalletFormModal";
 import { InstrumentFormModal } from "./wallet-detail/InstrumentFormModal";
+import { QuickEditValuesModal } from "./wallet-detail/QuickEditValuesModal";
 import { ConfirmDeleteDialog } from "./wallet-detail/ConfirmDeleteDialog";
 import { LoadingState } from "./LoadingState";
 import { ErrorState } from "./ErrorState";
@@ -79,6 +80,10 @@ export default function WalletDetailView({ walletId, accessToken }: WalletDetail
     setModalState({ type: "create-instrument" });
   };
 
+  const handleQuickEditValues = (instrument: InstrumentDto) => {
+    setModalState({ type: "quick-edit-values", instrument });
+  };
+
   const handleEditInstrument = (instrument: InstrumentDto) => {
     setModalState({
       type: "edit-instrument",
@@ -136,6 +141,18 @@ export default function WalletDetailView({ walletId, accessToken }: WalletDetail
     }
   };
 
+  // Handler for quick values update
+  const handleQuickValuesUpdate = async (command: UpdateInstrumentCommand) => {
+    if (modalState.type !== "quick-edit-values") return;
+    try {
+      await actions.updateInstrument(modalState.instrument.id, command);
+      toast.success("Values updated successfully!");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to update values");
+      throw error;
+    }
+  };
+
   // Handler for wallet deletion confirmation
   const handleWalletDeleteConfirm = async () => {
     setIsDeletingWallet(true);
@@ -177,6 +194,7 @@ export default function WalletDetailView({ walletId, accessToken }: WalletDetail
       <InstrumentList
         instruments={wallet.instruments}
         onAddInstrument={handleAddInstrument}
+        onQuickEditValues={handleQuickEditValues}
         onEditInstrument={handleEditInstrument}
         onDeleteInstrument={handleDeleteInstrument}
       />
@@ -198,6 +216,16 @@ export default function WalletDetailView({ walletId, accessToken }: WalletDetail
           onClose={closeModal}
           onSubmit={handleInstrumentCreate}
           mode="create"
+        />
+      )}
+
+      {/* Quick Edit Values Modal */}
+      {modalState.type === "quick-edit-values" && (
+        <QuickEditValuesModal
+          isOpen={true}
+          onClose={closeModal}
+          onSubmit={handleQuickValuesUpdate}
+          instrument={modalState.instrument}
         />
       )}
 

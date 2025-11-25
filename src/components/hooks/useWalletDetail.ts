@@ -31,6 +31,7 @@ export type WalletDetailViewModel = {
 export type ModalState =
   | { type: "idle" }
   | { type: "create-instrument" }
+  | { type: "quick-edit-values"; instrument: InstrumentDto }
   | { type: "edit-instrument"; instrument: InstrumentDto }
   | { type: "edit-wallet"; wallet: Pick<WalletDetailDto, "id" | "name" | "description"> }
   | { type: "delete-instrument"; instrumentId: string; instrumentName: string }

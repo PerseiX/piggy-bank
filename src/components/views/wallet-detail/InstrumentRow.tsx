@@ -10,11 +10,12 @@ import type { InstrumentDto } from "@/types";
 
 interface InstrumentRowProps {
   instrument: InstrumentDto;
+  onQuickEditValues: (instrument: InstrumentDto) => void;
   onEdit: (instrument: InstrumentDto) => void;
   onDelete: (instrumentId: string) => void;
 }
 
-export function InstrumentRow({ instrument, onEdit, onDelete }: InstrumentRowProps) {
+export function InstrumentRow({ instrument, onQuickEditValues, onEdit, onDelete }: InstrumentRowProps) {
   const handleViewDetails = () => {
     window.location.href = `/instruments/${instrument.id}`;
   };
@@ -88,6 +89,28 @@ export function InstrumentRow({ instrument, onEdit, onDelete }: InstrumentRowPro
               />
             </svg>
             <span className="hidden sm:inline">Details</span>
+          </Button>
+          <Button
+            onClick={() => onQuickEditValues(instrument)}
+            variant="outline"
+            size="sm"
+            aria-label={`Quick edit values for ${instrument.name}`}
+            title="Quick edit invested and current value"
+          >
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
           </Button>
           <Button
             onClick={() => onEdit(instrument)}

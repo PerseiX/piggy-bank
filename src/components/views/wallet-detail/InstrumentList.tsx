@@ -12,6 +12,7 @@ import type { InstrumentDto } from "@/types";
 interface InstrumentListProps {
   instruments: InstrumentDto[];
   onAddInstrument: () => void;
+  onQuickEditValues: (instrument: InstrumentDto) => void;
   onEditInstrument: (instrument: InstrumentDto) => void;
   onDeleteInstrument: (instrumentId: string) => void;
 }
@@ -19,6 +20,7 @@ interface InstrumentListProps {
 export function InstrumentList({
   instruments,
   onAddInstrument,
+  onQuickEditValues,
   onEditInstrument,
   onDeleteInstrument,
 }: InstrumentListProps) {
@@ -86,6 +88,7 @@ export function InstrumentList({
                   <InstrumentRow
                     key={instrument.id}
                     instrument={instrument}
+                    onQuickEditValues={onQuickEditValues}
                     onEdit={onEditInstrument}
                     onDelete={onDeleteInstrument}
                   />
