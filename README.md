@@ -17,6 +17,7 @@ Piggy Bank
 - [Tech stack](#tech-stack)
 - [Getting started locally](#getting-started-locally)
 - [Available scripts](#available-scripts)
+- [Testing](#testing)
 - [Project scope](#project-scope)
 - [Project status](#project-status)
 - [License](#license)
@@ -41,6 +42,11 @@ Piggy Bank is a goal‑oriented savings tracker that helps users build and susta
   - Shadcn/ui (Radix-based UI components)
 - Database
   - Supabase (PostgreSQL)
+- Testing
+  - Vitest (unit & integration tests)
+  - React Testing Library (component tests)
+  - Playwright (E2E tests)
+  - Codecov (coverage)
 - CI/CD
   - GitHub Actions
 
@@ -102,6 +108,12 @@ npm run preview
 - **lint**: Run ESLint
 - **lint:fix**: Run ESLint with auto-fix
 - **format**: Run Prettier on the repository
+- **test**: Run unit and component tests with Vitest
+- **test:watch**: Run tests in watch mode
+- **test:coverage**: Run tests with coverage report
+- **test:e2e**: Run end-to-end tests with Playwright
+- **test:e2e:ui**: Run E2E tests with Playwright UI
+- **test:a11y**: Run accessibility tests with Axe
 
 ```bash
 npm run dev
@@ -111,7 +123,59 @@ npm run astro -- <args>
 npm run lint
 npm run lint:fix
 npm run format
+npm run test
+npm run test:watch
+npm run test:coverage
+npm run test:e2e
+npm run test:e2e:ui
+npm run test:a11y
 ```
+
+## Testing
+
+The project includes comprehensive test coverage across multiple layers:
+
+### Unit & Integration Tests (Vitest)
+- Formatters and utilities (`src/lib/formatters/`, `src/lib/utils.ts`)
+- Validation schemas (`src/lib/schemas/`, `src/lib/validation/`)
+- Service-level logic (`src/lib/services/`)
+- API helpers (`src/lib/api/`)
+- Coverage target: ≥85% lines, ≥80% branches for `src/lib/**`
+
+### Component Tests (React Testing Library)
+- UI components and view containers (`src/components/**`)
+- Tests for loading, empty, error, and success states
+- User interaction flows and accessibility
+
+### E2E Tests (Playwright)
+- Complete user journeys across SSR/CSR pages
+- Authentication flows (login, signup, logout, password reset)
+- Wallet and instrument CRUD operations
+- Data visualization and history views
+- Runs on Chromium, Firefox, and WebKit
+
+### Accessibility Tests (Axe-core)
+- Automated WCAG A/AA compliance checks
+- Coverage of key pages, dialogs, and forms
+- No critical violations allowed in CI
+
+### Performance Tests (Lighthouse CI)
+- Dashboard, wallet detail, and instrument detail pages
+- Target: Performance score ≥80 on desktop
+- Monitored in CI for regressions
+
+### Database Tests (Supabase CLI)
+- Migration application and rollback
+- Soft-delete cascade behavior
+- Constraint and uniqueness validation
+
+### Test Environment
+- Node 22.14.0 (see `.nvmrc`)
+- Local Supabase instance via Supabase CLI
+- Test database reset between suites
+- Seed fixtures for wallets, instruments, and users
+
+See the complete test plan at [./.ai/qa/test-plan.md](./.ai/qa/test-plan.md) for detailed scenarios and acceptance criteria.
 
 ## Project scope
 

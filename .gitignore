@@ -24,3 +24,15 @@ pnpm-debug.log*
 .idea/
 .env
 .env.local
+
+# test coverage
+coverage/
+.nyc_output/
+
+# test results
+test-results/
+playwright-report/
+screenshots/
+
+# vitest
+.vitest/

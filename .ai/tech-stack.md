@@ -14,5 +14,12 @@
 ## Database
 - **Supabase (PostgreSQL)**: A managed Postgres database with real-time subscriptions and row-level security, providing robust relational storage for user wallets, instruments, and goals while supporting easy querying and authentication integration.
 
+## Testing
+- **Vitest**: Fast unit and integration test runner with native ESM support, providing comprehensive coverage reporting and fast feedback for utility functions, services, and validation logic.
+- **React Testing Library**: Component testing library that encourages testing from the user's perspective, ensuring UI components handle loading, error, empty, and success states correctly.
+- **Playwright**: End-to-end testing framework supporting multiple browsers (Chromium, Firefox, WebKit) for validating complete user journeys, SSR/CSR boundaries, and auth flows with automatic waiting and trace capture.
+- **Supabase CLI**: Database migration and seeding tooling for test environments, allowing repeatable schema setup and data fixtures across test runs.
+- **Test Coverage** - Codecov
+
 ## CI/CD
 - **GitHub Actions**: Integrated CI/CD workflows with GitHub for automated testing, linting, and deployment to platforms like Vercel, ensuring reliable builds and releases at no additional cost for open-source or small projects.
