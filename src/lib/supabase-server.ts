@@ -5,8 +5,13 @@ import type { Database } from "@/db/database.types";
 
 export const cookieOptions: CookieOptionsWithName = {
   path: '/',
-  secure: import.meta.env.PROD,
-  httpOnly: true,
+  // In test mode, we connect to cloud Supabase (HTTPS), so cookies should be secure
+  // In local dev, we connect to local Supabase (HTTP), so cookies should not be secure
+  secure: import.meta.env.PROD || import.meta.env.MODE === 'test',
+  // IMPORTANT: httpOnly must be false for Supabase auth cookies
+  // The browser client needs to read these cookies for session management
+  // Supabase handles security through other means (short-lived tokens, refresh flow)
+  httpOnly: false,
   sameSite: 'lax',
 };
 

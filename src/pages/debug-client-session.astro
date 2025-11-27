@@ -1,0 +1,103 @@
+---
+// Debug page to check client-side session state
+export const prerender = false;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debug Client Session</title>
+  <style>
+    body {
+      font-family: monospace;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    pre {
+      background: #f5f5f5;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      margin: 0.5rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Client Session Debug</h1>
+  
+  <button id="checkSession">Check Session</button>
+  <button id="refreshSession">Refresh Session</button>
+  <button id="clearSession">Clear Session</button>
+  
+  <h2>Session State:</h2>
+  <pre id="output">Click "Check Session" to see current state</pre>
+
+  <script type="module">
+    import { getSupabaseBrowserClient } from '/src/lib/supabase-browser.ts';
+
+    const supabase = getSupabaseBrowserClient();
+    const output = document.getElementById('output');
+
+    async function checkSession() {
+      try {
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+        const result = {
+          session: {
+            exists: !!session,
+            accessToken: session?.access_token ? 'present' : 'missing',
+            expiresAt: session?.expires_at,
+            error: sessionError?.message,
+          },
+          user: {
+            exists: !!user,
+            id: user?.id,
+            email: user?.email,
+            error: userError?.message,
+          },
+          cookies: document.cookie,
+        };
+
+        output.textContent = JSON.stringify(result, null, 2);
+      } catch (error) {
+        output.textContent = `Error: ${error.message}`;
+      }
+    }
+
+    async function refreshSession() {
+      output.textContent = 'Refreshing session...';
+      try {
+        const { data, error } = await supabase.auth.refreshSession();
+        if (error) {
+          output.textContent = `Refresh error: ${error.message}`;
+        } else {
+          output.textContent = 'Session refreshed! Click "Check Session" to see updated state.';
+        }
+      } catch (error) {
+        output.textContent = `Error: ${error.message}`;
+      }
+    }
+
+    async function clearSession() {
+      await supabase.auth.signOut();
+      output.textContent = 'Session cleared!';
+    }
+
+    document.getElementById('checkSession').addEventListener('click', checkSession);
+    document.getElementById('refreshSession').addEventListener('click', refreshSession);
+    document.getElementById('clearSession').addEventListener('click', clearSession);
+
+    // Auto-check on page load
+    checkSession();
+  </script>
+</body>
+</html>
+

@@ -36,6 +36,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     });
 
     if (error) {
+      console.error("Login error:", error);
       return new Response(
         JSON.stringify({
           error: "Invalid email or password",

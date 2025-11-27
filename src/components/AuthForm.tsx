@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AuthFormSchema, type AuthFormViewModel } from "@/lib/schemas/auth.schema";
+import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
 
 type AuthFormProps = {
   mode: "login" | "signup";
@@ -58,7 +59,12 @@ export function AuthForm({ mode }: AuthFormProps) {
         return;
       }
 
-      // Success - show success message and redirect
+      // Success - refresh the browser client's session
+      // This ensures the browser client picks up the cookies set by the server
+      const supabase = getSupabaseBrowserClient();
+      await supabase.auth.refreshSession();
+
+      // Show success message
       if (isLogin) {
         toast.success("Welcome back!", {
           description: "You have successfully signed in.",
@@ -69,8 +75,10 @@ export function AuthForm({ mode }: AuthFormProps) {
         });
       }
 
-      // Redirect to home page
-      window.location.href = "/";
+      // Redirect to home page after a short delay to ensure session is synced
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 100);
     } catch (error) {
       // Handle unexpected errors
       toast.error("An unexpected error occurred", {

@@ -36,3 +36,5 @@ screenshots/
 
 # vitest
 .vitest/
+
+.env.test

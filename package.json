@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "dev:e2e": "astro dev --mode test",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -21,7 +22,11 @@
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:report": "playwright show-report",
     "test:e2e:codegen": "playwright codegen",
-    "playwright:install": "playwright install --with-deps chromium"
+    "playwright:install": "playwright install --with-deps chromium",
+    "db:migrate:test": "supabase db push --linked",
+    "db:migrate:local": "supabase db push --local",
+    "db:link:test": "echo 'Run: supabase link --project-ref <your-test-project-ref>'",
+    "db:link:local": "echo 'Run: supabase link --project-ref <your-local-project-ref>'"
   },
   "dependencies": {
     "@astrojs/node": "^9.4.3",
