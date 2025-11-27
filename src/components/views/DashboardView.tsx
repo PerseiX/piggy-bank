@@ -20,7 +20,7 @@ export function DashboardView({ accessToken }: DashboardViewProps) {
   const viewModel = useWallets(accessToken);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" data-test-id="dashboard">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           {/* Page Header */}
           <header className="mb-8">
@@ -36,6 +36,7 @@ export function DashboardView({ accessToken }: DashboardViewProps) {
               <a
                 href="/wallets/new"
                 className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"
+                data-test-id="create-wallet-button"
               >
                 <svg
                   className="-ml-0.5 mr-1.5 h-5 w-5"

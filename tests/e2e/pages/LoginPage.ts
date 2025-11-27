@@ -3,9 +3,11 @@ import { BasePage } from './BasePage';
 
 /**
  * Page Object Model for the Login page
+ * Uses data-test-id attributes for stable element selection
  */
 export class LoginPage extends BasePage {
-  // Locators
+  // Locators using data-test-id for resilient element selection
+  readonly authForm: Locator;
   readonly emailInput: Locator;
   readonly passwordInput: Locator;
   readonly submitButton: Locator;
@@ -16,10 +18,13 @@ export class LoginPage extends BasePage {
   constructor(page: Page) {
     super(page);
     
-    // Initialize locators using resilient selectors
-    this.emailInput = page.getByRole('textbox', { name: /email/i });
-    this.passwordInput = page.getByLabel(/password/i);
-    this.submitButton = page.getByRole('button', { name: /sign in|log in/i });
+    // Initialize locators using data-test-id attributes
+    this.authForm = page.locator('[data-test-id="auth-form"]');
+    this.emailInput = page.locator('[data-test-id="auth-email-input"]');
+    this.passwordInput = page.locator('[data-test-id="auth-password-input"]');
+    this.submitButton = page.locator('[data-test-id="auth-submit-button"]');
+    
+    // Fallback to role-based selectors for elements without data-test-id
     this.errorMessage = page.getByRole('alert');
     this.signUpLink = page.getByRole('link', { name: /sign up|register/i });
     this.forgotPasswordLink = page.getByRole('link', { name: /forgot password/i });

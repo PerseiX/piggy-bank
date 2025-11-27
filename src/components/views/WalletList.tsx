@@ -14,7 +14,7 @@ interface WalletListProps {
 
 export function WalletList({ wallets }: WalletListProps) {
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-test-id="wallet-list">
       {wallets.map((wallet) => (
         <WalletCard key={wallet.id} wallet={wallet} />
       ))}

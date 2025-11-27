@@ -98,7 +98,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" data-test-id="auth-form">
               <FormField
                 control={form.control}
                 name="email"
@@ -110,6 +110,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                         type="email"
                         placeholder="you@example.com"
                         disabled={isLoading}
+                        data-test-id="auth-email-input"
                         {...field}
                       />
                     </FormControl>
@@ -138,6 +139,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                         type="password"
                         placeholder="••••••••"
                         disabled={isLoading}
+                        data-test-id="auth-password-input"
                         {...field}
                       />
                     </FormControl>
@@ -145,7 +147,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full" disabled={isLoading} data-test-id="auth-submit-button">
                 {isLoading ? "Loading..." : buttonText}
               </Button>
             </form>

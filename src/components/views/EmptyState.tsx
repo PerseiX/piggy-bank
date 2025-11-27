@@ -31,6 +31,7 @@ export function EmptyState() {
         <a
           href="/wallets/new"
           className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"
+          data-test-id="create-first-wallet-button"
         >
           <svg
             className="-ml-0.5 mr-1.5 h-5 w-5"

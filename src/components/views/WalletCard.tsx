@@ -25,12 +25,12 @@ export function WalletCard({ wallet }: WalletCardProps) {
   });
 
   return (
-    <div className="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-gray-300">
+    <div className="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-gray-300" data-test-id="wallet-card" data-wallet-id={id}>
       {/* Header */}
       <div className="mb-4">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900" data-test-id="wallet-card-name">
               {name}
             </h2>
             {description && (

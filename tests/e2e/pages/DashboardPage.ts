@@ -3,11 +3,15 @@ import { BasePage } from './BasePage';
 
 /**
  * Page Object Model for the Dashboard page
+ * Uses data-test-id attributes for stable element selection
  */
 export class DashboardPage extends BasePage {
-  // Locators
+  // Locators using data-test-id for resilient element selection
+  readonly dashboard: Locator;
   readonly pageHeading: Locator;
-  readonly addWalletButton: Locator;
+  readonly createWalletButton: Locator;
+  readonly createFirstWalletButton: Locator;
+  readonly walletList: Locator;
   readonly walletCards: Locator;
   readonly loadingState: Locator;
   readonly errorState: Locator;
@@ -16,13 +20,18 @@ export class DashboardPage extends BasePage {
   constructor(page: Page) {
     super(page);
     
-    // Initialize locators
-    this.pageHeading = page.getByRole('heading', { name: /dashboard|wallets/i, level: 1 });
-    this.addWalletButton = page.getByRole('button', { name: /add wallet|create wallet|new wallet/i });
-    this.walletCards = page.locator('[data-testid="wallet-card"]');
-    this.loadingState = page.getByTestId('loading-state');
-    this.errorState = page.getByTestId('error-state');
-    this.emptyState = page.getByTestId('empty-state');
+    // Initialize locators using data-test-id attributes
+    this.dashboard = page.locator('[data-test-id="dashboard"]');
+    this.createWalletButton = page.locator('[data-test-id="create-wallet-button"]');
+    this.createFirstWalletButton = page.locator('[data-test-id="create-first-wallet-button"]');
+    this.walletList = page.locator('[data-test-id="wallet-list"]');
+    this.walletCards = page.locator('[data-test-id="wallet-card"]');
+    
+    // Fallback to role-based selectors for elements without data-test-id
+    this.pageHeading = page.getByRole('heading', { name: /dashboard/i, level: 1 });
+    this.loadingState = page.getByRole('status').filter({ hasText: /loading/i });
+    this.errorState = page.getByText(/failed to load/i);
+    this.emptyState = page.getByText(/no wallets yet/i);
   }
 
   /**
@@ -41,10 +50,17 @@ export class DashboardPage extends BasePage {
   }
 
   /**
-   * Click the add wallet button
+   * Click the add wallet button (header button)
    */
   async clickAddWallet() {
-    await this.addWalletButton.click();
+    await this.createWalletButton.click();
+  }
+
+  /**
+   * Click the create first wallet button (empty state)
+   */
+  async clickCreateFirstWallet() {
+    await this.createFirstWalletButton.click();
   }
 
   /**
@@ -59,6 +75,28 @@ export class DashboardPage extends BasePage {
    */
   getWalletCard(index: number): Locator {
     return this.walletCards.nth(index);
+  }
+
+  /**
+   * Get wallet card by wallet ID
+   */
+  getWalletCardById(walletId: string): Locator {
+    return this.page.locator(`[data-test-id="wallet-card"][data-wallet-id="${walletId}"]`);
+  }
+
+  /**
+   * Get wallet card by name
+   */
+  getWalletCardByName(name: string): Locator {
+    return this.walletCards.filter({ has: this.page.locator(`[data-test-id="wallet-card-name"]:text("${name}")`) });
+  }
+
+  /**
+   * Check if wallet with name exists
+   */
+  async hasWalletWithName(name: string): Promise<boolean> {
+    const wallet = this.getWalletCardByName(name);
+    return await wallet.count() > 0;
   }
 
   /**

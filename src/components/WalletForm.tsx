@@ -186,7 +186,7 @@ export default function WalletForm({ mode, initialData }: WalletFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" data-test-id="wallet-form">
         {/* Name Field */}
         <FormField
           control={form.control}
@@ -200,6 +200,7 @@ export default function WalletForm({ mode, initialData }: WalletFormProps) {
                   placeholder="Enter wallet name"
                   disabled={isSubmitting}
                   aria-required="true"
+                  data-test-id="wallet-name-input"
                 />
               </FormControl>
               <FormMessage />
@@ -220,6 +221,7 @@ export default function WalletForm({ mode, initialData }: WalletFormProps) {
                   placeholder="Enter wallet description (optional)"
                   disabled={isSubmitting}
                   rows={4}
+                  data-test-id="wallet-description-input"
                 />
               </FormControl>
               <FormMessage />
@@ -234,10 +236,11 @@ export default function WalletForm({ mode, initialData }: WalletFormProps) {
             variant="outline"
             onClick={handleCancel}
             disabled={isSubmitting}
+            data-test-id="wallet-cancel-button"
           >
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitDisabled}>
+          <Button type="submit" disabled={isSubmitDisabled} data-test-id="wallet-submit-button">
             {isSubmitting
               ? mode === "create"
                 ? "Creating..."
