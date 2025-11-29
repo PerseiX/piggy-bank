@@ -81,5 +81,8 @@ export default defineConfig({
   
   // Output folder for test artifacts
   outputDir: 'test-results/',
+  
+  // Global teardown to clean up database after all tests
+  globalTeardown: './tests/global-teardown.ts',
 });
 

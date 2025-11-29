@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
+import { TEST_USER } from '../fixtures/testHelpers';
 
 test.describe('Login Flow', () => {
   let loginPage: LoginPage;
@@ -73,20 +74,19 @@ test.describe('Login Flow', () => {
   });
 
   test('should successfully login with valid credentials', async ({ page }) => {
-    // Note: This test requires valid test credentials
-    // You might want to skip this or use test fixtures
-    test.skip(true, 'Requires valid test credentials');
-    
     const dashboardPage = new DashboardPage(page);
     
-    // Login with valid credentials
-    await loginPage.login('test@example.com', 'validpassword');
+    // Login with valid test credentials from testHelpers
+    await loginPage.login(TEST_USER.email, TEST_USER.password);
     
     // Verify redirect to dashboard
-    await page.waitForURL(/.*dashboard|^\/?$/);
+    await page.waitForURL('/', { timeout: 5000 });
     
     // Verify dashboard is loaded
     expect(await dashboardPage.isLoaded()).toBe(true);
+    
+    // Verify we can see the dashboard elements
+    await expect(dashboardPage.createWalletButton).toBeVisible();
   });
 });
 

@@ -1,332 +1,128 @@
-# Testing Guide
+# Test Suite
 
-This project uses **Vitest** for unit/integration tests and **Playwright** for end-to-end (e2e) tests.
+This directory contains the test suite for the Piggy Bank application.
 
-## Table of Contents
-
-- [Setup](#setup)
-- [Running Tests](#running-tests)
-  - [Unit Tests (Vitest)](#unit-tests-vitest)
-  - [E2E Tests (Playwright)](#e2e-tests-playwright)
-- [Project Structure](#project-structure)
-- [Writing Tests](#writing-tests)
-  - [Unit Tests](#writing-unit-tests)
-  - [E2E Tests](#writing-e2e-tests)
-- [Coverage](#coverage)
-- [CI/CD Integration](#cicd-integration)
-
-## Setup
-
-### Prerequisites
-
-Make sure you have Node.js installed (version 18 or higher recommended).
-
-### Installation
-
-1. Install all dependencies:
-
-```bash
-npm install
-```
-
-2. Install Playwright browsers (Chromium):
-
-```bash
-npm run playwright:install
-```
-
-## Running Tests
-
-### Unit Tests (Vitest)
-
-#### Run all unit tests once
-
-```bash
-npm run test:unit
-```
-
-#### Run tests in watch mode (during development)
-
-```bash
-npm run test:watch
-```
-
-#### Run tests with UI mode
-
-```bash
-npm run test:ui
-```
-
-This opens a web interface where you can see all tests, filter them, and inspect results.
-
-#### Run tests with coverage
-
-```bash
-npm run test:coverage
-```
-
-Coverage report will be generated in the `coverage/` directory.
-
-### E2E Tests (Playwright)
-
-#### Run all e2e tests (headless)
-
-```bash
-npm run test:e2e
-```
-
-#### Run tests with UI mode
-
-```bash
-npm run test:e2e:ui
-```
-
-#### Run tests in headed mode (see the browser)
-
-```bash
-npm run test:e2e:headed
-```
-
-#### Debug tests
-
-```bash
-npm run test:e2e:debug
-```
-
-#### View test report
-
-```bash
-npm run test:e2e:report
-```
-
-#### Generate tests using Codegen
-
-```bash
-npm run test:e2e:codegen
-```
-
-This opens a browser where you can interact with your app, and Playwright will generate test code for you.
-
-## Project Structure
+## Structure
 
 ```
 tests/
-├── README.md                    # This file
-├── setup.ts                     # Vitest setup file
-├── unit/                        # Unit tests
-│   ├── components/              # Component tests
-│   │   └── ui/
-│   │       └── button.test.tsx
-│   └── lib/                     # Utility/service tests
-│       ├── utils.test.ts
-│       └── formatters/
-│           └── currency.test.ts
-└── e2e/                         # E2E tests
-    ├── pages/                   # Page Object Models
-    │   ├── BasePage.ts
-    │   ├── LoginPage.ts
-    │   └── DashboardPage.ts
-    ├── fixtures/                # Test fixtures/data
-    ├── auth/                    # Auth flow tests
-    │   └── login.spec.ts
-    └── dashboard/               # Dashboard tests
-        └── wallets.spec.ts
+├── e2e/                    # End-to-end tests using Playwright
+│   ├── auth/              # Authentication tests
+│   ├── dashboard/         # Dashboard tests
+│   ├── wallet/            # Wallet-related tests
+│   ├── pages/             # Page Object Models
+│   └── fixtures/          # Test helpers and utilities
+├── unit/                   # Unit tests
+├── global-teardown.ts     # Global teardown script
+└── setup.ts               # Test setup configuration
 ```
 
-## Writing Tests
+## Global Teardown
 
-### Writing Unit Tests
+The test suite includes a global teardown script that automatically cleans up the Supabase database after all Playwright tests complete.
 
-Unit tests are located in `tests/unit/` and mirror the structure of `src/`.
+### What It Does
 
-#### Example: Testing a utility function
+The teardown script (`global-teardown.ts`) performs the following cleanup operations in order:
+
+1. **Deletes all instrument_value_changes** - Historical value changes for instruments
+2. **Deletes all instruments** - Financial instruments within wallets
+3. **Deletes all wallets** - User wallets
+
+This order is important due to foreign key constraints with `ON DELETE RESTRICT` in the database schema.
+
+### Configuration
+
+The teardown script uses environment variables from `.env.test`:
+
+- `SUPABASE_URL` - URL of your Supabase instance
+- `SUPABASE_KEY` - Supabase anonymous key
+
+Make sure your `.env.test` file includes these variables:
+
+```env
+# Supabase configuration for tests
+SUPABASE_URL=http://127.0.0.1:54321
+SUPABASE_KEY=your_supabase_anon_key_here
+
+# Other test configuration...
+BASE_URL=http://localhost:3000
+E2E_USERNAME=test@example.com
+E2E_PASSWORD=TestPassword123!
+```
+
+### How It Works
+
+The global teardown is automatically executed by Playwright after all tests complete, as configured in `playwright.config.ts`:
 
 ```typescript
-import { describe, it, expect } from 'vitest';
-import { myFunction } from '@/lib/utils';
-
-describe('myFunction', () => {
-  it('should return expected result', () => {
-    const result = myFunction('input');
-    expect(result).toBe('expected output');
-  });
+export default defineConfig({
+  // ... other config
+  globalTeardown: './tests/global-teardown.ts',
 });
 ```
 
-#### Example: Testing a React component
+### Error Handling
 
-```typescript
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { MyComponent } from '@/components/MyComponent';
+The teardown script includes comprehensive error handling:
 
-describe('MyComponent', () => {
-  it('should render correctly', () => {
-    render(<MyComponent />);
-    expect(screen.getByRole('button')).toBeInTheDocument();
-  });
+- ✅ Validates environment variables before attempting cleanup
+- ✅ Reports the number of rows deleted from each table
+- ✅ Logs errors but doesn't fail the test suite (best-effort cleanup)
+- ✅ Provides clear console output for debugging
 
-  it('should handle click events', async () => {
-    const user = userEvent.setup();
-    render(<MyComponent />);
-    
-    await user.click(screen.getByRole('button'));
-    
-    expect(screen.getByText('Clicked!')).toBeInTheDocument();
-  });
-});
+### Running Tests
+
+To run tests with automatic cleanup:
+
+```bash
+# Run all e2e tests (cleanup runs after)
+npm run test:e2e
+
+# Run specific test file (cleanup still runs after all tests)
+npx playwright test tests/e2e/wallet/create-wallet.spec.ts
+
+# Run tests in UI mode (for development)
+npx playwright test --ui
 ```
 
-#### Mocking
+### Manual Cleanup
 
-```typescript
-import { vi } from 'vitest';
+If you need to manually clean up the database (without running tests):
 
-// Mock a function
-const mockFn = vi.fn();
-
-// Mock a module
-vi.mock('@/lib/api', () => ({
-  fetchData: vi.fn(() => Promise.resolve({ data: 'mocked' })),
-}));
-
-// Spy on existing function
-const spy = vi.spyOn(console, 'log');
+```bash
+# Create a script that imports and runs the teardown function
+node -e "import('./tests/global-teardown.ts').then(m => m.default())"
 ```
 
-### Writing E2E Tests
+### Important Notes
 
-E2E tests use the **Page Object Model** pattern for maintainability.
+⚠️ **WARNING**: The teardown script deletes ALL data from the wallets, instruments, and instrument_value_changes tables. Make sure you're using a test database instance, not production!
 
-#### Step 1: Create a Page Object
+- Always use a separate Supabase instance or local Supabase for testing
+- The teardown only runs after ALL tests complete
+- Data created during tests will remain until teardown runs
+- If tests are interrupted (Ctrl+C), teardown may not run
 
-```typescript
-// tests/e2e/pages/MyPage.ts
-import { Page, Locator } from '@playwright/test';
-import { BasePage } from './BasePage';
+### Troubleshooting
 
-export class MyPage extends BasePage {
-  readonly myButton: Locator;
+**Teardown not running:**
+- Make sure all tests complete (don't interrupt with Ctrl+C)
+- Check that `globalTeardown` is configured in `playwright.config.ts`
+- Verify the teardown file path is correct
 
-  constructor(page: Page) {
-    super(page);
-    this.myButton = page.getByRole('button', { name: /click me/i });
-  }
+**Database connection errors:**
+- Verify `SUPABASE_URL` and `SUPABASE_KEY` in `.env.test`
+- Ensure your Supabase instance is running (for local: `npx supabase start`)
+- Check network connectivity to your Supabase instance
 
-  async navigate() {
-    await this.goto('/my-page');
-  }
+**Permission errors:**
+- Ensure the Supabase key has sufficient permissions to delete rows
+- Check Row Level Security (RLS) policies on the tables
+- The anon key might not have delete permissions if RLS is strict
 
-  async clickMyButton() {
-    await this.myButton.click();
-  }
-}
-```
+## Related Files
 
-#### Step 2: Write tests using the Page Object
-
-```typescript
-// tests/e2e/my-feature/my-test.spec.ts
-import { test, expect } from '@playwright/test';
-import { MyPage } from '../pages/MyPage';
-
-test.describe('My Feature', () => {
-  let myPage: MyPage;
-
-  test.beforeEach(async ({ page }) => {
-    myPage = new MyPage(page);
-    await myPage.navigate();
-  });
-
-  test('should perform action', async () => {
-    await myPage.clickMyButton();
-    expect(await myPage.isVisible(myPage.myButton)).toBe(true);
-  });
-});
-```
-
-#### Best Practices for E2E Tests
-
-1. **Use resilient selectors**: Prefer `getByRole`, `getByLabel`, `getByText` over CSS selectors
-2. **Implement Page Object Model**: Keep locators and actions in page objects
-3. **Use test hooks**: `beforeEach`, `afterEach` for setup and cleanup
-4. **Use browser contexts**: Isolate tests from each other
-5. **Take screenshots on failure**: Already configured automatically
-6. **Use trace viewer**: Run `npm run test:e2e:report` to debug failures
-
-## Coverage
-
-### View coverage report
-
-After running `npm run test:coverage`, open `coverage/index.html` in your browser.
-
-### Coverage thresholds
-
-Current thresholds are set in `vitest.config.ts`:
-
-- Lines: 70%
-- Functions: 70%
-- Branches: 70%
-- Statements: 70%
-
-Adjust these as needed for your project.
-
-## CI/CD Integration
-
-### GitHub Actions Example
-
-```yaml
-name: Tests
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Run unit tests
-        run: npm run test:coverage
-      
-      - name: Install Playwright
-        run: npx playwright install --with-deps chromium
-      
-      - name: Run e2e tests
-        run: npm run test:e2e
-      
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./coverage/lcov.info
-```
-
-## Troubleshooting
-
-### Vitest
-
-- **Tests not found**: Make sure test files match the pattern `*.{test,spec}.{ts,tsx}` in `tests/unit/`
-- **Import errors**: Check your path aliases in `vitest.config.ts` and `tsconfig.json`
-- **DOM not available**: Verify `environment: 'jsdom'` is set in `vitest.config.ts`
-
-### Playwright
-
-- **Browser not installed**: Run `npm run playwright:install`
-- **Tests timing out**: Increase timeout in `playwright.config.ts` or specific tests
-- **Flaky tests**: Use `test.retry()` or better waits (`waitFor`, `waitForLoadState`)
-- **Can't see what's happening**: Use headed mode (`npm run test:e2e:headed`) or debug mode
-
-## Resources
-
-- [Vitest Documentation](https://vitest.dev/)
-- [Playwright Documentation](https://playwright.dev/)
-- [Testing Library](https://testing-library.com/)
-- [Page Object Model Pattern](https://playwright.dev/docs/pom)
-
+- `playwright.config.ts` - Main Playwright configuration
+- `.env.test` - Test environment variables (gitignored)
+- `tests/e2e/fixtures/testHelpers.ts` - Reusable test utilities
