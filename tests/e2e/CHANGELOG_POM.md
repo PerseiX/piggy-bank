@@ -7,6 +7,7 @@ Data: 2025-11-27
 ### ✅ Zaktualizowane pliki
 
 #### 1. **LoginPage.ts** - Zaktualizowano
+
 - ✨ Dodano nowy locator `authForm` z `data-test-id="auth-form"`
 - 🔄 Zmieniono wszystkie locatory na `data-test-id` dla stabilności:
   - `emailInput` → `data-test-id="auth-email-input"`
@@ -15,6 +16,7 @@ Data: 2025-11-27
 - 📝 Zaktualizowano dokumentację klasy
 
 #### 2. **DashboardPage.ts** - Zaktualizowano
+
 - ✨ Dodano nowe locatory z `data-test-id`:
   - `dashboard` → `data-test-id="dashboard"`
   - `createWalletButton` → `data-test-id="create-wallet-button"`
@@ -31,9 +33,11 @@ Data: 2025-11-27
 ### ✨ Nowe pliki
 
 #### 3. **WalletFormPage.ts** - NOWY ✨
+
 Kompletna klasa Page Object dla formularza portfela (tworzenie/edycja).
 
 **Locatory:**
+
 - `walletForm` → `data-test-id="wallet-form"`
 - `nameInput` → `data-test-id="wallet-name-input"`
 - `descriptionInput` → `data-test-id="wallet-description-input"`
@@ -41,6 +45,7 @@ Kompletna klasa Page Object dla formularza portfela (tworzenie/edycja).
 - `cancelButton` → `data-test-id="wallet-cancel-button"`
 
 **Metody:**
+
 - `navigateToCreate()` - nawigacja do strony tworzenia
 - `navigateToEdit(walletId)` - nawigacja do strony edycji
 - `fillName(name)` - wypełnienie nazwy
@@ -55,56 +60,68 @@ Kompletna klasa Page Object dla formularza portfela (tworzenie/edycja).
 - i wiele innych...
 
 #### 4. **index.ts** - NOWY ✨
+
 Centralized exports wszystkich Page Objects dla łatwego importowania:
 
 ```typescript
-export { BasePage } from './BasePage';
-export { LoginPage } from './LoginPage';
-export { DashboardPage } from './DashboardPage';
-export { WalletFormPage } from './WalletFormPage';
+export { BasePage } from "./BasePage";
+export { LoginPage } from "./LoginPage";
+export { DashboardPage } from "./DashboardPage";
+export { WalletFormPage } from "./WalletFormPage";
 ```
 
 #### 5. **testHelpers.ts** - NOWY ✨
+
 Zestaw pomocniczych funkcji dla testów E2E:
 
 **Setup Helpers:**
+
 - `setupAuthenticatedSession(page)` - przygotowanie zalogowanej sesji
 - `loginAsTestUser(page)` - logowanie testowym użytkownikiem
 - `navigateToDashboard(page)` - nawigacja do dashboardu
 
 **Wallet Helpers:**
+
 - `createTestWallet(page, name, description)` - tworzenie testowego portfela
 
 **Data Helpers:**
+
 - `generateTestData()` - generowanie unikalnych danych testowych
 
 **UI Helpers:**
+
 - `waitForToast(page, text)` - oczekiwanie na toast notification
 - `isInViewport(page, selector)` - sprawdzenie czy element jest widoczny
 - `scrollIntoView(page, selector)` - scrollowanie do elementu
 
 **API Helpers:**
+
 - `waitForApiResponse(page, pattern)` - oczekiwanie na odpowiedź API
 - `mockApiResponse(page, pattern, data)` - mockowanie API
 
 **Debugging Helpers:**
+
 - `takeTimestampedScreenshot(page, name)` - zrzut ekranu z timestampem
 - `captureConsoleErrors(page)` - przechwytywanie błędów konsoli
 - `clearBrowserState(page)` - czyszczenie cookies i storage
 
 #### 6. **create-wallet.spec.ts** - NOWY ✨
+
 Podstawowy test E2E dla scenariusza tworzenia portfela:
 
 **Testy:**
+
 - ✅ Kompletny flow tworzenia portfela (login → dashboard → form → weryfikacja)
 - ✅ Walidacja pustego pola nazwy
 - ✅ Anulowanie tworzenia portfela
 - ✅ Obsługa duplikatu nazwy
 
 #### 7. **create-wallet-improved.spec.ts** - NOWY ✨
+
 Ulepszona wersja testów używająca helpers:
 
 **Testy:**
+
 - ✅ Tworzenie portfela z helperami
 - ✅ Szczegółowa weryfikacja wszystkich kroków
 - ✅ Walidacja pól wymaganych
@@ -115,9 +132,11 @@ Ulepszona wersja testów używająca helpers:
 - ✅ Nawigacja z empty state
 
 #### 8. **README.md** - NOWY ✨
+
 Kompletna dokumentacja Page Object Model:
 
 **Zawartość:**
+
 - 📖 Struktura projektu
 - 🎯 Wyjaśnienie wzorca POM
 - 📚 Szczegółowy opis każdej klasy
@@ -129,6 +148,7 @@ Kompletna dokumentacja Page Object Model:
 ## 🎯 Pokrycie scenariusza testowego
 
 ### Scenariusz użytkownika:
+
 1. ✅ **Zaloguj się** - `LoginPage` z `auth-*` selektorami
 2. ✅ **Przejdź do dashboardu** - `DashboardPage` z `dashboard` selektorem
 3. ✅ **Kliknij create wallet** - `create-wallet-button` / `create-first-wallet-button`
@@ -178,42 +198,38 @@ tests/e2e/
 
 ```typescript
 // Pojedyncze
-import { LoginPage } from '../pages/LoginPage';
+import { LoginPage } from "../pages/LoginPage";
 
 // Lub wszystkie naraz
-import { LoginPage, DashboardPage, WalletFormPage } from '../pages';
+import { LoginPage, DashboardPage, WalletFormPage } from "../pages";
 ```
 
 ### Importowanie Helpers
 
 ```typescript
-import {
-  setupAuthenticatedSession,
-  generateTestData,
-  createTestWallet,
-} from '../fixtures/testHelpers';
+import { setupAuthenticatedSession, generateTestData, createTestWallet } from "../fixtures/testHelpers";
 ```
 
 ### Przykład prostego testu
 
 ```typescript
-import { test, expect } from '@playwright/test';
-import { LoginPage, DashboardPage, WalletFormPage } from '../pages';
-import { setupAuthenticatedSession, generateTestData } from '../fixtures/testHelpers';
+import { test, expect } from "@playwright/test";
+import { LoginPage, DashboardPage, WalletFormPage } from "../pages";
+import { setupAuthenticatedSession, generateTestData } from "../fixtures/testHelpers";
 
-test('create wallet', async ({ page }) => {
+test("create wallet", async ({ page }) => {
   // Setup
   const dashboardPage = new DashboardPage(page);
   const walletFormPage = new WalletFormPage(page);
   await setupAuthenticatedSession(page);
-  
+
   // Action
   const testData = generateTestData();
   await dashboardPage.clickAddWallet();
   await walletFormPage.createWallet(testData.walletName);
-  
+
   // Assert
-  await page.waitForURL('/');
+  await page.waitForURL("/");
   const hasWallet = await dashboardPage.hasWalletWithName(testData.walletName);
   expect(hasWallet).toBe(true);
 });
@@ -222,16 +238,19 @@ test('create wallet', async ({ page }) => {
 ## ✅ Następne kroki
 
 1. **Uruchom testy:**
+
    ```bash
    npx playwright test tests/e2e/wallet/
    ```
 
 2. **Zobacz wyniki:**
+
    ```bash
    npx playwright show-report
    ```
 
 3. **Debug jeśli potrzeba:**
+
    ```bash
    npx playwright test --debug
    ```
@@ -253,4 +272,3 @@ test('create wallet', async ({ page }) => {
 **Utworzone:** 2025-11-27  
 **Status:** ✅ Gotowe do użycia  
 **Testy:** ✅ Wszystkie bez błędów lintera
-

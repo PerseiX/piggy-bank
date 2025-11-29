@@ -15,6 +15,7 @@ tests/e2e/pages/
 ## 🎯 Wzorzec Page Object Model
 
 Page Object Model (POM) to wzorzec projektowy który:
+
 - **Zwiększa czytelność** - testy są bardziej zrozumiałe
 - **Ułatwia utrzymanie** - zmiany w UI wymagają edycji tylko w jednym miejscu
 - **Promuje reużywalność** - metody mogą być używane w wielu testach
@@ -27,12 +28,14 @@ Page Object Model (POM) to wzorzec projektowy który:
 Bazowa klasa zapewniająca wspólną funkcjonalność dla wszystkich Page Objects.
 
 **Główne metody:**
+
 - `goto(path: string)` - nawigacja do URL
 - `waitForPageLoad()` - oczekiwanie na załadowanie strony
 - `isVisible(locator: Locator)` - sprawdzenie widoczności elementu
 - `waitForElement(locator: Locator)` - oczekiwanie na element
 
 **Przykład:**
+
 ```typescript
 class MyPage extends BasePage {
   constructor(page: Page) {
@@ -48,25 +51,27 @@ class MyPage extends BasePage {
 Page Object dla strony logowania (`/auth/login`).
 
 **Locatory (data-test-id):**
+
 - `authForm` - formularz autoryzacji
 - `emailInput` - pole email (`auth-email-input`)
 - `passwordInput` - pole hasła (`auth-password-input`)
 - `submitButton` - przycisk logowania (`auth-submit-button`)
 
 **Główne metody:**
+
 ```typescript
 // Nawigacja
 await loginPage.navigate();
 
 // Wypełnienie pól
-await loginPage.fillEmail('user@example.com');
-await loginPage.fillPassword('password123');
+await loginPage.fillEmail("user@example.com");
+await loginPage.fillPassword("password123");
 
 // Kliknięcie przycisku
 await loginPage.clickSubmit();
 
 // Kompletny flow logowania
-await loginPage.login('user@example.com', 'password123');
+await loginPage.login("user@example.com", "password123");
 
 // Sprawdzenie błędów
 const hasError = await loginPage.hasErrorMessage();
@@ -74,15 +79,16 @@ const errorText = await loginPage.getErrorMessageText();
 ```
 
 **Przykład użycia:**
+
 ```typescript
-test('user login', async ({ page }) => {
+test("user login", async ({ page }) => {
   const loginPage = new LoginPage(page);
-  
+
   await loginPage.navigate();
-  await loginPage.login('user@example.com', 'SecurePass123!');
-  
+  await loginPage.login("user@example.com", "SecurePass123!");
+
   // Weryfikacja przekierowania
-  await page.waitForURL('/');
+  await page.waitForURL("/");
 });
 ```
 
@@ -93,6 +99,7 @@ test('user login', async ({ page }) => {
 Page Object dla strony dashboardu (`/`).
 
 **Locatory (data-test-id):**
+
 - `dashboard` - główny kontener dashboardu
 - `createWalletButton` - przycisk "Add Wallet" w nagłówku
 - `createFirstWalletButton` - przycisk "Create First Wallet" (empty state)
@@ -101,6 +108,7 @@ Page Object dla strony dashboardu (`/`).
 - `wallet-card-name` - nazwa portfela w karcie
 
 **Główne metody:**
+
 ```typescript
 // Nawigacja
 await dashboardPage.navigate();
@@ -115,11 +123,11 @@ await dashboardPage.clickCreateFirstWallet(); // z empty state
 // Pobieranie portfeli
 const count = await dashboardPage.getWalletCount();
 const wallet = dashboardPage.getWalletCard(0); // po indeksie
-const wallet = dashboardPage.getWalletCardById('uuid'); // po ID
-const wallet = dashboardPage.getWalletCardByName('Savings'); // po nazwie
+const wallet = dashboardPage.getWalletCardById("uuid"); // po ID
+const wallet = dashboardPage.getWalletCardByName("Savings"); // po nazwie
 
 // Sprawdzenie istnienia portfela
-const exists = await dashboardPage.hasWalletWithName('My Wallet');
+const exists = await dashboardPage.hasWalletWithName("My Wallet");
 
 // Sprawdzenie stanów
 const isEmpty = await dashboardPage.isEmpty();
@@ -131,17 +139,18 @@ await dashboardPage.waitForWalletsToLoad();
 ```
 
 **Przykład użycia:**
+
 ```typescript
-test('view wallets', async ({ page }) => {
+test("view wallets", async ({ page }) => {
   const dashboardPage = new DashboardPage(page);
-  
+
   await dashboardPage.navigate();
   await dashboardPage.waitForWalletsToLoad();
-  
+
   const walletCount = await dashboardPage.getWalletCount();
   expect(walletCount).toBeGreaterThan(0);
-  
-  const hasMyWallet = await dashboardPage.hasWalletWithName('Savings');
+
+  const hasMyWallet = await dashboardPage.hasWalletWithName("Savings");
   expect(hasMyWallet).toBe(true);
 });
 ```
@@ -153,6 +162,7 @@ test('view wallets', async ({ page }) => {
 Page Object dla formularza portfela (tworzenie: `/wallets/new`, edycja: `/wallets/detail/:id/edit`).
 
 **Locatory (data-test-id):**
+
 - `walletForm` - formularz portfela
 - `nameInput` - pole nazwy (`wallet-name-input`)
 - `descriptionInput` - pole opisu (`wallet-description-input`)
@@ -160,22 +170,23 @@ Page Object dla formularza portfela (tworzenie: `/wallets/new`, edycja: `/wallet
 - `cancelButton` - przycisk anulowania (`wallet-cancel-button`)
 
 **Główne metody:**
+
 ```typescript
 // Nawigacja
 await walletFormPage.navigateToCreate();
-await walletFormPage.navigateToEdit('wallet-uuid');
+await walletFormPage.navigateToEdit("wallet-uuid");
 
 // Wypełnienie pól
-await walletFormPage.fillName('My Savings');
-await walletFormPage.fillDescription('Emergency fund');
+await walletFormPage.fillName("My Savings");
+await walletFormPage.fillDescription("Emergency fund");
 
 // Akcje
 await walletFormPage.clickSubmit();
 await walletFormPage.clickCancel();
 
 // Kompletne flow
-await walletFormPage.createWallet('Name', 'Description');
-await walletFormPage.editWallet('New Name', 'New Description');
+await walletFormPage.createWallet("Name", "Description");
+await walletFormPage.editWallet("New Name", "New Description");
 
 // Walidacja
 const hasError = await walletFormPage.hasNameError();
@@ -188,15 +199,16 @@ const desc = await walletFormPage.getDescriptionValue();
 ```
 
 **Przykład użycia:**
+
 ```typescript
-test('create wallet', async ({ page }) => {
+test("create wallet", async ({ page }) => {
   const walletFormPage = new WalletFormPage(page);
-  
+
   await walletFormPage.navigateToCreate();
-  await walletFormPage.createWallet('Vacation Fund', 'Saving for summer trip');
-  
+  await walletFormPage.createWallet("Vacation Fund", "Saving for summer trip");
+
   // Oczekiwanie na przekierowanie
-  await page.waitForURL('/');
+  await page.waitForURL("/");
 });
 ```
 
@@ -211,7 +223,7 @@ test('create wallet', async ({ page }) => {
 this.submitButton = page.locator('[data-test-id="auth-submit-button"]');
 
 // ❌ ŹLE - wrażliwy na zmiany CSS
-this.submitButton = page.locator('.btn-primary.submit');
+this.submitButton = page.locator(".btn-primary.submit");
 ```
 
 ### 2. Enkapsulacja logiki
@@ -275,10 +287,10 @@ async login(email: string, password: string) {
 ## 📝 Przykładowy kompletny test
 
 ```typescript
-import { test, expect } from '@playwright/test';
-import { LoginPage, DashboardPage, WalletFormPage } from '../pages';
+import { test, expect } from "@playwright/test";
+import { LoginPage, DashboardPage, WalletFormPage } from "../pages";
 
-test('complete wallet creation flow', async ({ page }) => {
+test("complete wallet creation flow", async ({ page }) => {
   // Initialize Page Objects
   const loginPage = new LoginPage(page);
   const dashboardPage = new DashboardPage(page);
@@ -286,20 +298,20 @@ test('complete wallet creation flow', async ({ page }) => {
 
   // 1. Login
   await loginPage.navigate();
-  await loginPage.login('user@example.com', 'password');
-  await page.waitForURL('/');
+  await loginPage.login("user@example.com", "password");
+  await page.waitForURL("/");
 
   // 2. Verify dashboard
   await expect(dashboardPage.dashboard).toBeVisible();
 
   // 3. Create new wallet
   await dashboardPage.clickAddWallet();
-  await page.waitForURL('/wallets/new');
+  await page.waitForURL("/wallets/new");
 
   // 4. Fill form
   const walletName = `Test Wallet ${Date.now()}`;
-  await walletFormPage.createWallet(walletName, 'Test description');
-  await page.waitForURL('/');
+  await walletFormPage.createWallet(walletName, "Test description");
+  await page.waitForURL("/");
 
   // 5. Verify wallet created
   const hasWallet = await dashboardPage.hasWalletWithName(walletName);
@@ -328,27 +340,26 @@ npx playwright test -g "should successfully create a new wallet"
 
 ## 📊 Struktura atrybutów data-test-id
 
-| Komponent | data-test-id | Przeznaczenie |
-|-----------|--------------|---------------|
-| **AuthForm** | `auth-form` | Formularz logowania/rejestracji |
-| | `auth-email-input` | Pole email |
-| | `auth-password-input` | Pole hasła |
-| | `auth-submit-button` | Przycisk submit |
-| **Dashboard** | `dashboard` | Główny kontener |
-| | `create-wallet-button` | Przycisk tworzenia (nagłówek) |
-| | `create-first-wallet-button` | Przycisk tworzenia (empty state) |
-| | `wallet-list` | Lista portfeli |
-| | `wallet-card` | Karta portfela |
-| | `wallet-card-name` | Nazwa w karcie |
-| **WalletForm** | `wallet-form` | Formularz portfela |
-| | `wallet-name-input` | Pole nazwy |
-| | `wallet-description-input` | Pole opisu |
-| | `wallet-submit-button` | Przycisk zapisu |
-| | `wallet-cancel-button` | Przycisk anulowania |
+| Komponent      | data-test-id                 | Przeznaczenie                    |
+| -------------- | ---------------------------- | -------------------------------- |
+| **AuthForm**   | `auth-form`                  | Formularz logowania/rejestracji  |
+|                | `auth-email-input`           | Pole email                       |
+|                | `auth-password-input`        | Pole hasła                       |
+|                | `auth-submit-button`         | Przycisk submit                  |
+| **Dashboard**  | `dashboard`                  | Główny kontener                  |
+|                | `create-wallet-button`       | Przycisk tworzenia (nagłówek)    |
+|                | `create-first-wallet-button` | Przycisk tworzenia (empty state) |
+|                | `wallet-list`                | Lista portfeli                   |
+|                | `wallet-card`                | Karta portfela                   |
+|                | `wallet-card-name`           | Nazwa w karcie                   |
+| **WalletForm** | `wallet-form`                | Formularz portfela               |
+|                | `wallet-name-input`          | Pole nazwy                       |
+|                | `wallet-description-input`   | Pole opisu                       |
+|                | `wallet-submit-button`       | Przycisk zapisu                  |
+|                | `wallet-cancel-button`       | Przycisk anulowania              |
 
 ## 🔗 Dodatkowe zasoby
 
 - [Playwright Documentation](https://playwright.dev/)
 - [Page Object Model Pattern](https://playwright.dev/docs/pom)
 - [Best Practices](https://playwright.dev/docs/best-practices)
-

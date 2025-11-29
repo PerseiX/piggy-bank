@@ -58,7 +58,7 @@ The global teardown is automatically executed by Playwright after all tests comp
 ```typescript
 export default defineConfig({
   // ... other config
-  globalTeardown: './tests/global-teardown.ts',
+  globalTeardown: "./tests/global-teardown.ts",
 });
 ```
 
@@ -107,16 +107,19 @@ node -e "import('./tests/global-teardown.ts').then(m => m.default())"
 ### Troubleshooting
 
 **Teardown not running:**
+
 - Make sure all tests complete (don't interrupt with Ctrl+C)
 - Check that `globalTeardown` is configured in `playwright.config.ts`
 - Verify the teardown file path is correct
 
 **Database connection errors:**
+
 - Verify `SUPABASE_URL` and `SUPABASE_KEY` in `.env.test`
 - Ensure your Supabase instance is running (for local: `npx supabase start`)
 - Check network connectivity to your Supabase instance
 
 **Permission errors:**
+
 - Ensure the Supabase key has sufficient permissions to delete rows
 - Check Row Level Security (RLS) policies on the tables
 - The anon key might not have delete permissions if RLS is strict

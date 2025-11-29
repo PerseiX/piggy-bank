@@ -136,6 +136,7 @@ npm run test:a11y
 The project includes comprehensive test coverage across multiple layers:
 
 ### Unit & Integration Tests (Vitest)
+
 - Formatters and utilities (`src/lib/formatters/`, `src/lib/utils.ts`)
 - Validation schemas (`src/lib/schemas/`, `src/lib/validation/`)
 - Service-level logic (`src/lib/services/`)
@@ -143,11 +144,13 @@ The project includes comprehensive test coverage across multiple layers:
 - Coverage target: ≥85% lines, ≥80% branches for `src/lib/**`
 
 ### Component Tests (React Testing Library)
+
 - UI components and view containers (`src/components/**`)
 - Tests for loading, empty, error, and success states
 - User interaction flows and accessibility
 
 ### E2E Tests (Playwright)
+
 - Complete user journeys across SSR/CSR pages
 - Authentication flows (login, signup, logout, password reset)
 - Wallet and instrument CRUD operations
@@ -155,21 +158,25 @@ The project includes comprehensive test coverage across multiple layers:
 - Runs on Chromium, Firefox, and WebKit
 
 ### Accessibility Tests (Axe-core)
+
 - Automated WCAG A/AA compliance checks
 - Coverage of key pages, dialogs, and forms
 - No critical violations allowed in CI
 
 ### Performance Tests (Lighthouse CI)
+
 - Dashboard, wallet detail, and instrument detail pages
 - Target: Performance score ≥80 on desktop
 - Monitored in CI for regressions
 
 ### Database Tests (Supabase CLI)
+
 - Migration application and rollback
 - Soft-delete cascade behavior
 - Constraint and uniqueness validation
 
 ### Test Environment
+
 - Node 22.14.0 (see `.nvmrc`)
 - Local Supabase instance via Supabase CLI
 - Test database reset between suites
@@ -213,5 +220,3 @@ See the PRD for user stories, acceptance criteria, and success metrics: [./.ai/n
 ## License
 
 TBD. No license file has been specified yet. To make the project open-source, add a `LICENSE` file (e.g., MIT) and update the badge above.
-
-
