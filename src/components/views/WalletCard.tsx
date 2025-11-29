@@ -4,7 +4,7 @@ import { PerformanceIndicator } from "./PerformanceIndicator";
 
 /**
  * WalletCard Component
- * 
+ *
  * Displays a summary card for a single wallet.
  * Includes an edit button in the header and a "View Details" link in the footer.
  * Shows key metrics including current value, target, progress, and performance.
@@ -25,7 +25,11 @@ export function WalletCard({ wallet }: WalletCardProps) {
   });
 
   return (
-    <div className="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-gray-300" data-test-id="wallet-card" data-wallet-id={id}>
+    <div
+      className="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-gray-300"
+      data-test-id="wallet-card"
+      data-wallet-id={id}
+    >
       {/* Header */}
       <div className="mb-4">
         <div className="flex items-start justify-between gap-3">
@@ -33,9 +37,7 @@ export function WalletCard({ wallet }: WalletCardProps) {
             <h2 className="text-xl font-semibold text-gray-900" data-test-id="wallet-card-name">
               {name}
             </h2>
-            {description && (
-              <p className="mt-1 text-sm text-gray-600 line-clamp-2">{description}</p>
-            )}
+            {description && <p className="mt-1 text-sm text-gray-600 line-clamp-2">{description}</p>}
           </div>
           <a
             href={`/wallets/detail/${id}/edit`}
@@ -43,12 +45,7 @@ export function WalletCard({ wallet }: WalletCardProps) {
             aria-label={`Edit ${name}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <svg
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
+            <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
             </svg>
           </a>
@@ -59,21 +56,15 @@ export function WalletCard({ wallet }: WalletCardProps) {
       <div className="mb-4 space-y-2">
         <div>
           <span className="text-sm text-gray-500">Current Value</span>
-          <div className="text-2xl font-bold text-gray-900">
-            {aggregates.current_value_pln} PLN
-          </div>
+          <div className="text-2xl font-bold text-gray-900">{aggregates.current_value_pln} PLN</div>
         </div>
         <div>
           <span className="text-sm text-gray-500">Target</span>
-          <div className="text-lg font-semibold text-gray-700">
-            {aggregates.target_pln} PLN
-          </div>
+          <div className="text-lg font-semibold text-gray-700">{aggregates.target_pln} PLN</div>
         </div>
         <div>
           <span className="text-sm text-gray-500">Invested</span>
-          <div className="text-lg font-semibold text-gray-700">
-            {aggregates.invested_sum_pln} PLN
-          </div>
+          <div className="text-lg font-semibold text-gray-700">{aggregates.invested_sum_pln} PLN</div>
         </div>
       </div>
 
@@ -102,4 +93,3 @@ export function WalletCard({ wallet }: WalletCardProps) {
     </div>
   );
 }
-

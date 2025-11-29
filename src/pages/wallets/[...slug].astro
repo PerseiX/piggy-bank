@@ -7,14 +7,19 @@ export const prerender = false;
 
 // Get Supabase client and check authentication
 const supabase = Astro.locals.supabase;
-const { data: { user }, error } = await supabase.auth.getUser();
+const {
+  data: { user },
+  error,
+} = await supabase.auth.getUser();
 
 if (error || !user) {
   return Astro.redirect("/signin");
 }
 
 // Get session for accessing user data
-const { data: { session } } = await supabase.auth.getSession();
+const {
+  data: { session },
+} = await supabase.auth.getSession();
 if (!session) {
   return Astro.redirect("/signin");
 }
@@ -74,4 +79,3 @@ const pageTitle = mode === "create" ? "Create Wallet" : "Edit Wallet";
     <WalletForm client:load mode={mode} initialData={initialData} />
   </main>
 </Layout>
-

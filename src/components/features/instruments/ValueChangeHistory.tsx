@@ -1,25 +1,13 @@
 /**
  * ValueChangeHistory Component
- * 
+ *
  * Displays the instrument's value change history in a collapsible accordion.
  * Implements lazy loading - data is fetched only when the accordion is expanded for the first time.
  */
 
 import { useState, useEffect } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { ValueChangeDto } from "@/types";
 
 interface ValueChangeHistoryProps {
@@ -112,14 +100,12 @@ export function ValueChangeHistory({ instrumentId, accessToken }: ValueChangeHis
     <div className="mb-8">
       <Accordion type="single" collapsible onValueChange={handleAccordionChange} defaultValue="history">
         <AccordionItem value="history">
-          <AccordionTrigger className="text-lg font-semibold">
-            Value Change History
-          </AccordionTrigger>
+          <AccordionTrigger className="text-lg font-semibold">Value Change History</AccordionTrigger>
           <AccordionContent>
             {status === "loading" && (
               <div className="flex items-center justify-center py-8" role="status">
                 <div className="flex flex-col items-center gap-3">
-                  <div 
+                  <div
                     className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-blue-600"
                     aria-hidden="true"
                   />
@@ -129,13 +115,8 @@ export function ValueChangeHistory({ instrumentId, accessToken }: ValueChangeHis
             )}
 
             {status === "error" && (
-              <div
-                className="rounded-lg border border-red-200 bg-red-50 p-4"
-                role="alert"
-              >
-                <p className="text-sm text-red-800">
-                  Failed to load value change history: {error}
-                </p>
+              <div className="rounded-lg border border-red-200 bg-red-50 p-4" role="alert">
+                <p className="text-sm text-red-800">Failed to load value change history: {error}</p>
                 <button
                   onClick={fetchHistory}
                   className="mt-2 text-sm font-semibold text-red-800 underline hover:no-underline"
@@ -147,9 +128,7 @@ export function ValueChangeHistory({ instrumentId, accessToken }: ValueChangeHis
 
             {status === "success" && history.length === 0 && (
               <div className="py-8 text-center">
-                <p className="text-sm text-gray-600">
-                  No value changes recorded yet.
-                </p>
+                <p className="text-sm text-gray-600">No value changes recorded yet.</p>
               </div>
             )}
 
@@ -167,18 +146,10 @@ export function ValueChangeHistory({ instrumentId, accessToken }: ValueChangeHis
                   <TableBody>
                     {history.map((change) => (
                       <TableRow key={change.id}>
-                        <TableCell className="font-medium">
-                          {formatDate(change.created_at)}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {formatCurrency(change.before_value_pln)}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {formatCurrency(change.after_value_pln)}
-                        </TableCell>
-                        <TableCell
-                          className={`text-right font-semibold ${getDeltaColorClass(change.direction)}`}
-                        >
+                        <TableCell className="font-medium">{formatDate(change.created_at)}</TableCell>
+                        <TableCell className="text-right">{formatCurrency(change.before_value_pln)}</TableCell>
+                        <TableCell className="text-right">{formatCurrency(change.after_value_pln)}</TableCell>
+                        <TableCell className={`text-right font-semibold ${getDeltaColorClass(change.direction)}`}>
                           {getDeltaPrefix(change.direction)}
                           {formatCurrency(change.delta_pln)}
                         </TableCell>
@@ -194,4 +165,3 @@ export function ValueChangeHistory({ instrumentId, accessToken }: ValueChangeHis
     </div>
   );
 }
-

@@ -1,17 +1,14 @@
-import type { CurrencyDualFormat } from "../../../types"
-import { toCurrencyDualFormat } from "../../currency"
+import type { CurrencyDualFormat } from "../../../types";
+import { toCurrencyDualFormat } from "../../currency";
 
 export function formatCurrencyFromGrosze(grosze: number): CurrencyDualFormat {
-  return toCurrencyDualFormat(grosze)
+  return toCurrencyDualFormat(grosze);
 }
 
-export function formatOptionalCurrencyFromGrosze(
-  value: number | null | undefined,
-): CurrencyDualFormat | null {
+export function formatOptionalCurrencyFromGrosze(value: number | null | undefined): CurrencyDualFormat | null {
   if (value === null || value === undefined) {
-    return null
+    return null;
   }
 
-  return toCurrencyDualFormat(value)
+  return toCurrencyDualFormat(value);
 }
-

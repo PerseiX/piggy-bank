@@ -1,6 +1,6 @@
 /**
  * InstrumentList Component
- * 
+ *
  * Renders the list of instruments in a table format and provides
  * an "Add Instrument" button.
  */
@@ -35,9 +35,7 @@ export function InstrumentList({
 
       {instruments.length === 0 ? (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
-          <p className="text-gray-600">
-            No instruments yet. Add your first instrument to get started.
-          </p>
+          <p className="text-gray-600">No instruments yet. Add your first instrument to get started.</p>
         </div>
       ) : (
         <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
@@ -101,4 +99,3 @@ export function InstrumentList({
     </div>
   );
 }
-

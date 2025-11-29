@@ -43,7 +43,7 @@ export function UpdatePasswordForm() {
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const accessToken = hashParams.get("access_token");
         const type = hashParams.get("type");
-        
+
         if (accessToken && type === "recovery") {
           setIsValidToken(true);
         } else {
@@ -111,14 +111,12 @@ export function UpdatePasswordForm() {
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>Invalid or Expired Link</CardTitle>
-            <CardDescription>
-              This password reset link is invalid or has expired
-            </CardDescription>
+            <CardDescription>This password reset link is invalid or has expired</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="mb-4 text-sm text-muted-foreground">
-              Password reset links expire after a certain period for security reasons.
-              Please request a new password reset link.
+              Password reset links expire after a certain period for security reasons. Please request a new password
+              reset link.
             </p>
             <Button asChild className="w-full">
               <a href="/auth/forgot-password">Request New Link</a>
@@ -146,12 +144,7 @@ export function UpdatePasswordForm() {
                   <FormItem>
                     <FormLabel>New Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        disabled={isLoading}
-                        {...field}
-                      />
+                      <Input type="password" placeholder="••••••••" disabled={isLoading} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -164,12 +157,7 @@ export function UpdatePasswordForm() {
                   <FormItem>
                     <FormLabel>Confirm New Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        disabled={isLoading}
-                        {...field}
-                      />
+                      <Input type="password" placeholder="••••••••" disabled={isLoading} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

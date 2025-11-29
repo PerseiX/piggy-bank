@@ -3,7 +3,7 @@ import { WalletCard } from "./WalletCard";
 
 /**
  * WalletList Component
- * 
+ *
  * Presentational component that displays wallets in a responsive grid layout.
  * Maps over the wallets array and renders a WalletCard for each item.
  */
@@ -21,4 +21,3 @@ export function WalletList({ wallets }: WalletListProps) {
     </div>
   );
 }
-

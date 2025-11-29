@@ -1,6 +1,6 @@
 /**
  * ConfirmDeleteDialog Component
- * 
+ *
  * Reusable confirmation dialog for destructive actions.
  * Uses AlertDialog from Shadcn/ui for proper accessibility.
  */
@@ -57,4 +57,3 @@ export function ConfirmDeleteDialog({
     </AlertDialog>
   );
 }
-

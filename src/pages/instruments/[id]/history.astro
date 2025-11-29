@@ -6,7 +6,10 @@ export const prerender = false;
 
 // Get Supabase client and check authentication
 const supabase = Astro.locals.supabase;
-const { data: { user }, error } = await supabase.auth.getUser();
+const {
+  data: { user },
+  error,
+} = await supabase.auth.getUser();
 
 if (error || !user) {
   return Astro.redirect("/signin");
@@ -23,7 +26,9 @@ if (!id) {
 }
 
 // Get session for access token
-const { data: { session } } = await supabase.auth.getSession();
+const {
+  data: { session },
+} = await supabase.auth.getSession();
 if (!session) {
   return Astro.redirect("/signin");
 }
@@ -35,4 +40,3 @@ const accessToken = session.access_token;
 <Layout title="Instrument History">
   <InstrumentHistoryView client:visible instrumentId={id} accessToken={accessToken} />
 </Layout>
-

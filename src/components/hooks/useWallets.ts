@@ -20,7 +20,7 @@ interface DashboardViewModel {
 /**
  * Custom hook to fetch wallet data from the API.
  * Manages loading, success, empty, and error states.
- * 
+ *
  * @param accessToken - The user's access token for API authentication
  * @returns DashboardViewModel containing the current state and wallet data
  */
@@ -51,9 +51,7 @@ export function useWallets(accessToken: string): DashboardViewModel {
         // Handle other error responses
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          throw new Error(
-            errorData.message || `Failed to fetch wallets: ${response.status}`
-          );
+          throw new Error(errorData.message || `Failed to fetch wallets: ${response.status}`);
         }
 
         // Parse successful response
@@ -76,10 +74,7 @@ export function useWallets(accessToken: string): DashboardViewModel {
         }
       } catch (error) {
         // Handle fetch errors
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred";
+        const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
 
         setViewModel({
           status: "error",
@@ -94,4 +89,3 @@ export function useWallets(accessToken: string): DashboardViewModel {
 
   return viewModel;
 }
-

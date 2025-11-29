@@ -13,23 +13,23 @@ type ViewStatus = "loading" | "success" | "error" | "idle";
 /**
  * The main state object for the InstrumentDetailsView component
  */
-export type InstrumentDetailsViewModel = {
+export interface InstrumentDetailsViewModel {
   status: ViewStatus;
   instrument: InstrumentDto | null;
   error: { status: number; message: string } | null;
-};
+}
 
 // ============================================================================
 // Hook Return Type
 // ============================================================================
 
-export type UseInstrumentDetailsReturn = {
+export interface UseInstrumentDetailsReturn {
   viewModel: InstrumentDetailsViewModel;
   actions: {
     deleteInstrument: () => Promise<void>;
     refresh: () => Promise<void>;
   };
-};
+}
 
 // ============================================================================
 // Hook Implementation
@@ -38,15 +38,12 @@ export type UseInstrumentDetailsReturn = {
 /**
  * Custom hook to manage instrument details view state and API interactions.
  * Handles data fetching, mutations, and error states.
- * 
+ *
  * @param instrumentId - The UUID of the instrument to fetch
  * @param accessToken - The user's access token for API authentication
  * @returns ViewModel and actions object with mutation functions
  */
-export function useInstrumentDetails(
-  instrumentId: string,
-  accessToken: string
-): UseInstrumentDetailsReturn {
+export function useInstrumentDetails(instrumentId: string, accessToken: string): UseInstrumentDetailsReturn {
   const [viewModel, setViewModel] = useState<InstrumentDetailsViewModel>({
     status: "loading",
     instrument: null,
@@ -126,10 +123,7 @@ export function useInstrumentDetails(
       });
     } catch (error) {
       // Handle fetch errors
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "An unexpected error occurred";
+      const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
 
       setViewModel({
         status: "error",
@@ -145,7 +139,7 @@ export function useInstrumentDetails(
   /**
    * Deletes the instrument.
    * Note: This will redirect the user to the dashboard after successful deletion.
-   * 
+   *
    * @throws Error if the API call fails
    */
   const deleteInstrument = useCallback(async (): Promise<void> => {
@@ -191,4 +185,3 @@ export function useInstrumentDetails(
     },
   };
 }
-

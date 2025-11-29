@@ -1,20 +1,11 @@
 /**
  * ValueChangeChart Component
- * 
+ *
  * Displays a line chart visualizing the instrument's value changes over time.
  * Uses Recharts library for responsive, interactive data visualization.
  */
 
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import type { ValueChangeDto } from "@/types";
 
 interface ValueChangeChartProps {
@@ -122,10 +113,7 @@ export function ValueChangeChart({ history, currentValuePln }: ValueChangeChartP
               fontWeight: "600",
               marginBottom: "0.25rem",
             }}
-            formatter={(value: number, name: string, props: any) => [
-              `${value.toFixed(2)} PLN`,
-              "Value",
-            ]}
+            formatter={(value: number, name: string, props: any) => [`${value.toFixed(2)} PLN`, "Value"]}
             labelFormatter={(label, payload) => {
               if (payload && payload[0]) {
                 return payload[0].payload.formattedDate;
@@ -152,4 +140,3 @@ export function ValueChangeChart({ history, currentValuePln }: ValueChangeChartP
     </div>
   );
 }
-

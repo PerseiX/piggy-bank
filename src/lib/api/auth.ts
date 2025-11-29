@@ -1,28 +1,27 @@
-import { createHash } from "node:crypto"
+import { createHash } from "node:crypto";
 
-const BEARER_SCHEME = "bearer"
+const BEARER_SCHEME = "bearer";
 
 export function extractBearerToken(headerValue: string | null): string | null {
   if (!headerValue) {
-    return null
+    return null;
   }
 
-  const [scheme, token] = headerValue.split(" ")
+  const [scheme, token] = headerValue.split(" ");
 
   if (!token || scheme.toLowerCase() !== BEARER_SCHEME) {
-    return null
+    return null;
   }
 
-  return token.trim()
+  return token.trim();
 }
 
 export function fingerprint(value: unknown): string {
   try {
     return createHash("sha256")
       .update(typeof value === "string" ? value : JSON.stringify(value))
-      .digest("hex")
+      .digest("hex");
   } catch {
-    return "unavailable"
+    return "unavailable";
   }
 }
-

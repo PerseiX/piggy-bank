@@ -1,6 +1,6 @@
-import type { WalletAggregatesDto } from "../../../types"
+import type { WalletAggregatesDto } from "../../../types";
 
-const ZERO_PLN = "0.00"
+const ZERO_PLN = "0.00";
 
 const emptyAggregates: WalletAggregatesDto = {
   target_grosze: 0,
@@ -11,9 +11,8 @@ const emptyAggregates: WalletAggregatesDto = {
   invested_sum_pln: ZERO_PLN,
   progress_percent: 0,
   performance_percent: 0,
-}
+};
 
 export function buildEmptyWalletAggregates(): WalletAggregatesDto {
-  return { ...emptyAggregates }
+  return { ...emptyAggregates };
 }
-

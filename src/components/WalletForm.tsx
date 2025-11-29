@@ -3,14 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -25,17 +18,8 @@ import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
  * Validates name and description fields with appropriate constraints.
  */
 export const walletFormSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, "Name is required.")
-    .max(100, "Name must be 100 characters or less."),
-  description: z
-    .string()
-    .trim()
-    .max(500, "Description must be 500 characters or less.")
-    .optional()
-    .or(z.literal("")),
+  name: z.string().trim().min(1, "Name is required.").max(100, "Name must be 100 characters or less."),
+  description: z.string().trim().max(500, "Description must be 500 characters or less.").optional().or(z.literal("")),
 });
 
 /**
@@ -90,7 +74,10 @@ export default function WalletForm({ mode, initialData }: WalletFormProps) {
     try {
       // Get the current user to verify authentication
       const supabase = getSupabaseBrowserClient();
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
 
       if (userError || !user) {
         toast.error("You must be signed in to perform this action.");
@@ -99,7 +86,9 @@ export default function WalletForm({ mode, initialData }: WalletFormProps) {
       }
 
       // Get session for access token
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session?.access_token) {
         toast.error("Session expired. Please sign in again.");
         window.location.href = "/signin";
@@ -117,10 +106,7 @@ export default function WalletForm({ mode, initialData }: WalletFormProps) {
       }
 
       // Determine API endpoint and method based on mode
-      const url =
-        mode === "create"
-          ? "/api/wallets"
-          : `/api/wallets/${initialData?.id}`;
+      const url = mode === "create" ? "/api/wallets" : `/api/wallets/${initialData?.id}`;
       const method = mode === "create" ? "POST" : "PATCH";
 
       // Send API request with Authorization header
@@ -128,7 +114,7 @@ export default function WalletForm({ mode, initialData }: WalletFormProps) {
         method,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify(requestBody),
       });
@@ -155,10 +141,7 @@ export default function WalletForm({ mode, initialData }: WalletFormProps) {
       }
 
       // Success - redirect to dashboard
-      const successMessage =
-        mode === "create"
-          ? "Wallet created successfully!"
-          : "Wallet updated successfully!";
+      const successMessage = mode === "create" ? "Wallet created successfully!" : "Wallet updated successfully!";
       toast.success(successMessage);
 
       // Redirect after a short delay to allow toast to be visible
@@ -254,4 +237,3 @@ export default function WalletForm({ mode, initialData }: WalletFormProps) {
     </Form>
   );
 }
-

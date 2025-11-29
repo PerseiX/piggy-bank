@@ -1,8 +1,8 @@
-import { z } from "zod"
+import { z } from "zod";
 
-import type { CreateWalletCommand, UpdateWalletCommand } from "../../types"
+import type { CreateWalletCommand, UpdateWalletCommand } from "../../types";
 
-const CONTROL_CHAR_REGEX = /[\u0000-\u001F\u007F]/
+const CONTROL_CHAR_REGEX = /[\u0000-\u001F\u007F]/;
 
 const baseCreateWalletSchema = z.object({
   name: z
@@ -15,27 +15,25 @@ const baseCreateWalletSchema = z.object({
     .trim()
     .max(500, { message: "Description must contain at most 500 characters" })
     .nullish(),
-})
+});
 
 export const createWalletSchema = baseCreateWalletSchema.transform((data) => {
-  const payload: CreateWalletCommand = { name: data.name }
+  const payload: CreateWalletCommand = { name: data.name };
 
   if (typeof data.description === "string" && data.description.length > 0) {
-    payload.description = data.description
+    payload.description = data.description;
   }
 
-  return payload
-})
+  return payload;
+});
 
-export type CreateWalletSchemaOutput = z.infer<typeof createWalletSchema>
+export type CreateWalletSchemaOutput = z.infer<typeof createWalletSchema>;
 
 export const walletIdParamSchema = z.object({
-  id: z
-    .string({ required_error: "Wallet id is required" })
-    .uuid({ message: "Wallet id must be a valid UUID" }),
-})
+  id: z.string({ required_error: "Wallet id is required" }).uuid({ message: "Wallet id must be a valid UUID" }),
+});
 
-export type WalletIdParamSchemaOutput = z.infer<typeof walletIdParamSchema>
+export type WalletIdParamSchemaOutput = z.infer<typeof walletIdParamSchema>;
 
 const updateWalletNameSchema = z
   .string({
@@ -46,7 +44,7 @@ const updateWalletNameSchema = z
   .max(100, { message: "Name must contain at most 100 characters" })
   .refine((value) => !CONTROL_CHAR_REGEX.test(value), {
     message: "Name cannot contain control characters",
-  })
+  });
 
 const updateWalletDescriptionSchema = z
   .union([
@@ -62,7 +60,7 @@ const updateWalletDescriptionSchema = z
       .transform((value) => (value.length === 0 ? null : value)),
     z.null(),
   ])
-  .optional()
+  .optional();
 
 const baseUpdateWalletSchema = z
   .object({
@@ -71,31 +69,27 @@ const baseUpdateWalletSchema = z
   })
   .strict()
   .superRefine((data, ctx) => {
-    if (
-      typeof data.name === "undefined" &&
-      typeof data.description === "undefined"
-    ) {
+    if (typeof data.name === "undefined" && typeof data.description === "undefined") {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "At least one field must be provided",
         path: [],
-      })
+      });
     }
-  })
+  });
 
 export const updateWalletSchema = baseUpdateWalletSchema.transform((data) => {
-  const payload: UpdateWalletCommand = {}
+  const payload: UpdateWalletCommand = {};
 
   if (typeof data.name === "string") {
-    payload.name = data.name
+    payload.name = data.name;
   }
 
   if (data.description !== undefined) {
-    payload.description = data.description
+    payload.description = data.description;
   }
 
-  return payload
-})
+  return payload;
+});
 
-export type UpdateWalletSchemaOutput = z.infer<typeof updateWalletSchema>
-
+export type UpdateWalletSchemaOutput = z.infer<typeof updateWalletSchema>;

@@ -3,12 +3,12 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 
-type AppHeaderProps = {
+interface AppHeaderProps {
   user?: {
     id: string;
     email?: string;
   } | null;
-};
+}
 
 export function AppHeader({ user }: AppHeaderProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -53,10 +53,7 @@ export function AppHeader({ user }: AppHeaderProps) {
           </a>
           {user && (
             <nav className="hidden md:flex items-center gap-4">
-              <a
-                href="/"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              >
+              <a href="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
                 Wallets
               </a>
             </nav>
@@ -72,16 +69,9 @@ export function AppHeader({ user }: AppHeaderProps) {
                     {user.email?.charAt(0).toUpperCase() || "U"}
                   </span>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  {user.email || "User"}
-                </span>
+                <span className="text-sm text-muted-foreground">{user.email || "User"}</span>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-              >
+              <Button variant="outline" size="sm" onClick={handleLogout} disabled={isLoggingOut}>
                 {isLoggingOut ? "Logging out..." : "Sign Out"}
               </Button>
             </div>

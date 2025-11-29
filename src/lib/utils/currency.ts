@@ -1,5 +1,1 @@
-export {
-  formatGroszeToPln,
-  formatOptionalGroszeToPln,
-} from "../formatters/currency"
-
+export { formatGroszeToPln, formatOptionalGroszeToPln } from "../formatters/currency";

@@ -4,7 +4,9 @@ import { DashboardView } from "@/components/views/DashboardView";
 
 // User is guaranteed to be authenticated by middleware
 // Get session for access token
-const { data: { session } } = await Astro.locals.supabase.auth.getSession();
+const {
+  data: { session },
+} = await Astro.locals.supabase.auth.getSession();
 const accessToken = session?.access_token || "";
 ---
 

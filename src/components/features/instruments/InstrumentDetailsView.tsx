@@ -1,6 +1,6 @@
 /**
  * InstrumentDetailsView Component
- * 
+ *
  * Main container for the instrument detail page.
  * Manages state, data fetching, and orchestrates all child components.
  */
@@ -38,26 +38,20 @@ export default function InstrumentDetailsView({ instrumentId, accessToken }: Ins
 
   // Handle error state
   if (viewModel.status === "error" || !viewModel.instrument) {
-    const errorTitle = viewModel.error?.status === 404
-      ? "Instrument Not Found"
-      : viewModel.error?.status === 403
-      ? "Access Denied"
-      : "Failed to Load Instrument";
+    const errorTitle =
+      viewModel.error?.status === 404
+        ? "Instrument Not Found"
+        : viewModel.error?.status === 403
+          ? "Access Denied"
+          : "Failed to Load Instrument";
 
     const errorMessage = viewModel.error?.message || "Could not load instrument details. Please try again.";
 
     return (
       <div className="container mx-auto max-w-6xl px-4 py-8">
-        <ErrorState
-          title={errorTitle}
-          message={errorMessage}
-          onRetry={actions.refresh}
-        />
+        <ErrorState title={errorTitle} message={errorMessage} onRetry={actions.refresh} />
         <div className="mt-4">
-          <a
-            href="/"
-            className="text-sm font-medium text-blue-600 hover:text-blue-500"
-          >
+          <a href="/" className="text-sm font-medium text-blue-600 hover:text-blue-500">
             ← Back to Dashboard
           </a>
         </div>
@@ -105,44 +99,37 @@ export default function InstrumentDetailsView({ instrumentId, accessToken }: Ins
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8">
-        {/* Back to Wallet Link */}
-        <div className="mb-4">
-          <a
-            href={`/wallets/detail/${instrument.wallet_id}`}
-            className="text-sm font-medium text-blue-600 hover:text-blue-500"
-          >
-            ← Back to Wallet
-          </a>
-        </div>
-
-        {/* Header with name, type, and action buttons */}
-        <InstrumentHeader
-          instrument={headerViewModel}
-          instrumentId={instrumentId}
-          onDelete={handleDelete}
-        />
-
-        {/* Financial metrics cards */}
-        <InstrumentMetrics metrics={metricsViewModel} />
-
-        {/* Value change history accordion */}
-        <ValueChangeHistory
-          instrumentId={instrumentId}
-          accessToken={accessToken}
-        />
-
-        {/* Delete confirmation dialog */}
-        {showDeleteDialog && (
-          <ConfirmDeleteDialog
-            isOpen={true}
-            onClose={handleDeleteCancel}
-            onConfirm={handleDeleteConfirm}
-            title="Delete Instrument"
-            description={`Are you sure you want to delete "${instrument.name}"? This action cannot be undone and will delete all value change history for this instrument.`}
-            isLoading={isDeleting}
-          />
-        )}
+      {/* Back to Wallet Link */}
+      <div className="mb-4">
+        <a
+          href={`/wallets/detail/${instrument.wallet_id}`}
+          className="text-sm font-medium text-blue-600 hover:text-blue-500"
+        >
+          ← Back to Wallet
+        </a>
       </div>
+
+      {/* Header with name, type, and action buttons */}
+      <InstrumentHeader instrument={headerViewModel} instrumentId={instrumentId} onDelete={handleDelete} />
+
+      {/* Financial metrics cards */}
+      <InstrumentMetrics metrics={metricsViewModel} />
+
+      {/* Value change history accordion */}
+      <ValueChangeHistory instrumentId={instrumentId} accessToken={accessToken} />
+
+      {/* Delete confirmation dialog */}
+      {showDeleteDialog && (
+        <ConfirmDeleteDialog
+          isOpen={true}
+          onClose={handleDeleteCancel}
+          onConfirm={handleDeleteConfirm}
+          title="Delete Instrument"
+          description={`Are you sure you want to delete "${instrument.name}"? This action cannot be undone and will delete all value change history for this instrument.`}
+          isLoading={isDeleting}
+        />
+      )}
+    </div>
   );
 }
 
@@ -157,7 +144,7 @@ function calculateDeltaPln(instrument: InstrumentDto): string {
   const current = parseFloat(instrument.current_value_pln);
   const invested = parseFloat(instrument.invested_money_pln);
   const delta = current - invested;
-  
+
   // Format with 2 decimal places, always show sign for non-zero values
   return Math.abs(delta).toFixed(2);
 }
@@ -169,9 +156,8 @@ function calculateDeltaDirection(instrument: InstrumentDto): ValueChangeDirectio
   const current = parseFloat(instrument.current_value_pln);
   const invested = parseFloat(instrument.invested_money_pln);
   const delta = current - invested;
-  
+
   if (delta > 0) return "increase";
   if (delta < 0) return "decrease";
   return "unchanged";
 }
-

@@ -1,5 +1,5 @@
-import { Page, Locator } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page, Locator } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
 /**
  * Page Object Model for the Login page
@@ -17,24 +17,24 @@ export class LoginPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    
+
     // Initialize locators using data-test-id attributes
     this.authForm = page.locator('[data-test-id="auth-form"]');
     this.emailInput = page.locator('[data-test-id="auth-email-input"]');
     this.passwordInput = page.locator('[data-test-id="auth-password-input"]');
     this.submitButton = page.locator('[data-test-id="auth-submit-button"]');
-    
+
     // Fallback to role-based selectors for elements without data-test-id
-    this.errorMessage = page.getByRole('alert');
-    this.signUpLink = page.getByRole('link', { name: /sign up|register/i });
-    this.forgotPasswordLink = page.getByRole('link', { name: /forgot password/i });
+    this.errorMessage = page.getByRole("alert");
+    this.signUpLink = page.getByRole("link", { name: /sign up|register/i });
+    this.forgotPasswordLink = page.getByRole("link", { name: /forgot password/i });
   }
 
   /**
    * Navigate to the login page
    */
   async navigate() {
-    await this.goto('/auth/login');
+    await this.goto("/auth/login");
     await this.waitForPageLoad();
   }
 
@@ -79,7 +79,7 @@ export class LoginPage extends BasePage {
    * Get the error message text
    */
   async getErrorMessageText(): Promise<string> {
-    return await this.errorMessage.textContent() || '';
+    return (await this.errorMessage.textContent()) || "";
   }
 
   /**
@@ -103,4 +103,3 @@ export class LoginPage extends BasePage {
     return await this.isVisible(this.submitButton);
   }
 }
-

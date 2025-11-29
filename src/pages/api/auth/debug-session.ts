@@ -33,28 +33,32 @@ export const GET: APIRoute = async ({ locals, request }) => {
     const cookieHeader = request.headers.get("Cookie") || "no cookies";
 
     return new Response(
-      JSON.stringify({
-        session: {
-          exists: !!sessionData.session,
-          accessToken: sessionData.session?.access_token ? "present" : "missing",
-          expiresAt: sessionData.session?.expires_at,
-          error: sessionError?.message,
+      JSON.stringify(
+        {
+          session: {
+            exists: !!sessionData.session,
+            accessToken: sessionData.session?.access_token ? "present" : "missing",
+            expiresAt: sessionData.session?.expires_at,
+            error: sessionError?.message,
+          },
+          user: {
+            exists: !!userData.user,
+            id: userData.user?.id,
+            email: userData.user?.email,
+            emailConfirmed: userData.user?.email_confirmed_at ? true : false,
+            error: userError?.message,
+          },
+          cookies: {
+            header: cookieHeader,
+          },
+          locals: {
+            userExists: !!locals.user,
+            userId: locals.user?.id,
+          },
         },
-        user: {
-          exists: !!userData.user,
-          id: userData.user?.id,
-          email: userData.user?.email,
-          emailConfirmed: userData.user?.email_confirmed_at ? true : false,
-          error: userError?.message,
-        },
-        cookies: {
-          header: cookieHeader,
-        },
-        locals: {
-          userExists: !!locals.user,
-          userId: locals.user?.id,
-        },
-      }, null, 2),
+        null,
+        2
+      ),
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
@@ -74,4 +78,3 @@ export const GET: APIRoute = async ({ locals, request }) => {
     );
   }
 };
-

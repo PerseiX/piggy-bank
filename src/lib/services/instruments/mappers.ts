@@ -1,9 +1,6 @@
-import type { Database } from "../../../db/database.types"
-import type { InstrumentDeletedDto, InstrumentDto } from "../../../types"
-import {
-  formatGroszeToPln,
-  formatOptionalGroszeToPln,
-} from "../../utils/currency"
+import type { Database } from "../../../db/database.types";
+import type { InstrumentDeletedDto, InstrumentDto } from "../../../types";
+import { formatGroszeToPln, formatOptionalGroszeToPln } from "../../utils/currency";
 
 export type InstrumentRowForDto = Pick<
   Database["public"]["Tables"]["instruments"]["Row"],
@@ -18,11 +15,9 @@ export type InstrumentRowForDto = Pick<
   | "goal_grosze"
   | "created_at"
   | "updated_at"
->
+>;
 
-export function mapInstrumentRecordToDto(
-  instrument: InstrumentRowForDto,
-): InstrumentDto {
+export function mapInstrumentRecordToDto(instrument: InstrumentRowForDto): InstrumentDto {
   return {
     id: instrument.id,
     wallet_id: instrument.wallet_id,
@@ -37,25 +32,18 @@ export function mapInstrumentRecordToDto(
     goal_pln: formatOptionalGroszeToPln(instrument.goal_grosze),
     created_at: instrument.created_at,
     updated_at: instrument.updated_at,
-  }
+  };
 }
 
-export function mapInstrumentRowToDto(
-  instrument: InstrumentRowForDto,
-): InstrumentDto {
-  return mapInstrumentRecordToDto(instrument)
+export function mapInstrumentRowToDto(instrument: InstrumentRowForDto): InstrumentDto {
+  return mapInstrumentRecordToDto(instrument);
 }
 
-export type InstrumentSoftDeleteRow = Pick<
-  Database["public"]["Tables"]["instruments"]["Row"],
-  "id" | "deleted_at"
->
+export type InstrumentSoftDeleteRow = Pick<Database["public"]["Tables"]["instruments"]["Row"], "id" | "deleted_at">;
 
-export function mapInstrumentSoftDeleteRowToDto(
-  instrument: InstrumentSoftDeleteRow,
-): InstrumentDeletedDto {
+export function mapInstrumentSoftDeleteRowToDto(instrument: InstrumentSoftDeleteRow): InstrumentDeletedDto {
   return {
     id: instrument.id,
     deleted_at: instrument.deleted_at,
-  }
+  };
 }

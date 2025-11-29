@@ -1,5 +1,5 @@
-import { Page, Locator } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page, Locator } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
 /**
  * Page Object Model for the Wallet Form page (Create/Edit)
@@ -17,24 +17,27 @@ export class WalletFormPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    
+
     // Initialize locators using data-test-id attributes
     this.walletForm = page.locator('[data-test-id="wallet-form"]');
     this.nameInput = page.locator('[data-test-id="wallet-name-input"]');
     this.descriptionInput = page.locator('[data-test-id="wallet-description-input"]');
     this.submitButton = page.locator('[data-test-id="wallet-submit-button"]');
     this.cancelButton = page.locator('[data-test-id="wallet-cancel-button"]');
-    
+
     // Error messages are typically displayed near their respective fields
-    this.nameErrorMessage = page.locator('[data-test-id="wallet-name-input"]').locator('..').locator('[role="alert"]');
-    this.descriptionErrorMessage = page.locator('[data-test-id="wallet-description-input"]').locator('..').locator('[role="alert"]');
+    this.nameErrorMessage = page.locator('[data-test-id="wallet-name-input"]').locator("..").locator('[role="alert"]');
+    this.descriptionErrorMessage = page
+      .locator('[data-test-id="wallet-description-input"]')
+      .locator("..")
+      .locator('[role="alert"]');
   }
 
   /**
    * Navigate to the create wallet page
    */
   async navigateToCreate() {
-    await this.goto('/wallets/new');
+    await this.goto("/wallets/new");
     await this.waitForPageLoad();
   }
 
@@ -118,7 +121,7 @@ export class WalletFormPage extends BasePage {
    * Get the name error message text
    */
   async getNameErrorText(): Promise<string> {
-    return await this.nameErrorMessage.textContent() || '';
+    return (await this.nameErrorMessage.textContent()) || "";
   }
 
   /**
@@ -132,7 +135,7 @@ export class WalletFormPage extends BasePage {
    * Get the description error message text
    */
   async getDescriptionErrorText(): Promise<string> {
-    return await this.descriptionErrorMessage.textContent() || '';
+    return (await this.descriptionErrorMessage.textContent()) || "";
   }
 
   /**
@@ -168,7 +171,6 @@ export class WalletFormPage extends BasePage {
    * (waits for navigation away from the form)
    */
   async waitForSubmission() {
-    await this.page.waitForURL('/', { timeout: 5000 });
+    await this.page.waitForURL("/", { timeout: 5000 });
   }
 }
-

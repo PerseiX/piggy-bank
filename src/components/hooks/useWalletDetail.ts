@@ -19,11 +19,11 @@ type ViewStatus = "loading" | "success" | "error" | "idle";
 /**
  * The main state object for the WalletDetailView component
  */
-export type WalletDetailViewModel = {
+export interface WalletDetailViewModel {
   status: ViewStatus;
   walletData: WalletDetailDto | null;
   error: string | null;
-};
+}
 
 /**
  * Represents the currently active modal and its required data
@@ -41,7 +41,7 @@ export type ModalState =
 // Hook Return Type
 // ============================================================================
 
-export type UseWalletDetailReturn = {
+export interface UseWalletDetailReturn {
   viewModel: WalletDetailViewModel;
   actions: {
     createInstrument: (command: CreateInstrumentCommand) => Promise<void>;
@@ -51,7 +51,7 @@ export type UseWalletDetailReturn = {
     deleteWallet: () => Promise<void>;
     refresh: () => Promise<void>;
   };
-};
+}
 
 // ============================================================================
 // Hook Implementation
@@ -60,15 +60,12 @@ export type UseWalletDetailReturn = {
 /**
  * Custom hook to manage wallet detail view state and API interactions.
  * Handles data fetching, mutations, and error states.
- * 
+ *
  * @param walletId - The UUID of the wallet to fetch
  * @param accessToken - The user's access token for API authentication
  * @returns ViewModel and actions object with mutation functions
  */
-export function useWalletDetail(
-  walletId: string,
-  accessToken: string
-): UseWalletDetailReturn {
+export function useWalletDetail(walletId: string, accessToken: string): UseWalletDetailReturn {
   const [viewModel, setViewModel] = useState<WalletDetailViewModel>({
     status: "loading",
     walletData: null,
@@ -120,9 +117,7 @@ export function useWalletDetail(
       // Handle other error responses
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.message || `Failed to fetch wallet: ${response.status}`
-        );
+        throw new Error(errorData.message || `Failed to fetch wallet: ${response.status}`);
       }
 
       // Parse successful response
@@ -136,10 +131,7 @@ export function useWalletDetail(
       });
     } catch (error) {
       // Handle fetch errors
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "An unexpected error occurred";
+      const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
 
       setViewModel({
         status: "error",
@@ -151,7 +143,7 @@ export function useWalletDetail(
 
   /**
    * Creates a new instrument in this wallet.
-   * 
+   *
    * @param command - The instrument creation data
    * @throws Error if the API call fails
    */
@@ -184,16 +176,13 @@ export function useWalletDetail(
 
   /**
    * Updates an existing instrument.
-   * 
+   *
    * @param instrumentId - The UUID of the instrument to update
    * @param command - The instrument update data
    * @throws Error if the API call fails
    */
   const updateInstrument = useCallback(
-    async (
-      instrumentId: string,
-      command: UpdateInstrumentCommand
-    ): Promise<void> => {
+    async (instrumentId: string, command: UpdateInstrumentCommand): Promise<void> => {
       const response = await fetch(`/api/instruments/${instrumentId}`, {
         method: "PATCH",
         headers: {
@@ -221,7 +210,7 @@ export function useWalletDetail(
 
   /**
    * Deletes an instrument.
-   * 
+   *
    * @param instrumentId - The UUID of the instrument to delete
    * @throws Error if the API call fails
    */
@@ -253,7 +242,7 @@ export function useWalletDetail(
 
   /**
    * Updates the wallet's basic information.
-   * 
+   *
    * @param command - The wallet update data
    * @throws Error if the API call fails
    */
@@ -287,7 +276,7 @@ export function useWalletDetail(
   /**
    * Deletes the wallet.
    * Note: This will redirect the user to the dashboard after successful deletion.
-   * 
+   *
    * @throws Error if the API call fails
    */
   const deleteWallet = useCallback(async (): Promise<void> => {
@@ -337,4 +326,3 @@ export function useWalletDetail(
     },
   };
 }
-

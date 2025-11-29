@@ -10,18 +10,16 @@ import { Input } from "@/components/ui/input";
 import { AuthFormSchema, type AuthFormViewModel } from "@/lib/schemas/auth.schema";
 import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
 
-type AuthFormProps = {
+interface AuthFormProps {
   mode: "login" | "signup";
-};
+}
 
 export function AuthForm({ mode }: AuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const isLogin = mode === "login";
   const title = isLogin ? "Sign In" : "Sign Up";
-  const description = isLogin 
-    ? "Enter your credentials to access your account" 
-    : "Create a new account to get started";
+  const description = isLogin ? "Enter your credentials to access your account" : "Create a new account to get started";
   const buttonText = isLogin ? "Sign In" : "Sign Up";
   const footerText = isLogin ? "Don't have an account?" : "Already have an account?";
   const footerLinkText = isLogin ? "Sign Up" : "Sign In";
@@ -126,10 +124,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                     <div className="flex items-center justify-between">
                       <FormLabel>Password</FormLabel>
                       {isLogin && (
-                        <a 
-                          href="/auth/forgot-password" 
-                          className="text-sm text-primary hover:underline"
-                        >
+                        <a href="/auth/forgot-password" className="text-sm text-primary hover:underline">
                           Forgot password?
                         </a>
                       )}
@@ -165,4 +160,3 @@ export function AuthForm({ mode }: AuthFormProps) {
     </div>
   );
 }
-

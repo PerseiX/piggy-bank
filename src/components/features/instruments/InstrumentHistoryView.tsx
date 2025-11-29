@@ -1,6 +1,6 @@
 /**
  * InstrumentHistoryView Component
- * 
+ *
  * Displays the full history of an instrument with charts and detailed table.
  * This is a dedicated page for viewing and analyzing value changes over time.
  */
@@ -10,14 +10,7 @@ import { useInstrumentDetails } from "@/components/hooks/useInstrumentDetails";
 import { ValueChangeChart } from "./ValueChangeChart";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { LoadingState } from "@/components/views/LoadingState";
 import { ErrorState } from "@/components/views/ErrorState";
 import type { ValueChangeDto } from "@/types";
@@ -32,7 +25,7 @@ type HistoryStatus = "idle" | "loading" | "success" | "error";
 export default function InstrumentHistoryView({ instrumentId, accessToken }: InstrumentHistoryViewProps) {
   // Fetch instrument details
   const { viewModel: instrumentViewModel, actions } = useInstrumentDetails(instrumentId, accessToken);
-  
+
   // Fetch history data
   const [historyStatus, setHistoryStatus] = useState<HistoryStatus>("idle");
   const [history, setHistory] = useState<ValueChangeDto[]>([]);
@@ -90,26 +83,20 @@ export default function InstrumentHistoryView({ instrumentId, accessToken }: Ins
 
   // Handle error state for instrument
   if (instrumentViewModel.status === "error" || !instrumentViewModel.instrument) {
-    const errorTitle = instrumentViewModel.error?.status === 404
-      ? "Instrument Not Found"
-      : instrumentViewModel.error?.status === 403
-      ? "Access Denied"
-      : "Failed to Load Instrument";
+    const errorTitle =
+      instrumentViewModel.error?.status === 404
+        ? "Instrument Not Found"
+        : instrumentViewModel.error?.status === 403
+          ? "Access Denied"
+          : "Failed to Load Instrument";
 
     const errorMessage = instrumentViewModel.error?.message || "Could not load instrument details. Please try again.";
 
     return (
       <div className="container mx-auto max-w-7xl px-4 py-8">
-        <ErrorState
-          title={errorTitle}
-          message={errorMessage}
-          onRetry={actions.refresh}
-        />
+        <ErrorState title={errorTitle} message={errorMessage} onRetry={actions.refresh} />
         <div className="mt-4">
-          <a
-            href="/"
-            className="text-sm font-medium text-blue-600 hover:text-blue-500"
-          >
+          <a href="/" className="text-sm font-medium text-blue-600 hover:text-blue-500">
             ← Back to Dashboard
           </a>
         </div>
@@ -154,19 +141,13 @@ export default function InstrumentHistoryView({ instrumentId, accessToken }: Ins
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8">
-        {/* Navigation */}
-        <div className="mb-4 flex items-center gap-4">
-          <a
-            href={`/instruments/${instrumentId}`}
-            className="text-sm font-medium text-blue-600 hover:text-blue-500"
-          >
+      {/* Navigation */}
+      <div className="mb-4 flex items-center gap-4">
+        <a href={`/instruments/${instrumentId}`} className="text-sm font-medium text-blue-600 hover:text-blue-500">
           ← Back to Instrument Details
         </a>
         <span className="text-gray-300">|</span>
-        <a
-          href="/"
-          className="text-sm font-medium text-blue-600 hover:text-blue-500"
-        >
+        <a href="/" className="text-sm font-medium text-blue-600 hover:text-blue-500">
           Dashboard
         </a>
       </div>
@@ -174,9 +155,7 @@ export default function InstrumentHistoryView({ instrumentId, accessToken }: Ins
       {/* Header */}
       <div className="mb-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            {instrument.name} - Value History
-          </h1>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">{instrument.name} - Value History</h1>
           <Badge variant="secondary" className="w-fit">
             {instrumentTypeLabels[instrument.type]}
           </Badge>
@@ -187,21 +166,15 @@ export default function InstrumentHistoryView({ instrumentId, accessToken }: Ins
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         <div className="rounded-lg border border-gray-200 bg-white p-4">
           <div className="text-sm font-medium text-gray-600">Current Value</div>
-          <div className="mt-2 text-2xl font-bold text-gray-900">
-            {formatCurrency(instrument.current_value_pln)}
-          </div>
+          <div className="mt-2 text-2xl font-bold text-gray-900">{formatCurrency(instrument.current_value_pln)}</div>
         </div>
         <div className="rounded-lg border border-gray-200 bg-white p-4">
           <div className="text-sm font-medium text-gray-600">Invested Money</div>
-          <div className="mt-2 text-2xl font-bold text-gray-900">
-            {formatCurrency(instrument.invested_money_pln)}
-          </div>
+          <div className="mt-2 text-2xl font-bold text-gray-900">{formatCurrency(instrument.invested_money_pln)}</div>
         </div>
         <div className="rounded-lg border border-gray-200 bg-white p-4">
           <div className="text-sm font-medium text-gray-600">Total Changes</div>
-          <div className="mt-2 text-2xl font-bold text-gray-900">
-            {history.length}
-          </div>
+          <div className="mt-2 text-2xl font-bold text-gray-900">{history.length}</div>
         </div>
       </div>
 
@@ -228,10 +201,7 @@ export default function InstrumentHistoryView({ instrumentId, accessToken }: Ins
         <>
           {/* Chart */}
           <div className="mb-8">
-            <ValueChangeChart
-              history={history}
-              currentValuePln={instrument.current_value_pln}
-            />
+            <ValueChangeChart history={history} currentValuePln={instrument.current_value_pln} />
           </div>
 
           {/* Detailed Table */}
@@ -252,18 +222,10 @@ export default function InstrumentHistoryView({ instrumentId, accessToken }: Ins
                 <TableBody>
                   {history.map((change) => (
                     <TableRow key={change.id}>
-                      <TableCell className="font-medium">
-                        {formatDate(change.created_at)}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {formatCurrency(change.before_value_pln)}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {formatCurrency(change.after_value_pln)}
-                      </TableCell>
-                      <TableCell
-                        className={`text-right font-semibold ${getDeltaColorClass(change.direction)}`}
-                      >
+                      <TableCell className="font-medium">{formatDate(change.created_at)}</TableCell>
+                      <TableCell className="text-right">{formatCurrency(change.before_value_pln)}</TableCell>
+                      <TableCell className="text-right">{formatCurrency(change.after_value_pln)}</TableCell>
+                      <TableCell className={`text-right font-semibold ${getDeltaColorClass(change.direction)}`}>
                         {getDeltaPrefix(change.direction)}
                         {formatCurrency(change.delta_pln)}
                       </TableCell>
@@ -278,4 +240,3 @@ export default function InstrumentHistoryView({ instrumentId, accessToken }: Ins
     </div>
   );
 }
-

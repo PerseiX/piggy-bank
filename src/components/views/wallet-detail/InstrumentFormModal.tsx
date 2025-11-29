@@ -1,6 +1,6 @@
 /**
  * InstrumentFormModal Component
- * 
+ *
  * Modal dialog for creating or editing an instrument.
  * Handles form validation and submission.
  */
@@ -18,23 +18,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { InstrumentDto, CreateInstrumentCommand, UpdateInstrumentCommand, InstrumentType } from "@/types";
 
 // Form validation schema
@@ -42,11 +29,7 @@ const instrumentFormSchema = z.object({
   type: z.enum(["bonds", "etf", "stocks"], {
     required_error: "Instrument type is required.",
   }),
-  name: z
-    .string()
-    .trim()
-    .min(1, "Name is required.")
-    .max(100, "Name must be 100 characters or less."),
+  name: z.string().trim().min(1, "Name is required.").max(100, "Name must be 100 characters or less."),
   short_description: z
     .string()
     .trim()
@@ -165,9 +148,7 @@ export function InstrumentFormModal(props: InstrumentFormModalAllProps) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>
-            {mode === "create" ? "Add New Instrument" : "Edit Instrument"}
-          </DialogTitle>
+          <DialogTitle>{mode === "create" ? "Add New Instrument" : "Edit Instrument"}</DialogTitle>
           <DialogDescription>
             {mode === "create"
               ? "Add a new financial instrument to your wallet."
@@ -184,11 +165,7 @@ export function InstrumentFormModal(props: InstrumentFormModalAllProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    disabled={isSubmitting}
-                  >
+                  <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isSubmitting}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select instrument type" />
@@ -233,12 +210,7 @@ export function InstrumentFormModal(props: InstrumentFormModalAllProps) {
                 <FormItem>
                   <FormLabel>Description (Optional)</FormLabel>
                   <FormControl>
-                    <Textarea
-                      {...field}
-                      placeholder="Enter a short description"
-                      disabled={isSubmitting}
-                      rows={3}
-                    />
+                    <Textarea {...field} placeholder="Enter a short description" disabled={isSubmitting} rows={3} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -253,13 +225,7 @@ export function InstrumentFormModal(props: InstrumentFormModalAllProps) {
                 <FormItem>
                   <FormLabel>Invested Money (PLN)</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="text"
-                      placeholder="0.00"
-                      disabled={isSubmitting}
-                      aria-required="true"
-                    />
+                    <Input {...field} type="text" placeholder="0.00" disabled={isSubmitting} aria-required="true" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -274,13 +240,7 @@ export function InstrumentFormModal(props: InstrumentFormModalAllProps) {
                 <FormItem>
                   <FormLabel>Current Value (PLN)</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="text"
-                      placeholder="0.00"
-                      disabled={isSubmitting}
-                      aria-required="true"
-                    />
+                    <Input {...field} type="text" placeholder="0.00" disabled={isSubmitting} aria-required="true" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -295,12 +255,7 @@ export function InstrumentFormModal(props: InstrumentFormModalAllProps) {
                 <FormItem>
                   <FormLabel>Goal (PLN) - Optional</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="text"
-                      placeholder="0.00"
-                      disabled={isSubmitting}
-                    />
+                    <Input {...field} type="text" placeholder="0.00" disabled={isSubmitting} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -308,12 +263,7 @@ export function InstrumentFormModal(props: InstrumentFormModalAllProps) {
             />
 
             <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleClose}
-                disabled={isSubmitting}
-              >
+              <Button type="button" variant="outline" onClick={handleClose} disabled={isSubmitting}>
                 Cancel
               </Button>
               <Button type="submit" disabled={isSubmitting}>
@@ -332,4 +282,3 @@ export function InstrumentFormModal(props: InstrumentFormModalAllProps) {
     </Dialog>
   );
 }
-

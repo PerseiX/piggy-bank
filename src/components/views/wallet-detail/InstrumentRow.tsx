@@ -1,6 +1,6 @@
 /**
  * InstrumentRow Component
- * 
+ *
  * Displays a single instrument in a table row format with its key data
  * and action buttons for editing and deleting.
  */
@@ -35,9 +35,7 @@ export function InstrumentRow({ instrument, onQuickEditValues, onEdit, onDelete 
           {instrument.name}
         </button>
         {instrument.short_description && (
-          <div className="text-sm text-gray-600 mt-1">
-            {instrument.short_description}
-          </div>
+          <div className="text-sm text-gray-600 mt-1">{instrument.short_description}</div>
         )}
       </td>
 
@@ -49,14 +47,10 @@ export function InstrumentRow({ instrument, onQuickEditValues, onEdit, onDelete 
       </td>
 
       {/* Invested Money */}
-      <td className="py-4 px-4 text-right text-gray-900 font-medium">
-        {instrument.invested_money_pln} PLN
-      </td>
+      <td className="py-4 px-4 text-right text-gray-900 font-medium">{instrument.invested_money_pln} PLN</td>
 
       {/* Current Value */}
-      <td className="py-4 px-4 text-right text-gray-900 font-medium">
-        {instrument.current_value_pln} PLN
-      </td>
+      <td className="py-4 px-4 text-right text-gray-900 font-medium">{instrument.current_value_pln} PLN</td>
 
       {/* Goal */}
       <td className="py-4 px-4 text-right text-gray-700">
@@ -74,13 +68,7 @@ export function InstrumentRow({ instrument, onQuickEditValues, onEdit, onDelete 
             aria-label={`View details for ${instrument.name}`}
             title="View instrument details"
           >
-            <svg
-              className="h-4 w-4 sm:mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
+            <svg className="h-4 w-4 sm:mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -97,27 +85,11 @@ export function InstrumentRow({ instrument, onQuickEditValues, onEdit, onDelete 
             aria-label={`Quick edit values for ${instrument.name}`}
             title="Quick edit invested and current value"
           >
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
           </Button>
-          <Button
-            onClick={() => onEdit(instrument)}
-            variant="outline"
-            size="sm"
-            aria-label={`Edit ${instrument.name}`}
-          >
+          <Button onClick={() => onEdit(instrument)} variant="outline" size="sm" aria-label={`Edit ${instrument.name}`}>
             Edit
           </Button>
           <Button
@@ -133,4 +105,3 @@ export function InstrumentRow({ instrument, onQuickEditValues, onEdit, onDelete 
     </tr>
   );
 }
-

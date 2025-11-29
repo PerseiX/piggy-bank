@@ -1,39 +1,24 @@
-import { z } from "zod"
+import { z } from "zod";
 
-export { walletIdParamSchema } from "./wallets"
-export type { WalletIdParamSchemaOutput } from "./wallets"
+export { walletIdParamSchema } from "./wallets";
+export type { WalletIdParamSchemaOutput } from "./wallets";
 
-import type {
-  CreateInstrumentCommand,
-  InstrumentType,
-  UpdateInstrumentCommand,
-} from "../../types"
+import type { CreateInstrumentCommand, InstrumentType, UpdateInstrumentCommand } from "../../types";
 
-const CONTROL_CHAR_REGEX = /[\u0000-\u001F\u007F]/
-const PLN_DECIMAL_PATTERN = /^[0-9]+(\.[0-9]{1,2})?$/
+const CONTROL_CHAR_REGEX = /[\u0000-\u001F\u007F]/;
+const PLN_DECIMAL_PATTERN = /^[0-9]+(\.[0-9]{1,2})?$/;
 
-const instrumentTypeValues = ["bonds", "etf", "stocks"] as const
+const instrumentTypeValues = ["bonds", "etf", "stocks"] as const;
 
-const listWalletInstrumentsSortEnum = z.enum([
-  "name",
-  "updated_at",
-  "type",
-  "current_value_grosze",
-])
+const listWalletInstrumentsSortEnum = z.enum(["name", "updated_at", "type", "current_value_grosze"]);
 
-const listWalletInstrumentsOrderEnum = z.enum(["asc", "desc"])
+const listWalletInstrumentsOrderEnum = z.enum(["asc", "desc"]);
 
-export type ListWalletInstrumentsSortField = z.infer<
-  typeof listWalletInstrumentsSortEnum
->
-export type ListWalletInstrumentsSortOrder = z.infer<
-  typeof listWalletInstrumentsOrderEnum
->
+export type ListWalletInstrumentsSortField = z.infer<typeof listWalletInstrumentsSortEnum>;
+export type ListWalletInstrumentsSortOrder = z.infer<typeof listWalletInstrumentsOrderEnum>;
 
-export const LIST_WALLET_INSTRUMENTS_DEFAULT_SORT: ListWalletInstrumentsSortField =
-  "updated_at"
-export const LIST_WALLET_INSTRUMENTS_DEFAULT_ORDER: ListWalletInstrumentsSortOrder =
-  "desc"
+export const LIST_WALLET_INSTRUMENTS_DEFAULT_SORT: ListWalletInstrumentsSortField = "updated_at";
+export const LIST_WALLET_INSTRUMENTS_DEFAULT_ORDER: ListWalletInstrumentsSortOrder = "desc";
 
 const normalizedSortSchema = z
   .string({
@@ -41,7 +26,7 @@ const normalizedSortSchema = z
   })
   .trim()
   .transform((value) => value.toLowerCase())
-  .pipe(listWalletInstrumentsSortEnum)
+  .pipe(listWalletInstrumentsSortEnum);
 
 const normalizedOrderSchema = z
   .string({
@@ -49,7 +34,7 @@ const normalizedOrderSchema = z
   })
   .trim()
   .transform((value) => value.toLowerCase())
-  .pipe(listWalletInstrumentsOrderEnum)
+  .pipe(listWalletInstrumentsOrderEnum);
 
 export const listWalletInstrumentsQuerySchema = z
   .object({
@@ -60,14 +45,12 @@ export const listWalletInstrumentsQuerySchema = z
   .transform((value) => ({
     sort: value.sort ?? LIST_WALLET_INSTRUMENTS_DEFAULT_SORT,
     order: value.order ?? LIST_WALLET_INSTRUMENTS_DEFAULT_ORDER,
-  }))
+  }));
 
-export type ListWalletInstrumentsQuery = z.infer<
-  typeof listWalletInstrumentsQuerySchema
->
+export type ListWalletInstrumentsQuery = z.infer<typeof listWalletInstrumentsQuerySchema>;
 
 function isValidInstrumentType(value: string): value is InstrumentType {
-  return instrumentTypeValues.includes(value as InstrumentType)
+  return instrumentTypeValues.includes(value as InstrumentType);
 }
 
 function createPlnAmountSchema(fieldLabel: string) {
@@ -80,7 +63,7 @@ function createPlnAmountSchema(fieldLabel: string) {
     .min(1, { message: `${fieldLabel} must not be empty` })
     .refine((value) => PLN_DECIMAL_PATTERN.test(value), {
       message: `${fieldLabel} must be a non-negative amount with up to two decimal places`,
-    })
+    });
 }
 
 function createOptionalPlnAmountSchema(fieldLabel: string) {
@@ -89,14 +72,11 @@ function createOptionalPlnAmountSchema(fieldLabel: string) {
       invalid_type_error: `${fieldLabel} must be provided as a string`,
     })
     .trim()
-    .refine(
-      (value) => value.length === 0 || PLN_DECIMAL_PATTERN.test(value),
-      {
-        message: `${fieldLabel} must be a non-negative amount with up to two decimal places`,
-      },
-    )
+    .refine((value) => value.length === 0 || PLN_DECIMAL_PATTERN.test(value), {
+      message: `${fieldLabel} must be a non-negative amount with up to two decimal places`,
+    })
     .transform((value) => (value.length === 0 ? undefined : value))
-    .optional()
+    .optional();
 }
 
 function createPartialPlnAmountSchema(fieldLabel: string) {
@@ -109,7 +89,7 @@ function createPartialPlnAmountSchema(fieldLabel: string) {
     .refine((value) => PLN_DECIMAL_PATTERN.test(value), {
       message: `${fieldLabel} must be a non-negative amount with up to two decimal places`,
     })
-    .optional()
+    .optional();
 }
 
 const instrumentTypeSchema = z
@@ -121,7 +101,7 @@ const instrumentTypeSchema = z
   .transform((value) => value.toLowerCase())
   .refine(isValidInstrumentType, {
     message: "Instrument type must be one of bonds, etf, or stocks",
-  })
+  });
 
 const baseCreateInstrumentSchema = z
   .object({
@@ -154,32 +134,30 @@ const baseCreateInstrumentSchema = z
     current_value_pln: createPlnAmountSchema("Current value"),
     goal_pln: createOptionalPlnAmountSchema("Goal"),
   })
-  .strict()
+  .strict();
 
-export const createInstrumentSchema = baseCreateInstrumentSchema.transform(
-  (data) => {
-    const payload: CreateInstrumentCommand = {
-      type: data.type,
-      name: data.name,
-      invested_money_pln: data.invested_money_pln,
-      current_value_pln: data.current_value_pln,
-    }
+export const createInstrumentSchema = baseCreateInstrumentSchema.transform((data) => {
+  const payload: CreateInstrumentCommand = {
+    type: data.type,
+    name: data.name,
+    invested_money_pln: data.invested_money_pln,
+    current_value_pln: data.current_value_pln,
+  };
 
-    if (data.short_description) {
-      payload.short_description = data.short_description
-    }
+  if (data.short_description) {
+    payload.short_description = data.short_description;
+  }
 
-    if (data.goal_pln) {
-      payload.goal_pln = data.goal_pln
-    }
+  if (data.goal_pln) {
+    payload.goal_pln = data.goal_pln;
+  }
 
-    return payload
-  },
-)
+  return payload;
+});
 
-export type CreateInstrumentSchemaOutput = z.infer<typeof createInstrumentSchema>
+export type CreateInstrumentSchemaOutput = z.infer<typeof createInstrumentSchema>;
 
-export const decimalStringSchema = createPlnAmountSchema("Amount")
+export const decimalStringSchema = createPlnAmountSchema("Amount");
 
 const baseUpdateInstrumentSchema = z
   .object({
@@ -215,13 +193,9 @@ const baseUpdateInstrumentSchema = z
         invalid_type_error: "Goal must be provided as a string",
       })
       .trim()
-      .refine(
-        (value) => value.length === 0 || PLN_DECIMAL_PATTERN.test(value),
-        {
-          message:
-            "Goal must be a non-negative amount with up to two decimal places",
-        },
-      )
+      .refine((value) => value.length === 0 || PLN_DECIMAL_PATTERN.test(value), {
+        message: "Goal must be a non-negative amount with up to two decimal places",
+      })
       .transform((value) => (value.length === 0 ? null : value))
       .optional(),
   })
@@ -233,50 +207,48 @@ const baseUpdateInstrumentSchema = z
       data.short_description !== undefined ||
       data.invested_money_pln !== undefined ||
       data.current_value_pln !== undefined ||
-      data.goal_pln !== undefined
+      data.goal_pln !== undefined;
 
     if (!hasAtLeastOneField) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "At least one field must be provided",
         path: [],
-      })
+      });
     }
-  })
+  });
 
-export const updateInstrumentSchema = baseUpdateInstrumentSchema.transform(
-  (data) => {
-    const payload: UpdateInstrumentCommand = {}
+export const updateInstrumentSchema = baseUpdateInstrumentSchema.transform((data) => {
+  const payload: UpdateInstrumentCommand = {};
 
-    if (data.type !== undefined) {
-      payload.type = data.type
-    }
+  if (data.type !== undefined) {
+    payload.type = data.type;
+  }
 
-    if (data.name !== undefined) {
-      payload.name = data.name
-    }
+  if (data.name !== undefined) {
+    payload.name = data.name;
+  }
 
-    if (data.short_description !== undefined) {
-      payload.short_description = data.short_description
-    }
+  if (data.short_description !== undefined) {
+    payload.short_description = data.short_description;
+  }
 
-    if (data.invested_money_pln !== undefined) {
-      payload.invested_money_pln = data.invested_money_pln
-    }
+  if (data.invested_money_pln !== undefined) {
+    payload.invested_money_pln = data.invested_money_pln;
+  }
 
-    if (data.current_value_pln !== undefined) {
-      payload.current_value_pln = data.current_value_pln
-    }
+  if (data.current_value_pln !== undefined) {
+    payload.current_value_pln = data.current_value_pln;
+  }
 
-    if (data.goal_pln !== undefined) {
-      payload.goal_pln = data.goal_pln
-    }
+  if (data.goal_pln !== undefined) {
+    payload.goal_pln = data.goal_pln;
+  }
 
-    return payload
-  },
-)
+  return payload;
+});
 
-export type UpdateInstrumentSchemaOutput = z.infer<typeof updateInstrumentSchema>
+export type UpdateInstrumentSchemaOutput = z.infer<typeof updateInstrumentSchema>;
 
 const baseInstrumentIdParamSchema = z
   .object({
@@ -284,17 +256,12 @@ const baseInstrumentIdParamSchema = z
       .string({ required_error: "Instrument id is required" })
       .uuid({ message: "Instrument id must be a valid UUID" }),
   })
-  .strict()
+  .strict();
 
-export const instrumentIdParamSchema = baseInstrumentIdParamSchema
+export const instrumentIdParamSchema = baseInstrumentIdParamSchema;
 
-export type InstrumentIdParamSchemaOutput = z.infer<
-  typeof instrumentIdParamSchema
->
+export type InstrumentIdParamSchemaOutput = z.infer<typeof instrumentIdParamSchema>;
 
-export const deleteInstrumentParamsSchema = baseInstrumentIdParamSchema
+export const deleteInstrumentParamsSchema = baseInstrumentIdParamSchema;
 
-export type DeleteInstrumentParamsSchemaOutput = z.infer<
-  typeof deleteInstrumentParamsSchema
->
-
+export type DeleteInstrumentParamsSchemaOutput = z.infer<typeof deleteInstrumentParamsSchema>;

@@ -1,6 +1,6 @@
 /**
  * WalletDetailView Component
- * 
+ *
  * Main container for the wallet detail page.
  * Manages state, data fetching, and orchestrates all child components.
  */
@@ -183,21 +183,17 @@ export default function WalletDetailView({ walletId, accessToken }: WalletDetail
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8">
-        <WalletHeader
-          wallet={wallet}
-          onEdit={handleEditWallet}
-          onDelete={handleDeleteWallet}
-        />
+      <WalletHeader wallet={wallet} onEdit={handleEditWallet} onDelete={handleDeleteWallet} />
 
-        <AggregatesSummary aggregates={wallet.aggregates} />
+      <AggregatesSummary aggregates={wallet.aggregates} />
 
-        <InstrumentList
-          instruments={wallet.instruments}
-          onAddInstrument={handleAddInstrument}
-          onQuickEditValues={handleQuickEditValues}
-          onEditInstrument={handleEditInstrument}
-          onDeleteInstrument={handleDeleteInstrument}
-        />
+      <InstrumentList
+        instruments={wallet.instruments}
+        onAddInstrument={handleAddInstrument}
+        onQuickEditValues={handleQuickEditValues}
+        onEditInstrument={handleEditInstrument}
+        onDeleteInstrument={handleDeleteInstrument}
+      />
 
       {/* Wallet Edit Modal */}
       {modalState.type === "edit-wallet" && (
@@ -211,12 +207,7 @@ export default function WalletDetailView({ walletId, accessToken }: WalletDetail
 
       {/* Instrument Create Modal */}
       {modalState.type === "create-instrument" && (
-        <InstrumentFormModal
-          isOpen={true}
-          onClose={closeModal}
-          onSubmit={handleInstrumentCreate}
-          mode="create"
-        />
+        <InstrumentFormModal isOpen={true} onClose={closeModal} onSubmit={handleInstrumentCreate} mode="create" />
       )}
 
       {/* Quick Edit Values Modal */}
@@ -266,4 +257,3 @@ export default function WalletDetailView({ walletId, accessToken }: WalletDetail
     </div>
   );
 }
-

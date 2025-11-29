@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
+      - name: Check code formatting
+        run: npx prettier --check .
+      
       - name: Run linter
         run: npm run lint
       

@@ -62,10 +62,9 @@ export function ForgotPasswordForm() {
         <CardHeader>
           <CardTitle>Forgot Password</CardTitle>
           <CardDescription>
-            {emailSent 
+            {emailSent
               ? "Check your email for password reset instructions"
-              : "Enter your email address and we'll send you a link to reset your password"
-            }
+              : "Enter your email address and we'll send you a link to reset your password"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -79,12 +78,7 @@ export function ForgotPasswordForm() {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="you@example.com"
-                          disabled={isLoading}
-                          {...field}
-                        />
+                        <Input type="email" placeholder="you@example.com" disabled={isLoading} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -98,23 +92,24 @@ export function ForgotPasswordForm() {
           ) : (
             <div className="space-y-4 text-center">
               <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-primary/10">
-                <svg 
-                  className="size-6 text-primary" 
-                  fill="none" 
-                  stroke="currentColor" 
+                <svg
+                  className="size-6 text-primary"
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
                 >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" 
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
               </div>
               <p className="text-sm text-muted-foreground">
-                We've sent password reset instructions to your email address. Please check your inbox and follow the link to reset your password.
+                We've sent password reset instructions to your email address. Please check your inbox and follow the
+                link to reset your password.
               </p>
               <p className="text-sm text-muted-foreground">
                 Didn't receive the email? Check your spam folder or{" "}
@@ -144,4 +139,3 @@ export function ForgotPasswordForm() {
     </div>
   );
 }
-

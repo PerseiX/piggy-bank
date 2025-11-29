@@ -1,6 +1,6 @@
 /**
  * InstrumentMetrics Component
- * 
+ *
  * Displays key financial metrics for an instrument including current value,
  * invested money, goal, and calculated delta with visual indicators.
  */
@@ -24,54 +24,21 @@ export function InstrumentMetrics({ metrics }: InstrumentMetricsProps) {
   const getDeltaIcon = () => {
     if (metrics.deltaDirection === "increase") {
       return (
-        <svg
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M5 10l7-7m0 0l7 7m-7-7v18"
-          />
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
         </svg>
       );
     }
     if (metrics.deltaDirection === "decrease") {
       return (
-        <svg
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-          />
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
         </svg>
       );
     }
     return (
-      <svg
-        className="h-5 w-5"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        aria-hidden="true"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M5 12h14"
-        />
+      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14" />
       </svg>
     );
   };
@@ -95,37 +62,27 @@ export function InstrumentMetrics({ metrics }: InstrumentMetricsProps) {
       {/* Current Value */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-gray-600">
-            Current Value
-          </CardTitle>
+          <CardTitle className="text-sm font-medium text-gray-600">Current Value</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-gray-900">
-            {formatCurrency(metrics.currentValuePln)}
-          </div>
+          <div className="text-2xl font-bold text-gray-900">{formatCurrency(metrics.currentValuePln)}</div>
         </CardContent>
       </Card>
 
       {/* Invested Money */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-gray-600">
-            Invested Money
-          </CardTitle>
+          <CardTitle className="text-sm font-medium text-gray-600">Invested Money</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-gray-900">
-            {formatCurrency(metrics.investedPln)}
-          </div>
+          <div className="text-2xl font-bold text-gray-900">{formatCurrency(metrics.investedPln)}</div>
         </CardContent>
       </Card>
 
       {/* Goal */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-gray-600">
-            Goal
-          </CardTitle>
+          <CardTitle className="text-sm font-medium text-gray-600">Goal</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-gray-900">
@@ -137,16 +94,12 @@ export function InstrumentMetrics({ metrics }: InstrumentMetricsProps) {
       {/* Delta (Gain/Loss) */}
       <Card className={`border ${getDeltaColorClasses()}`}>
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">
-            Gain/Loss
-          </CardTitle>
+          <CardTitle className="text-sm font-medium">Gain/Loss</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-2">
             {getDeltaIcon()}
-            <div className="text-2xl font-bold">
-              {formatCurrency(metrics.deltaPln)}
-            </div>
+            <div className="text-2xl font-bold">{formatCurrency(metrics.deltaPln)}</div>
           </div>
           <div className="sr-only">
             {metrics.deltaDirection === "increase" && "Positive gain"}
@@ -158,4 +111,3 @@ export function InstrumentMetrics({ metrics }: InstrumentMetricsProps) {
     </div>
   );
 }
-

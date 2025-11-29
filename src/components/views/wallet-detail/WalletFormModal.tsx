@@ -1,6 +1,6 @@
 /**
  * WalletFormModal Component
- * 
+ *
  * Modal dialog wrapper for editing wallet information.
  * Reuses the WalletForm logic but adapts it for modal usage.
  */
@@ -18,31 +18,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { UpdateWalletCommand } from "@/types";
 
 // Form validation schema
 const walletFormSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, "Name is required.")
-    .max(100, "Name must be 100 characters or less."),
-  description: z
-    .string()
-    .trim()
-    .max(500, "Description must be 500 characters or less.")
-    .optional()
-    .or(z.literal("")),
+  name: z.string().trim().min(1, "Name is required.").max(100, "Name must be 100 characters or less."),
+  description: z.string().trim().max(500, "Description must be 500 characters or less.").optional().or(z.literal("")),
 });
 
 type WalletFormData = z.infer<typeof walletFormSchema>;
@@ -58,12 +42,7 @@ interface WalletFormModalProps {
   };
 }
 
-export function WalletFormModal({
-  isOpen,
-  onClose,
-  onSubmit,
-  initialData,
-}: WalletFormModalProps) {
+export function WalletFormModal({ isOpen, onClose, onSubmit, initialData }: WalletFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<WalletFormData>({
@@ -103,9 +82,7 @@ export function WalletFormModal({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit Wallet</DialogTitle>
-          <DialogDescription>
-            Update your wallet's name and description.
-          </DialogDescription>
+          <DialogDescription>Update your wallet's name and description.</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -118,12 +95,7 @@ export function WalletFormModal({
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Enter wallet name"
-                      disabled={isSubmitting}
-                      aria-required="true"
-                    />
+                    <Input {...field} placeholder="Enter wallet name" disabled={isSubmitting} aria-required="true" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -151,12 +123,7 @@ export function WalletFormModal({
             />
 
             <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleClose}
-                disabled={isSubmitting}
-              >
+              <Button type="button" variant="outline" onClick={handleClose} disabled={isSubmitting}>
                 Cancel
               </Button>
               <Button type="submit" disabled={isSubmitting}>
@@ -169,4 +136,3 @@ export function WalletFormModal({
     </Dialog>
   );
 }
-

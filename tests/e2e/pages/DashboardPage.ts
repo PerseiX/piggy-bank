@@ -1,5 +1,5 @@
-import { Page, Locator } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page, Locator } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
 /**
  * Page Object Model for the Dashboard page
@@ -19,17 +19,17 @@ export class DashboardPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    
+
     // Initialize locators using data-test-id attributes
     this.dashboard = page.locator('[data-test-id="dashboard"]');
     this.createWalletButton = page.locator('[data-test-id="create-wallet-button"]');
     this.createFirstWalletButton = page.locator('[data-test-id="create-first-wallet-button"]');
     this.walletList = page.locator('[data-test-id="wallet-list"]');
     this.walletCards = page.locator('[data-test-id="wallet-card"]');
-    
+
     // Fallback to role-based selectors for elements without data-test-id
-    this.pageHeading = page.getByRole('heading', { name: /dashboard/i, level: 1 });
-    this.loadingState = page.getByRole('status').filter({ hasText: /loading/i });
+    this.pageHeading = page.getByRole("heading", { name: /dashboard/i, level: 1 });
+    this.loadingState = page.getByRole("status").filter({ hasText: /loading/i });
     this.errorState = page.getByText(/failed to load/i);
     this.emptyState = page.getByText(/no wallets yet/i);
   }
@@ -38,7 +38,7 @@ export class DashboardPage extends BasePage {
    * Navigate to the dashboard page
    */
   async navigate() {
-    await this.goto('/');
+    await this.goto("/");
     await this.waitForPageLoad();
   }
 
@@ -96,7 +96,7 @@ export class DashboardPage extends BasePage {
    */
   async hasWalletWithName(name: string): Promise<boolean> {
     const wallet = this.getWalletCardByName(name);
-    return await wallet.count() > 0;
+    return (await wallet.count()) > 0;
   }
 
   /**
@@ -133,10 +133,12 @@ export class DashboardPage extends BasePage {
   async waitForWalletsToLoad() {
     // Wait for either wallets to appear, empty state, or error state
     await Promise.race([
-      this.walletCards.first().waitFor({ state: 'visible' }).catch(() => {}),
-      this.emptyState.waitFor({ state: 'visible' }).catch(() => {}),
-      this.errorState.waitFor({ state: 'visible' }).catch(() => {}),
+      this.walletCards
+        .first()
+        .waitFor({ state: "visible" })
+        .catch(() => {}),
+      this.emptyState.waitFor({ state: "visible" }).catch(() => {}),
+      this.errorState.waitFor({ state: "visible" }).catch(() => {}),
     ]);
   }
 }
-

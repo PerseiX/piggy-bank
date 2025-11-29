@@ -1,6 +1,6 @@
 /**
  * QuickEditValuesModal Component
- * 
+ *
  * A simplified modal for quickly updating only the invested money and current value
  * of an existing instrument. Does not modify other fields like name, type, etc.
  */
@@ -56,12 +56,7 @@ interface QuickEditValuesModalProps {
 // Component
 // ============================================================================
 
-export function QuickEditValuesModal({
-  isOpen,
-  onClose,
-  onSubmit,
-  instrument,
-}: QuickEditValuesModalProps) {
+export function QuickEditValuesModal({ isOpen, onClose, onSubmit, instrument }: QuickEditValuesModalProps) {
   const [formData, setFormData] = useState<QuickEditValuesFormData>({
     invested_money_pln: instrument.invested_money_pln,
     current_value_pln: instrument.current_value_pln,
@@ -104,7 +99,7 @@ export function QuickEditValuesModal({
       };
 
       await onSubmit(command);
-      
+
       // Close modal on success
       onClose();
     } catch (error) {
@@ -163,17 +158,11 @@ export function QuickEditValuesModal({
                 value={formData.invested_money_pln}
                 onChange={(e) => handleChange("invested_money_pln", e.target.value)}
                 aria-invalid={!!errors.invested_money_pln}
-                aria-describedby={
-                  errors.invested_money_pln ? "invested_money_pln-error" : undefined
-                }
+                aria-describedby={errors.invested_money_pln ? "invested_money_pln-error" : undefined}
                 disabled={isSubmitting}
               />
               {errors.invested_money_pln && (
-                <p
-                  id="invested_money_pln-error"
-                  className="text-sm text-destructive"
-                  role="alert"
-                >
+                <p id="invested_money_pln-error" className="text-sm text-destructive" role="alert">
                   {errors.invested_money_pln}
                 </p>
               )}
@@ -192,17 +181,11 @@ export function QuickEditValuesModal({
                 value={formData.current_value_pln}
                 onChange={(e) => handleChange("current_value_pln", e.target.value)}
                 aria-invalid={!!errors.current_value_pln}
-                aria-describedby={
-                  errors.current_value_pln ? "current_value_pln-error" : undefined
-                }
+                aria-describedby={errors.current_value_pln ? "current_value_pln-error" : undefined}
                 disabled={isSubmitting}
               />
               {errors.current_value_pln && (
-                <p
-                  id="current_value_pln-error"
-                  className="text-sm text-destructive"
-                  role="alert"
-                >
+                <p id="current_value_pln-error" className="text-sm text-destructive" role="alert">
                   {errors.current_value_pln}
                 </p>
               )}
@@ -210,12 +193,7 @@ export function QuickEditValuesModal({
           </div>
 
           <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleClose}
-              disabled={isSubmitting}
-            >
+            <Button type="button" variant="outline" onClick={handleClose} disabled={isSubmitting}>
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>
@@ -227,4 +205,3 @@ export function QuickEditValuesModal({
     </Dialog>
   );
 }
-
