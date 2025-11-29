@@ -20,10 +20,6 @@ export function InstrumentRow({ instrument, onQuickEditValues, onEdit, onDelete 
     window.location.href = `/instruments/${instrument.id}`;
   };
 
-  const handleViewHistory = () => {
-    window.location.href = `/instruments/${instrument.id}/history`;
-  };
-
   return (
     <tr className="border-b border-gray-200 hover:bg-gray-50">
       {/* Name */}

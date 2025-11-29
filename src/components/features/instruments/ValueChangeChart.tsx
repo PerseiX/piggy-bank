@@ -113,7 +113,7 @@ export function ValueChangeChart({ history, currentValuePln }: ValueChangeChartP
               fontWeight: "600",
               marginBottom: "0.25rem",
             }}
-            formatter={(value: number, name: string, props: any) => [`${value.toFixed(2)} PLN`, "Value"]}
+            formatter={(value: number) => [`${value.toFixed(2)} PLN`, "Value"]}
             labelFormatter={(label, payload) => {
               if (payload && payload[0]) {
                 return payload[0].payload.formattedDate;

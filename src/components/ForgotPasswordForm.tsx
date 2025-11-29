@@ -108,11 +108,11 @@ export function ForgotPasswordForm() {
                 </svg>
               </div>
               <p className="text-sm text-muted-foreground">
-                We've sent password reset instructions to your email address. Please check your inbox and follow the
-                link to reset your password.
+                We&apos;ve sent password reset instructions to your email address. Please check your inbox and follow
+                the link to reset your password.
               </p>
               <p className="text-sm text-muted-foreground">
-                Didn't receive the email? Check your spam folder or{" "}
+                Didn&apos;t receive the email? Check your spam folder or{" "}
                 <button
                   type="button"
                   onClick={() => {

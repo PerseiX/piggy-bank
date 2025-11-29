@@ -81,6 +81,7 @@ export default function WalletForm({ mode, initialData }: WalletFormProps) {
 
       if (userError || !user) {
         toast.error("You must be signed in to perform this action.");
+        // eslint-disable-next-line react-compiler/react-compiler
         window.location.href = "/signin";
         return;
       }

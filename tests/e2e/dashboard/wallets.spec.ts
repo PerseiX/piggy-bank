@@ -21,7 +21,7 @@ test.describe("Dashboard - Wallets", () => {
     expect(title.toLowerCase()).toContain("piggy");
   });
 
-  test("should show loading state while fetching wallets", async ({ page }) => {
+  test("should show loading state while fetching wallets", async () => {
     // Navigate to dashboard and immediately check for loading state
     // Even if fast, we should eventually not be loading
     await dashboardPage.navigate();
@@ -62,7 +62,7 @@ test.describe("Dashboard - Wallets", () => {
 
   test("should navigate to wallet detail on card click", async ({ page }) => {
     // Create a test wallet first to ensure we have one
-    const walletName = await createTestWallet(page, "Detail Test Wallet", "Wallet for testing details navigation");
+    await createTestWallet(page, "Detail Test Wallet", "Wallet for testing details navigation");
 
     // Navigate to dashboard
     await dashboardPage.navigate();
@@ -85,7 +85,7 @@ test.describe("Dashboard - Wallets", () => {
     expect(page.url()).toMatch(/wallets\/detail\/.+/);
   });
 
-  test("should handle error state gracefully", async ({ page }) => {
+  test("should handle error state gracefully", async () => {
     // Verify that under normal conditions, no error is shown
     await dashboardPage.waitForWalletsToLoad();
 

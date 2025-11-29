@@ -5,7 +5,7 @@
  * Implements lazy loading - data is fetched only when the accordion is expanded for the first time.
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { ValueChangeDto } from "@/types";
@@ -23,14 +23,7 @@ export function ValueChangeHistory({ instrumentId, accessToken }: ValueChangeHis
   const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(true); // Open by default
 
-  // Fetch history when accordion is expanded for the first time
-  useEffect(() => {
-    if (isExpanded && status === "idle") {
-      fetchHistory();
-    }
-  }, [isExpanded]);
-
-  const fetchHistory = async () => {
+  const fetchHistory = useCallback(async () => {
     try {
       setStatus("loading");
       setError(null);
@@ -63,7 +56,14 @@ export function ValueChangeHistory({ instrumentId, accessToken }: ValueChangeHis
       setError(errorMessage);
       setStatus("error");
     }
-  };
+  }, [instrumentId, accessToken]);
+
+  // Fetch history when accordion is expanded for the first time
+  useEffect(() => {
+    if (isExpanded && status === "idle") {
+      fetchHistory();
+    }
+  }, [isExpanded, status, fetchHistory]);
 
   const handleAccordionChange = (value: string) => {
     setIsExpanded(value === "history");

@@ -136,9 +136,15 @@ export class DashboardPage extends BasePage {
       this.walletCards
         .first()
         .waitFor({ state: "visible" })
-        .catch(() => {}),
-      this.emptyState.waitFor({ state: "visible" }).catch(() => {}),
-      this.errorState.waitFor({ state: "visible" }).catch(() => {}),
+        .catch(() => {
+          // Ignore - one of the states will be visible
+        }),
+      this.emptyState.waitFor({ state: "visible" }).catch(() => {
+        // Ignore - one of the states will be visible
+      }),
+      this.errorState.waitFor({ state: "visible" }).catch(() => {
+        // Ignore - one of the states will be visible
+      }),
     ]);
   }
 }

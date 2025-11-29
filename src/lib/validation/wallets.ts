@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import type { CreateWalletCommand, UpdateWalletCommand } from "../../types";
 
+// eslint-disable-next-line no-control-regex
 const CONTROL_CHAR_REGEX = /[\u0000-\u001F\u007F]/;
 
 const baseCreateWalletSchema = z.object({

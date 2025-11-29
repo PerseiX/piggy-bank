@@ -5,6 +5,7 @@ export type { WalletIdParamSchemaOutput } from "./wallets";
 
 import type { CreateInstrumentCommand, InstrumentType, UpdateInstrumentCommand } from "../../types";
 
+// eslint-disable-next-line no-control-regex
 const CONTROL_CHAR_REGEX = /[\u0000-\u001F\u007F]/;
 const PLN_DECIMAL_PATTERN = /^[0-9]+(\.[0-9]{1,2})?$/;
 

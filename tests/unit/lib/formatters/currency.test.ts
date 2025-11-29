@@ -97,20 +97,20 @@ describe("parsePlnToGrosze", () => {
   describe("type validation", () => {
     it("should throw TypeError for non-string input", () => {
       // Act & Assert
-      expect(() => parsePlnToGrosze(100 as any)).toThrow(TypeError);
-      expect(() => parsePlnToGrosze(100 as any)).toThrow("PLN amount must be provided as a string");
+      expect(() => parsePlnToGrosze(100 as unknown as string)).toThrow(TypeError);
+      expect(() => parsePlnToGrosze(100 as unknown as string)).toThrow("PLN amount must be provided as a string");
     });
 
     it("should throw TypeError for number input", () => {
-      expect(() => parsePlnToGrosze(123.45 as any)).toThrow(TypeError);
+      expect(() => parsePlnToGrosze(123.45 as unknown as string)).toThrow(TypeError);
     });
 
     it("should throw TypeError for null", () => {
-      expect(() => parsePlnToGrosze(null as any)).toThrow(TypeError);
+      expect(() => parsePlnToGrosze(null as unknown as string)).toThrow(TypeError);
     });
 
     it("should throw TypeError for undefined", () => {
-      expect(() => parsePlnToGrosze(undefined as any)).toThrow(TypeError);
+      expect(() => parsePlnToGrosze(undefined as unknown as string)).toThrow(TypeError);
     });
   });
 

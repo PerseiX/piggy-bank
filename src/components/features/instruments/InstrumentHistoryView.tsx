@@ -9,7 +9,6 @@ import { useState, useEffect, useCallback } from "react";
 import { useInstrumentDetails } from "@/components/hooks/useInstrumentDetails";
 import { ValueChangeChart } from "./ValueChangeChart";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { LoadingState } from "@/components/views/LoadingState";
 import { ErrorState } from "@/components/views/ErrorState";

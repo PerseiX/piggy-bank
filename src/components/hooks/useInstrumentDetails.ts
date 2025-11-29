@@ -68,6 +68,7 @@ export function useInstrumentDetails(instrumentId: string, accessToken: string):
 
       // Handle unauthorized access
       if (response.status === 401) {
+        // eslint-disable-next-line react-compiler/react-compiler
         window.location.href = "/signin";
         return;
       }

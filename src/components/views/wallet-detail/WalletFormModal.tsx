@@ -82,7 +82,7 @@ export function WalletFormModal({ isOpen, onClose, onSubmit, initialData }: Wall
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit Wallet</DialogTitle>
-          <DialogDescription>Update your wallet's name and description.</DialogDescription>
+          <DialogDescription>Update your wallet&apos;s name and description.</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>

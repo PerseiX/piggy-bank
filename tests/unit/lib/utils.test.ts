@@ -8,7 +8,11 @@ describe("cn utility function", () => {
   });
 
   it("should handle conditional classes", () => {
-    const result = cn("base", false && "hidden", true && "visible");
+    const shouldHide = false;
+    const shouldShow = true;
+    const hiddenClass = shouldHide ? "hidden" : undefined;
+    const visibleClass = shouldShow ? "visible" : undefined;
+    const result = cn("base", hiddenClass, visibleClass);
     expect(result).toBe("base visible");
   });
 

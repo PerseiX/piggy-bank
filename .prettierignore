@@ -44,3 +44,6 @@ supabase/.temp/
 components.json
 TEST_SETUP_SUMMARY.md
 
+# Debug pages with complex script tags
+src/pages/debug-client-session.astro
+

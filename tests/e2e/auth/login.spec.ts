@@ -21,7 +21,7 @@ test.describe("Login Flow", () => {
     await expect(loginPage.submitButton).toBeVisible();
   });
 
-  test("should show validation errors for empty form submission", async ({ page }) => {
+  test("should show validation errors for empty form submission", async () => {
     // Try to submit empty form
     await loginPage.clickSubmit();
 
@@ -29,7 +29,7 @@ test.describe("Login Flow", () => {
     expect(await loginPage.isLoaded()).toBe(true);
   });
 
-  test("should show validation error for invalid email format", async ({ page }) => {
+  test("should show validation error for invalid email format", async () => {
     // Fill invalid email
     await loginPage.fillEmail("invalid-email");
     await loginPage.fillPassword("password123");

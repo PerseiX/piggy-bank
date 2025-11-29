@@ -3,7 +3,6 @@ import { DashboardPage, WalletFormPage } from "../pages";
 import {
   setupAuthenticatedSession,
   generateTestData,
-  waitForToast,
   navigateToDashboard,
   createTestWallet,
 } from "../fixtures/testHelpers";
@@ -159,7 +158,7 @@ test.describe("Wallet Creation Flow (Improved)", () => {
     expect(walletCount).toBeGreaterThanOrEqual(wallets.length);
   });
 
-  test("should preserve form data when validation fails", async ({ page }) => {
+  test("should preserve form data when validation fails", async () => {
     const testData = generateTestData();
     const longName = "A".repeat(101); // Exceeds max length of 100
 
@@ -204,10 +203,9 @@ test.describe("Wallet Creation Flow (Improved)", () => {
 
       // Try to find the wallet by exact name, but don't fail if special chars were modified
       try {
-        const hasWallet = await dashboardPage.hasWalletWithName(uniqueName);
-        console.log(`Wallet "${uniqueName}" found: ${hasWallet}`);
-      } catch (error) {
-        console.log(`Note: Wallet name may have been sanitized for "${uniqueName}"`);
+        await dashboardPage.hasWalletWithName(uniqueName);
+      } catch {
+        // Note: Wallet name may have been sanitized
       }
     }
   });

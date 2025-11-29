@@ -47,14 +47,13 @@ export const prerender = false;
 
       async function checkSession() {
         try {
-          const {
-            data: { session },
-            error: sessionError,
-          } = await supabase.auth.getSession();
-          const {
-            data: { user },
-            error: userError,
-          } = await supabase.auth.getUser();
+          const sessionResult = await supabase.auth.getSession();
+          const sessionError = sessionResult.error;
+          const session = sessionResult.data.session;
+
+          const userResult = await supabase.auth.getUser();
+          const userError = userResult.error;
+          const user = userResult.data.user;
 
           const result = {
             session: {
@@ -81,7 +80,7 @@ export const prerender = false;
       async function refreshSession() {
         output.textContent = "Refreshing session...";
         try {
-          const { data, error } = await supabase.auth.refreshSession();
+          const { error } = await supabase.auth.refreshSession();
           if (error) {
             output.textContent = `Refresh error: ${error.message}`;
           } else {

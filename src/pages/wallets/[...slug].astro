@@ -54,7 +54,7 @@ else if (slugParts.length === 3 && slugParts[0] === "detail" && slugParts[2] ===
       name: walletDetail.name,
       description: walletDetail.description,
     };
-  } catch (error) {
+  } catch {
     // If wallet not found or unauthorized, show 404
     return new Response(null, {
       status: 404,

@@ -137,7 +137,7 @@ export async function waitForApiResponse(page: Page, urlPattern: string | RegExp
 /**
  * Helper to intercept and mock API calls
  */
-export async function mockApiResponse(page: Page, urlPattern: string | RegExp, responseData: any, status = 200) {
+export async function mockApiResponse(page: Page, urlPattern: string | RegExp, responseData: unknown, status = 200) {
   await page.route(urlPattern, (route) => {
     route.fulfill({
       status,
