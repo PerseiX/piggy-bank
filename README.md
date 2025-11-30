@@ -46,7 +46,7 @@ Piggy Bank is a goal‑oriented savings tracker that helps users build and susta
   - Vitest (unit & integration tests)
   - React Testing Library (component tests)
   - Playwright (E2E tests)
-  - Codecov (coverage)
+  - Codecov 
 - CI/CD
   - GitHub Actions
 
