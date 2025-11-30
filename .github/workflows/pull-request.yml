@@ -88,6 +88,7 @@ jobs:
       - name: Create .env.test file
         run: |
           cat > .env.test << EOF
+          CI=true
           SUPABASE_URL=${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY=${{ secrets.SUPABASE_KEY }}
           BASE_URL=${{ secrets.BASE_URL || 'http://localhost:3000' }}
@@ -96,6 +97,25 @@ jobs:
           PUBLIC_SUPABASE_URL=${{ secrets.PUBLIC_SUPABASE_URL }}
           PUBLIC_SUPABASE_ANON_KEY=${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
           EOF
+      
+      - name: Verify environment variables (debug)
+        run: |
+          echo "Checking if environment variables are set (not showing values):"
+          [ -n "$SUPABASE_URL" ] && echo "✓ SUPABASE_URL is set" || echo "✗ SUPABASE_URL is missing"
+          [ -n "$SUPABASE_KEY" ] && echo "✓ SUPABASE_KEY is set" || echo "✗ SUPABASE_KEY is missing"
+          [ -n "$PUBLIC_SUPABASE_URL" ] && echo "✓ PUBLIC_SUPABASE_URL is set" || echo "✗ PUBLIC_SUPABASE_URL is missing"
+          [ -n "$PUBLIC_SUPABASE_ANON_KEY" ] && echo "✓ PUBLIC_SUPABASE_ANON_KEY is set" || echo "✗ PUBLIC_SUPABASE_ANON_KEY is missing"
+          [ -n "$E2E_USERNAME" ] && echo "✓ E2E_USERNAME is set" || echo "✗ E2E_USERNAME is missing"
+          [ -n "$E2E_PASSWORD" ] && echo "✓ E2E_PASSWORD is set" || echo "✗ E2E_PASSWORD is missing"
+          echo "Checking .env.test file contents (keys only):"
+          grep -o '^[A-Z_]*=' .env.test || echo "Failed to read .env.test"
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+          PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+          E2E_USERNAME: ${{ secrets.E2E_USERNAME }}
+          E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
       
       - name: Run E2E tests
         run: npm run test:e2e
