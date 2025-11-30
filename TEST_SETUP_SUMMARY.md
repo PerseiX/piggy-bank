@@ -4,7 +4,7 @@
 
 ## 📋 Co zostało zainstalowane i skonfigurowane
 
-### 1. Vitest (Testy Jednostkowe)
+### 1. Vitest (Testy jednostkowe)
 
 #### Zainstalowane pakiety:
 - `vitest` - Framework do testów jednostkowych
