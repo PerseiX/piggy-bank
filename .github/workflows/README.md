@@ -124,10 +124,13 @@ Runs on push to `master` branch. Executes tests and builds the production bundle
 
 ### E2E Tests Failing
 
-1. Check that all environment secrets are set correctly
+1. Check that all environment secrets are set correctly in the `integration` environment
 2. Verify the Supabase test instance is accessible
-3. Review test artifacts in the Actions tab
-4. Check Playwright reports for detailed failure information
+3. Ensure `.env.test` file is created correctly before running tests
+4. Review test artifacts in the Actions tab
+5. Check Playwright reports for detailed failure information
+
+**Note**: The Playwright config uses `dev:e2e` script which runs Astro in test mode and passes the required environment variables to the dev server.
 
 ### Coverage Not Uploading
 
