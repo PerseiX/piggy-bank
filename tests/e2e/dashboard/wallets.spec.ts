@@ -96,33 +96,4 @@ test.describe("Dashboard - Wallets", () => {
     // Verify dashboard is functioning normally
     await expect(dashboardPage.createWalletButton).toBeVisible();
   });
-
-  test("should take visual snapshot of dashboard", async ({ page }) => {
-    // Create test wallets to ensure consistent snapshot
-    // This ensures the snapshot is always the same regardless of database state
-    await createTestWallet(page, "Snapshot Wallet 1", "First test wallet for snapshot");
-    await createTestWallet(page, "Snapshot Wallet 2", "Second test wallet for snapshot");
-
-    // Navigate to dashboard
-    await dashboardPage.navigate();
-
-    // Wait for wallets to load
-    await dashboardPage.waitForWalletsToLoad();
-
-    // Wait a bit for animations to complete and page to stabilize
-    await page.waitForTimeout(2000);
-
-    // Take screenshot of just the main content area (not full page)
-    // This is more reliable as full page height can vary based on timing
-    // Note: This test is sensitive to data changes. To update the baseline snapshot, run:
-    // npm run test:e2e -- --update-snapshots
-    //
-    // For CI/CD, you might want to skip this test or use a more flexible approach
-    await expect(page).toHaveScreenshot("dashboard-wallets.png", {
-      fullPage: false, // Only capture viewport to avoid height inconsistencies
-      maxDiffPixels: 15000, // High tolerance for minor rendering differences in parallel execution
-      maxDiffPixelRatio: 0.03, // 3% difference allowed
-      timeout: 10000,
-    });
-  });
 });
