@@ -57,10 +57,10 @@ You need to configure the following secrets in your GitHub repository:
 
 Create an environment named `integration` with the following secrets:
 
-- `SUPABASE_URL` - Supabase test instance URL
-- `SUPABASE_KEY` - Supabase anon key for test instance
+- `SUPABASE_URL` - Supabase test instance URL (for admin/background operations)
+- `SUPABASE_KEY` - Supabase service role or anon key (for admin operations)
 - `PUBLIC_SUPABASE_URL` - Public Supabase URL (used in client-side code)
-- `PUBLIC_SUPABASE_ANON_KEY` - Public Supabase anon key
+- `PUBLIC_SUPABASE_KEY` - Public Supabase anon key (used in client-side code)
 - `BASE_URL` - Base URL for E2E tests (default: `http://localhost:3000`)
 - `E2E_USERNAME` - Test user email for authentication tests
 - `E2E_PASSWORD` - Test user password for authentication tests

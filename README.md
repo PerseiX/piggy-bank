@@ -79,11 +79,11 @@ Create a `.env.local` file in the project root and provide your Supabase credent
 ```env
 # Public (safe to expose to the browser)
 PUBLIC_SUPABASE_URL="https://<your-project>.supabase.co"
-PUBLIC_SUPABASE_ANON_KEY="<your-anon-key>"
+PUBLIC_SUPABASE_KEY="<your-anon-key>"
 
-# Optional: server-only key if certain API routes require it.
-# Do NOT expose this in client code.
-# SUPABASE_SERVICE_ROLE_KEY="<your-service-role-key>"
+# Server-only (for background jobs, database admin operations)
+SUPABASE_URL="https://<your-project>.supabase.co"
+SUPABASE_KEY="<your-service-role-key-or-anon-key>"
 ```
 
 ### Run the app

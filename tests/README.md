@@ -35,15 +35,21 @@ This order is important due to foreign key constraints with `ON DELETE RESTRICT`
 
 The teardown script uses environment variables from `.env.test`:
 
-- `SUPABASE_URL` - URL of your Supabase instance
-- `SUPABASE_KEY` - Supabase anonymous key
+- `SUPABASE_URL` - URL of your Supabase instance (for admin/background operations)
+- `SUPABASE_KEY` - Supabase service role or anon key (for admin operations)
+- `PUBLIC_SUPABASE_URL` - URL of your Supabase instance (for client-side)
+- `PUBLIC_SUPABASE_KEY` - Supabase anonymous key (for client-side)
 
 Make sure your `.env.test` file includes these variables:
 
 ```env
-# Supabase configuration for tests
+# Supabase configuration for tests - Admin/Server operations
 SUPABASE_URL=http://127.0.0.1:54321
-SUPABASE_KEY=your_supabase_anon_key_here
+SUPABASE_KEY=your_supabase_service_role_key_here
+
+# Supabase configuration for tests - Client-side operations
+PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+PUBLIC_SUPABASE_KEY=your_supabase_anon_key_here
 
 # Other test configuration...
 BASE_URL=http://localhost:3000
@@ -114,7 +120,7 @@ node -e "import('./tests/global-teardown.ts').then(m => m.default())"
 
 **Database connection errors:**
 
-- Verify `SUPABASE_URL` and `SUPABASE_KEY` in `.env.test`
+- Verify `SUPABASE_URL`, `SUPABASE_KEY`, `PUBLIC_SUPABASE_URL`, and `PUBLIC_SUPABASE_KEY` in `.env.test`
 - Ensure your Supabase instance is running (for local: `npx supabase start`)
 - Check network connectivity to your Supabase instance
 
