@@ -71,7 +71,7 @@ export const GET: APIRoute = async ({ request, params, locals }) => {
 
   if (authError || !userData?.user) {
     logApiError("Failed to authenticate request", authError, {
-      tokenFingerprint: fingerprint(token),
+      tokenFingerprint: await fingerprint(token),
       instrumentId,
     });
     return errorResponse(401, {
@@ -179,7 +179,7 @@ export const PATCH: APIRoute = async ({ request, params, locals }) => {
 
   if (authError || !userData?.user) {
     logApiError("Failed to authenticate request", authError, {
-      tokenFingerprint: fingerprint(token),
+      tokenFingerprint: await fingerprint(token),
       instrumentId,
     });
     return errorResponse(401, {
@@ -227,7 +227,7 @@ export const PATCH: APIRoute = async ({ request, params, locals }) => {
   }
 
   const payload = validationResult.data;
-  const payloadFingerprint = fingerprint(payload);
+  const payloadFingerprint = await fingerprint(payload);
 
   try {
     const instrument = await updateInstrument({
@@ -339,7 +339,7 @@ export const DELETE: APIRoute = async ({ request, params, locals }) => {
 
   if (authError || !userData?.user) {
     logApiError("Failed to authenticate request", authError, {
-      tokenFingerprint: fingerprint(token),
+      tokenFingerprint: await fingerprint(token),
       instrumentId,
     });
     return errorResponse(401, {
@@ -359,7 +359,7 @@ export const DELETE: APIRoute = async ({ request, params, locals }) => {
     if (trimmedBody.length > 0) {
       try {
         const parsedBody = JSON.parse(trimmedBody);
-        bodyFingerprint = fingerprint(parsedBody);
+        bodyFingerprint = await fingerprint(parsedBody);
       } catch (error) {
         logApiError("Failed to parse DELETE instrument JSON body", error, {
           userId: ownerId,

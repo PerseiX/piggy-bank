@@ -70,7 +70,7 @@ export const POST: APIRoute = async ({ request, params, locals }) => {
 
   if (authError || !userData?.user) {
     logApiError("Failed to authenticate request", authError, {
-      tokenFingerprint: fingerprint(token),
+      tokenFingerprint: await fingerprint(token),
       walletId,
     });
     return errorResponse(401, {
@@ -103,7 +103,7 @@ export const POST: APIRoute = async ({ request, params, locals }) => {
   }
 
   const payload = validationResult.data;
-  const payloadFingerprint = fingerprint(payload);
+  const payloadFingerprint = await fingerprint(payload);
 
   try {
     const instrument = await createInstrument({
@@ -255,7 +255,7 @@ export const GET: APIRoute = async ({ request, params, locals }) => {
 
   if (authError || !userData?.user) {
     logApiError("Failed to authenticate request", authError, {
-      tokenFingerprint: fingerprint(token),
+      tokenFingerprint: await fingerprint(token),
       walletId,
     });
     return errorResponse(401, {

@@ -73,7 +73,7 @@ export const GET: APIRoute = async ({ request, params, locals }) => {
 
   if (authError || !userData?.user) {
     logApiError("Failed to authenticate request", authError, {
-      tokenFingerprint: fingerprint(token),
+      tokenFingerprint: await fingerprint(token),
       instrumentId,
       correlationId,
     });

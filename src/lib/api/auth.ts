@@ -1,5 +1,3 @@
-import { createHash } from "node:crypto";
-
 const BEARER_SCHEME = "bearer";
 
 export function extractBearerToken(headerValue: string | null): string | null {
@@ -16,11 +14,13 @@ export function extractBearerToken(headerValue: string | null): string | null {
   return token.trim();
 }
 
-export function fingerprint(value: unknown): string {
+export async function fingerprint(value: unknown): Promise<string> {
   try {
-    return createHash("sha256")
-      .update(typeof value === "string" ? value : JSON.stringify(value))
-      .digest("hex");
+    const data = typeof value === "string" ? value : JSON.stringify(value);
+    const encoder = new TextEncoder();
+    const hashBuffer = await crypto.subtle.digest("SHA-256", encoder.encode(data));
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
   } catch {
     return "unavailable";
   }

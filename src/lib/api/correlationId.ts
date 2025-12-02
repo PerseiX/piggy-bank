@@ -1,5 +1,3 @@
-import { randomUUID } from "node:crypto";
-
 export const CORRELATION_ID_HEADER = "x-correlation-id";
 
 export function getRequestCorrelationId(request: Request): string | null {
@@ -15,7 +13,7 @@ export function getRequestCorrelationId(request: Request): string | null {
 }
 
 export function createCorrelationId(): string {
-  return randomUUID();
+  return crypto.randomUUID();
 }
 
 export function ensureCorrelationId(request: Request, fallback?: string): string {
