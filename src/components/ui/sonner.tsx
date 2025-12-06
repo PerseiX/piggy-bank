@@ -8,8 +8,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       className="toaster group"
       toastOptions={{
         classNames: {
-          toast:
-            "group-[.toaster]:shadow-lg group-[.toaster]:border-border/60 group-[.toaster]:backdrop-blur-sm",
+          toast: "group-[.toaster]:shadow-lg group-[.toaster]:border-border/60 group-[.toaster]:backdrop-blur-sm",
           title: "group-[.toaster]:font-semibold",
           description: "group-[.toaster]:text-muted-foreground",
           success:
