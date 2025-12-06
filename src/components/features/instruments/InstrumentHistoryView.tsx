@@ -10,6 +10,14 @@ import { useInstrumentDetails } from "@/components/hooks/useInstrumentDetails";
 import { ValueChangeChart } from "./ValueChangeChart";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { LoadingState } from "@/components/views/LoadingState";
 import { ErrorState } from "@/components/views/ErrorState";
 import type { ValueChangeDto } from "@/types";
@@ -140,16 +148,26 @@ export default function InstrumentHistoryView({ instrumentId, accessToken }: Ins
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8">
-      {/* Navigation */}
-      <div className="mb-4 flex items-center gap-4">
-        <a href={`/instruments/${instrumentId}`} className="text-sm font-medium text-blue-600 hover:text-blue-500">
-          ← Back to Instrument Details
-        </a>
-        <span className="text-gray-300">|</span>
-        <a href="/" className="text-sm font-medium text-blue-600 hover:text-blue-500">
-          Dashboard
-        </a>
-      </div>
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb className="mb-6">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Wallets</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`/wallets/detail/${instrument.wallet_id}`}>Wallet</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`/instruments/${instrumentId}`}>{instrument.name}</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>History</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
       {/* Header */}
       <div className="mb-6">

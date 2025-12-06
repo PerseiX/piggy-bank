@@ -112,6 +112,7 @@ Secondary flows:
   - `/wallets/:id/instruments/new` → Instrument Create (modal/page)
   - `/wallets/:id/instruments/:instrumentId/edit` → Instrument Edit (modal/page)
   - `/instruments/:id` → Instrument Detail (GET `/api/instruments/:id` + history)
+  - `/instruments/:id/history` → Instrument History (full value change history with charts)
   - `/signin`, `/signup`, `/404`, `/401`
 
 - **Modal behavior**:
@@ -119,10 +120,19 @@ Secondary flows:
   - Modal traps focus and returns focus to the triggering element when closed.
 
 - **Navigation patterns**:
-  - Primary nav uses `TopNav` and context-aware back/close buttons.
-  - Intra-wallet navigation keeps wallet context in nested layout so aggregates remain visible while editing instruments.
+  - Primary nav uses `TopNav` for global navigation (brand, user menu).
+  - **Breadcrumb navigation** is used on nested pages to show hierarchical context:
+    - Wallet Detail: `Wallets › {Wallet Name}`
+    - Instrument Detail: `Wallets › Wallet › {Instrument Name}`
+    - Instrument History: `Wallets › Wallet › {Instrument Name} › History`
+  - Breadcrumbs use the shadcn/ui `Breadcrumb` component with chevron separators.
+  - Each breadcrumb item is clickable to navigate back to that level.
+  - The current page is displayed as non-clickable text (`BreadcrumbPage`).
+  - Intra-wallet navigation keeps wallet context visible through breadcrumbs.
 
 ## 5. Key Components
+
+- `Breadcrumb` (shadcn/ui): Hierarchical navigation component used on nested pages (Wallet Detail, Instrument Detail, Instrument History). Includes `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, and `BreadcrumbSeparator` sub-components. Provides accessible navigation with proper ARIA attributes.
 
 - `RadialProgress` (accessible SVG): Displays progress percent with ARIA label and textual backup. Handles overflow >100% and zero-target case.
 
@@ -135,6 +145,8 @@ Secondary flows:
 - `InstrumentForm` (shared create/edit): Zod-based validation, `CurrencyInput` converting PLN ↔ grosze, inline field error renderer that maps API `VALIDATION_ERROR` details to fields.
 
 - `ValueChangeHistory`: Collapsible list/grid showing before/after/delta/direction. Fetches on expand.
+
+- `ValueChangeChart`: Line chart visualization for instrument value history on the dedicated history page.
 
 - `ToastProvider` / `useToast`: Global toasts for errors/success; map API error codes to friendly messages.
 

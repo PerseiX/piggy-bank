@@ -19,6 +19,7 @@ The view will be implemented as an Astro page that hydrates a single top-level R
 /wallets/[id].astro
 └── WalletDetailView (React Client Component)
     ├── WalletHeader
+    │   ├── Breadcrumb (hierarchical navigation: Wallets › {Wallet Name})
     │   ├── Button (Edit Wallet)
     │   └── Button (Delete Wallet)
     ├── AggregatesSummary
@@ -53,8 +54,8 @@ The view will be implemented as an Astro page that hydrates a single top-level R
 
 ### `WalletHeader`
 
--   **Component description**: A presentational component that displays the wallet's name and description, along with top-level action buttons.
--   **Main elements**: `h1` for the wallet name, `p` for the description, and two `Button` components (from Shadcn/ui).
+-   **Component description**: A presentational component that displays breadcrumb navigation, the wallet's name and description, along with top-level action buttons.
+-   **Main elements**: `Breadcrumb` component showing `Wallets › {Wallet Name}`, `h1` for the wallet name, `p` for the description, and two `Button` components (from Shadcn/ui).
 -   **Handled interactions**:
     -   `onClick` on "Edit Wallet" button.
     -   `onClick` on "Delete Wallet" button.

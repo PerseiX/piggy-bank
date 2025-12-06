@@ -14,8 +14,9 @@ The view will be composed of a main Astro page that renders a primary React comp
 ```
 /src/pages/instruments/[id].astro
 └── /src/components/features/instruments/InstrumentDetailsView.tsx (Client-side Component)
+    ├── /src/components/ui/Breadcrumb.tsx (hierarchical navigation)
     ├── /src/components/features/instruments/InstrumentHeader.tsx
-    │   ├── /src/components/ui/Button.tsx (for Edit action)
+    │   ├── /src/components/ui/Button.tsx (for View History action)
     │   └── /src/components/ui/Button.tsx (for Delete action)
     ├── /src/components/features/instruments/InstrumentMetrics.tsx
     │   └── /src/components/ui/Card.tsx (for each metric)
@@ -23,6 +24,13 @@ The view will be composed of a main Astro page that renders a primary React comp
         └── /src/components/ui/Accordion.tsx
             └── /src/components/ui/Table.tsx
 ```
+
+### Breadcrumb Navigation
+The view includes a breadcrumb component at the top showing the navigation hierarchy:
+- **Path**: `Wallets › Wallet › {Instrument Name}`
+- Uses shadcn/ui `Breadcrumb` components for consistent styling
+- Each item is clickable to navigate back to that level
+- Current page (instrument name) is displayed as non-clickable text
 
 ## 4. Component Details
 
@@ -149,14 +157,40 @@ Both API calls will be made from client-side code using a shared API client util
 - **Server Error (500)**: A generic error message, "Something went wrong, please try again later," will be displayed.
 - **History Fetch Failure**: If the instrument details load but the history fetch fails, an error message will be displayed only within the `ValueChangeHistory` accordion panel, allowing the rest of the view to remain interactive.
 
-## 11. Implementation Steps
+## 11. Related View: Instrument History Page
+
+A dedicated history page is available at `/instruments/[id]/history` for users who want to see the full value change history with charts and detailed analysis.
+
+### Component Structure
+```
+/src/pages/instruments/[id]/history.astro
+└── /src/components/features/instruments/InstrumentHistoryView.tsx (Client-side Component)
+    ├── /src/components/ui/Breadcrumb.tsx (hierarchical navigation)
+    ├── /src/components/features/instruments/ValueChangeChart.tsx (line chart visualization)
+    └── /src/components/ui/Table.tsx (detailed history table)
+```
+
+### Breadcrumb Navigation
+- **Path**: `Wallets › Wallet › {Instrument Name} › History`
+- Uses shadcn/ui `Breadcrumb` components for consistent styling
+- Each item is clickable to navigate back to that level
+- Current page ("History") is displayed as non-clickable text
+
+### Key Features
+- Summary stats cards (Current Value, Invested Money, Total Changes)
+- Line chart visualization of value changes over time
+- Detailed table with date/time, before/after values, and change amount
+- Color-coded delta values (green for increase, red for decrease)
+
+## 12. Implementation Steps
 1.  **Create Page File**: Create the Astro page file at `src/pages/instruments/[id].astro`. Set up the main layout and pass the `id` param to the main React component.
 2.  **Develop Components**: Create the React components: `InstrumentDetailsView`, `InstrumentHeader`, `InstrumentMetrics`, and `ValueChangeHistory` in `src/components/features/instruments/`.
 3.  **Implement `useInstrumentDetails` Hook**: Create the custom hook to handle fetching the main instrument data and manage its state.
-4.  **Build `InstrumentDetailsView`**: Implement the main view component, use the hook, and compose the child components. Add logic to handle loading and error states.
+4.  **Build `InstrumentDetailsView`**: Implement the main view component, use the hook, and compose the child components. Add logic to handle loading and error states. Include breadcrumb navigation.
 5.  **Build `InstrumentHeader` and `InstrumentMetrics`**: Implement these presentational components, ensuring they correctly display the data passed via props.
 6.  **Build `ValueChangeHistory`**: Implement the accordion and table, including the lazy-loading logic to fetch data only on first expansion. Handle its independent loading and error states.
 7.  **Add API Functions**: Add the necessary client-side functions for making the `GET` requests to the two API endpoints.
 8.  **Styling**: Apply Tailwind CSS classes to all components to match the application's design system, leveraging Shadcn/ui components where appropriate.
 9.  **Connect Actions**: Wire up the `onEdit` and `onDelete` handlers in `InstrumentHeader` to their respective logic (navigation and confirmation modal).
-10. **Testing**: Write component tests for the new components, especially for the logic within `useInstrumentDetails` and the conditional rendering in `InstrumentDetailsView` and `ValueChangeHistory`.
+10. **Build History Page**: Create `/instruments/[id]/history.astro` and `InstrumentHistoryView.tsx` with breadcrumb navigation, chart visualization, and detailed history table.
+11. **Testing**: Write component tests for the new components, especially for the logic within `useInstrumentDetails` and the conditional rendering in `InstrumentDetailsView` and `ValueChangeHistory`.

@@ -5,8 +5,15 @@
  * along with action buttons for editing and deleting the wallet.
  */
 
-import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import type { WalletDetailDto } from "@/types";
 
 interface WalletHeaderProps {
@@ -16,25 +23,20 @@ interface WalletHeaderProps {
 }
 
 export function WalletHeader({ wallet, onEdit, onDelete }: WalletHeaderProps) {
-  const handleBackToWallets = () => {
-    window.location.href = "/";
-  };
-
   return (
     <div className="mb-8">
-      {/* Back to Wallets Button */}
-      <div className="mb-4">
-        <Button
-          onClick={handleBackToWallets}
-          variant="ghost"
-          size="sm"
-          className="gap-2"
-          aria-label="Back to wallets list"
-        >
-          <ArrowLeftIcon className="size-4" />
-          Back to Wallets
-        </Button>
-      </div>
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb className="mb-6">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Wallets</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{wallet.name}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
       {/* Wallet Title and Actions */}
       <div className="flex items-start justify-between gap-4">

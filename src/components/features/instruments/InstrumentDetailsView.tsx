@@ -12,6 +12,14 @@ import { InstrumentHeader, type InstrumentHeaderViewModel } from "./InstrumentHe
 import { InstrumentMetrics, type InstrumentMetricsViewModel } from "./InstrumentMetrics";
 import { ValueChangeHistory } from "./ValueChangeHistory";
 import { ConfirmDeleteDialog } from "@/components/views/wallet-detail/ConfirmDeleteDialog";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { LoadingState } from "@/components/views/LoadingState";
 import { ErrorState } from "@/components/views/ErrorState";
 import type { InstrumentDto, ValueChangeDirection } from "@/types";
@@ -99,15 +107,22 @@ export default function InstrumentDetailsView({ instrumentId, accessToken }: Ins
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8">
-      {/* Back to Wallet Link */}
-      <div className="mb-4">
-        <a
-          href={`/wallets/detail/${instrument.wallet_id}`}
-          className="text-sm font-medium text-blue-600 hover:text-blue-500"
-        >
-          ← Back to Wallet
-        </a>
-      </div>
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb className="mb-6">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Wallets</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`/wallets/detail/${instrument.wallet_id}`}>Wallet</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{instrument.name}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
       {/* Header with name, type, and action buttons */}
       <InstrumentHeader instrument={headerViewModel} instrumentId={instrumentId} onDelete={handleDelete} />
