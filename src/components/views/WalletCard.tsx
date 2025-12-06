@@ -1,6 +1,7 @@
 import type { WalletListItemDto } from "@/types";
 import { ProgressCircle } from "./ProgressCircle";
 import { PerformanceIndicator } from "./PerformanceIndicator";
+import { ProfitLossIndicator } from "./ProfitLossIndicator";
 
 /**
  * WalletCard Component
@@ -69,12 +70,18 @@ export function WalletCard({ wallet }: WalletCardProps) {
       </div>
 
       {/* Visual Indicators */}
-      <div className="mb-4 flex items-center gap-6">
+      <div className="mb-4 flex flex-wrap items-center gap-4">
         <div className="flex-shrink-0">
           <ProgressCircle percent={aggregates.progress_percent} />
         </div>
-        <div className="flex-1">
+        <div>
           <PerformanceIndicator percent={aggregates.performance_percent} />
+        </div>
+        <div>
+          <ProfitLossIndicator
+            currentValueGrosze={aggregates.current_value_grosze}
+            investedSumGrosze={aggregates.invested_sum_grosze}
+          />
         </div>
       </div>
 

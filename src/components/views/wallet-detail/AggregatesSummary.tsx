@@ -7,6 +7,7 @@
 
 import { ProgressCircle } from "@/components/views/ProgressCircle";
 import { PerformanceIndicator } from "@/components/views/PerformanceIndicator";
+import { ProfitLossIndicator } from "@/components/views/ProfitLossIndicator";
 import type { WalletAggregatesDto } from "@/types";
 
 interface AggregatesSummaryProps {
@@ -49,6 +50,14 @@ export function AggregatesSummary({ aggregates }: AggregatesSummaryProps) {
         <div className="flex flex-col items-center gap-2">
           <PerformanceIndicator percent={aggregates.performance_percent} />
           <span className="text-sm text-gray-600 font-medium">Investment Performance</span>
+        </div>
+
+        <div className="flex flex-col items-center gap-2">
+          <ProfitLossIndicator
+            currentValueGrosze={aggregates.current_value_grosze}
+            investedSumGrosze={aggregates.invested_sum_grosze}
+          />
+          <span className="text-sm text-gray-600 font-medium">Profit / Loss</span>
         </div>
       </div>
     </div>
