@@ -1,7 +1,7 @@
 You are a lead DevOps and cloud infrastructure architect tasked with designing optimal production deployment scenarios for a web application. The application's tech stack is as follows:
 
 <tech_stack>
-@tech-stack.md
+@.ai/tech-stack.md
 </tech_stack>
 
 Context:

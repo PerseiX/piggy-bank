@@ -168,7 +168,7 @@ Uses Tailwind CSS utility classes with:
 
 ### Created
 - `src/components/AppHeader.tsx` - New header component
-- `.ai/layout-header-implementation.md` - This document
+- `.ai/ui/layout-header-implementation.md` - This document
 
 ### Modified
 - `src/layouts/Layout.astro` - Added header and user state

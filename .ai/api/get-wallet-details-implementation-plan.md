@@ -70,5 +70,5 @@
 4. Create Astro route handler `src/pages/api/wallets/[id].ts` that validates input, retrieves the authenticated user, invokes the service, and maps domain errors to HTTP responses.
 5. Introduce a lightweight logging helper (if missing) for structured error logging; hook it into error branches in both service and route.
 6. Write unit tests for the service (aggregate calculations, auth enforcement, error translation) and integration tests for the route using mocked Supabase responses.
-7. Document the endpoint in API references (`.ai/api-plan.md`) if behavior deviates, and ensure linter/test suites pass.
+7. Document the endpoint in API references (`.ai/api/api-plan.md`) if behavior deviates, and ensure linter/test suites pass.
 

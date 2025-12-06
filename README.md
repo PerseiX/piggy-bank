@@ -26,8 +26,8 @@ Piggy Bank
 
 Piggy Bank is a goal‑oriented savings tracker that helps users build and sustain long‑term savings habits. Users create manual, virtual wallets and add simple instruments (Bonds, ETF, Stocks). Each wallet shows two circle graphs: progress toward a target and performance relative to invested capital. All monetary amounts are stored safely as integer grosze (PLN minor units) to avoid floating‑point errors. Authentication and data storage are powered by Supabase.
 
-- PRD: [./.ai/new/prd.md](./.ai/new/prd.md)
-- Tech Stack: [./.ai/new/tech-stack.md](./.ai/new/tech-stack.md)
+- PRD: [./.ai/prd.md](./.ai/prd.md)
+- Tech Stack: [./.ai/tech-stack.md](./.ai/tech-stack.md)
 
 ## Tech stack
 
@@ -215,7 +215,7 @@ See the complete test plan at [./.ai/qa/test-plan.md](./.ai/qa/test-plan.md) for
 
 MVP in progress. Current version: `0.0.1`.
 
-See the PRD for user stories, acceptance criteria, and success metrics: [./.ai/new/prd.md](./.ai/new/prd.md)
+See the PRD for user stories, acceptance criteria, and success metrics: [./.ai/prd.md](./.ai/prd.md)
 
 ## License
 

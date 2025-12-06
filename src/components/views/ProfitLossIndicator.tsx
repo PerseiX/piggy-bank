@@ -95,4 +95,3 @@ export function ProfitLossIndicator({ currentValueGrosze, investedSumGrosze }: P
     </div>
   );
 }
-

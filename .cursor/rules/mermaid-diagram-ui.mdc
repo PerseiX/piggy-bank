@@ -14,7 +14,7 @@ Będziesz musiał odnieść się do następujących plików w celu poznania istn
 </file_references>
 
 <destination>
-.ai/diagrams/ui.md
+.ai/ui/diagrams/ui.md
 </destination>
 
 Twoim zadaniem jest analiza specyfikacji modułu logowania i rejestracji oraz utworzenie kompleksowego diagramu Mermaid, który dokładnie przedstawia architekturę systemu. Diagram powinien być w języku polskim.

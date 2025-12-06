@@ -78,5 +78,5 @@
 7. Add structured logging for unexpected errors (include instrument id and user id, omit sensitive payloads).
 8. Write unit/integration tests for service (mock Supabase) covering success, not found, owner mismatch, soft-deleted, and query failure paths.
 9. Add API route tests/e2e (if harness exists) verifying status codes and payloads for success, invalid UUID, unauthorized, forbidden, and not found scenarios.
-10. Update API documentation if generated from code comments or docs (ensure alignment with `.ai/api-plan.md`).
+10. Update API documentation if generated from code comments or docs (ensure alignment with `.ai/api/api-plan.md`).
 

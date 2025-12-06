@@ -68,5 +68,5 @@
 5. **API Route:** Create or extend `src/pages/api/instruments/[id].ts` with `export const prerender = false` and `export async function DELETE(context)`, orchestrating auth, validation, service invocation, and HTTP translation per Data Flow.
 6. **Error Mapping & Logging:** Centralize error-to-status mapping within the route; integrate with existing logging utility (`src/lib/observability/logging.ts`) or add `logApiError({ error, userId, instrumentId })` to capture unexpected failures.
 7. **Testing:** Write unit tests for the service covering success, unauthorized deletion (403), already deleted (404), and Supabase failure (500) with mocked client; add API integration test stub if framework support exists.
-8. **Manual Verification & Docs:** Verify endpoint via authenticated curl/Postman call; ensure related documentation (`.ai/api-plan.md`) references updated behavior and coordinate with frontend to handle 404-on-repeat deletes gracefully.
+8. **Manual Verification & Docs:** Verify endpoint via authenticated curl/Postman call; ensure related documentation (`.ai/api/api-plan.md`) references updated behavior and coordinate with frontend to handle 404-on-repeat deletes gracefully.
 

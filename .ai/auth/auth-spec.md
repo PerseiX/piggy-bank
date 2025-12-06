@@ -1,6 +1,6 @@
 # Authentication Architecture Specification
 
-This document outlines the technical architecture for implementing user authentication (registration, login, logout, password recovery) in the Piggy Bank application. The architecture is based on the requirements from `.ai/prd.md` (US-001, US-002, US-003) and the technology stack defined in `.ai/tech-stack.md`.
+This document outlines the technical architecture for implementing user authentication (registration, login, logout, password recovery) in the Piggy Bank application. The architecture is based on the requirements from `.ai/prd.md` (US-001, US-002, US-003) and the technology stack defined in `.ai/tech-stack.md`. Note: `prd.md` and `tech-stack.md` remain in the root `.ai/` directory.
 
 ## 1. User Interface Architecture
 

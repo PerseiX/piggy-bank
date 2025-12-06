@@ -72,5 +72,5 @@
 4. Implement the Astro route handler (`src/pages/api/wallets/index.ts`): authenticate user, validate input, call the service, map to DTOs, and return JSON.
 5. Add structured error handling in the route: convert known errors to HTTP 400/401, and fallback to 500 with logging.
 6. Write unit tests for the service (aggregate calculations, ordering) and integration tests for the route (using mocked Supabase client) to cover success and failure paths.
-7. Update API documentation or `.ai/api-plan.md` references if needed to reflect final behavior and any new utilities.
+7. Update API documentation or `.ai/api/api-plan.md` references if needed to reflect final behavior and any new utilities.
 

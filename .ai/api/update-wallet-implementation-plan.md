@@ -78,5 +78,5 @@
 4. **Utility Enhancements:** Ensure common helpers exist for `parseJsonBody`, `mapSupabaseError`, and `normalizeString`; add/adjust as needed in `src/lib/utils`.
 5. **Testing:** Write unit tests for validation (if testing stack available) and integration tests hitting the API route with mocked Supabase responses covering 200, 400, 401, 404, 409 paths.
 6. **Logging & Monitoring:** Use existing logger to capture error context; ensure no PII in logs.
-7. **Documentation:** Update API docs (e.g., `.ai/api-plan.md` if needed) and changelog referencing this plan.
+7. **Documentation:** Update API docs (e.g., `.ai/api/api-plan.md` if needed) and changelog referencing this plan.
 

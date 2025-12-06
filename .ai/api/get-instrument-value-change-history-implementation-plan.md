@@ -62,5 +62,5 @@
 5. **Build API Route**: Implement handler in `src/pages/api/instruments/[id]/value-changes.ts` that validates input, fetches auth user, invokes the service, and maps domain errors to HTTP responses per section 6.
 6. **Wire Logging**: Ensure all failure branches log through the structured logger with contextual metadata (instrumentId, ownerId, correlationId).
 7. **Add Tests**: Write unit tests for the service (ownership, delta/direction computation, empty history) and integration tests for the route using mocked Supabase clients.
-8. **Documentation & QA**: Update `.ai/api-plan.md` if response nuances change, run lint/tests, and document any new utilities for future reuse.
+8. **Documentation & QA**: Update `.ai/api/api-plan.md` if response nuances change, run lint/tests, and document any new utilities for future reuse.
 

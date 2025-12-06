@@ -1,6 +1,6 @@
 # Authentication UI Implementation Summary
 
-This document summarizes the authentication UI components and pages implemented based on `.ai/auth-spec.md`.
+This document summarizes the authentication UI components and pages implemented based on `.ai/auth/auth-spec.md`.
 
 ## Implementation Date
 November 25, 2025

@@ -80,5 +80,5 @@
 6. **API Route:** Create `src/pages/api/wallets/[walletId]/instruments.ts` defining `export const prerender = false` and `export async function POST(context)` that orchestrates auth, validation, service invocation, and response/error mapping.
 7. **Logging Helper:** If not present, add `logApiError` in `src/lib/observability/logging.ts` and call it from the route on non-expected failures.
 8. **Testing:** Write unit tests for converters and service (success, duplicate, wallet not found/forbidden, soft-deleted) with mocked Supabase; add integration test stubs if automated API testing exists.
-9. **Documentation & QA:** Update `.ai/api-plan.md` or developer docs if needed, run project lint/test commands, and coordinate with frontend to align on payload/response.
+9. **Documentation & QA:** Update `.ai/api/api-plan.md` or developer docs if needed, run project lint/test commands, and coordinate with frontend to align on payload/response.
 

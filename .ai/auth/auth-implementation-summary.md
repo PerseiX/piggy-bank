@@ -184,8 +184,8 @@ PUBLIC_SUPABASE_KEY=your_anon_key
 - `src/pages/api/auth/forgot-password.ts`
 - `src/components/UpdatePasswordForm.tsx`
 - `src/components/AppHeader.tsx` (NEW - Nov 25)
-- `.ai/auth-implementation-summary.md` (this file)
-- `.ai/layout-header-implementation.md` (NEW - Nov 25)
+- `.ai/auth/auth-implementation-summary.md` (this file)
+- `.ai/ui/layout-header-implementation.md` (NEW - Nov 25)
 
 ### Modified
 - `src/lib/supabase-server.ts`
@@ -196,7 +196,7 @@ PUBLIC_SUPABASE_KEY=your_anon_key
 - `src/pages/auth/update-password.astro`
 - `src/layouts/Layout.astro` (NEW - Nov 25)
 - `src/pages/index.astro` (NEW - Nov 25)
-- `.ai/auth-spec.md`
+- `.ai/auth/auth-spec.md`
 
 ## Linting Status
 ✅ **All files pass linting with zero errors**

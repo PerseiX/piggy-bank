@@ -89,5 +89,5 @@
 6. **API Route:** Create or update `src/pages/api/instruments/[id].ts` to expose `PATCH`, invoking validation, service, and error mapper; ensure `prerender = false` and consistent response envelope.
 7. **Logging & Error Mapping:** Centralize error-to-HTTP translation in shared utility (e.g., `resolveApiError`) and integrate structured logging with user/instrument context.
 8. **Testing:** Write unit tests for validation schema and currency helpers; add service tests mocking Supabase for success and error paths (not found, forbidden, conflict, soft-deleted, value change). If API integration tests exist, cover 200/400/401/403/404/409 flows.
-9. **Docs & QA:** Update `.ai/api-plan.md` or other docs if payload shape changes; run lint/test suites to ensure compliance.
+9. **Docs & QA:** Update `.ai/api/api-plan.md` or other docs if payload shape changes; run lint/test suites to ensure compliance.
 
