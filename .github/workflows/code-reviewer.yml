@@ -1,5 +1,3 @@
-Lets create new github action . Name it code-reviewer and put: 
-
 name: AI Reviewer
 
 on:
